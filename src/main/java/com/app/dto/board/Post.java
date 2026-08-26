@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class Post {
-    private Long pId; // PK
+    private Long pid; // PK
     private String title;
     private String content;
     private Long uId; // FK , UserInfo
