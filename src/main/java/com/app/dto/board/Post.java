@@ -1,4 +1,4 @@
-package com.app.dto;
+package com.app.dto.board;
 
 import java.time.LocalDateTime;
 import lombok.Data;
