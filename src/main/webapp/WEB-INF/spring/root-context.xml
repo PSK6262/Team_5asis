@@ -20,10 +20,8 @@
 	<!-- 2. MyBatis 설정 -->
 	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
 		<property name="dataSource" ref="data_source"></property>
-		<!-- src/main/resources 아래의 모든 하위 폴더 mapper들 스캔 -->
-		<property name="mapperLocations" value="classpath:mybatis/**/*_mapper.xml"></property>
-		<!-- src/main/resources 아래에 mybatis 설정파일 지정 -->
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+		<property name="mapperLocations" value="classpath:mybatis/**/*_mapper.xml" />
 	</bean>
 
 	<!-- 3. DAO에서 의존성 주입받아 사용할 SqlSessionTemplate 설정 -->
