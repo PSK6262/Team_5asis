@@ -4,5 +4,14 @@
 		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		   
 <mapper namespace="board_mapper">
-
+	<select id="findPostListByGameAlias" resultType="Post" parameterType="string">
+		select *
+		from post
+		where game_id in (select game_id from game_list where game_alias = #{value})
+	</select>
+	<select id="findGameNameByGameAlias" resultType="string" parameterType="string">
+		select game_name
+		from game_list
+		where game_alias = #{value}
+	</select>
 </mapper>
