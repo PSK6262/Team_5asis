@@ -11,7 +11,7 @@ import com.app.dto.post.PostDetail;
 import com.app.service.post.PostService;
 
 @Controller
-@RequestMapping("/post")
+@RequestMapping("/board")
 public class PostController {
 
     @Autowired
@@ -23,18 +23,24 @@ public class PostController {
         return "post/write";
     }
 
-    // 게시글 상세 조회 (/post/12)
-    @GetMapping("/{pId}")
-    public String postDetail(@PathVariable("pId") Long pId, Model model) {
+    // 게시글 상세 조회 (/board/lol/5)
+    @GetMapping("/{gameAlias}/{pId}")
+    public String postDetail(@PathVariable("gameAlias") String gameAlias, 
+    		@PathVariable("pId") Long pId, Model model) {
+    	
+    	System.out.println(">>> 요청받은 gameAlias: " + gameAlias + ", pId: " + pId);
+
+    	//게시글 상세 데이터 조회
+    	PostDetail postDetail = postService.getPostDetail(pId, gameAlias);
+    	 
+        System.out.println(">>> 조회 결과 postDetail: " + postDetail);
     	
         //조회수 1 증가
         postService.increaseViewCount(pId);
 
-        //게시글 상세 데이터 조회
-        PostDetail postDetail = postService.getPostDetail(pId);
-
         if (postDetail == null) {
-            return "redirect:/main"; // 존재하지 않는 게시글일 경우 메인으로 이동
+        	// 해당 게임 게시판에 속한 글이 아닐 경우
+            return "redirect:/main";
         }
 
         model.addAttribute("post", postDetail);

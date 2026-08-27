@@ -10,9 +10,9 @@
         WHERE p_id = #{pId}
     </update>
 
-    <select id="selectPostDetail" parameterType="long" resultType="PostDetail">
-        SELECT 
-            p.p_id,
+    <select id="selectPostDetail" parameterType="map" resultType="PostDetail">
+	    SELECT 
+	        p.p_id,
 	        p.title,
 	        p.content,
 	        p.category,
@@ -23,12 +23,14 @@
 	        u.u_id,
 	        u.nickname,
 	        g.game_id,
-	        g.game_name
-        FROM post p
-        JOIN user_info u ON p.u_id = u.u_id
-        LEFT JOIN game_list g ON p.game_id = g.game_id
-        WHERE p.p_id = #{pId}
-    </select>
+	        g.game_name,
+	        g.game_alias
+	    FROM post p
+	    JOIN user_info u ON p.u_id = u.u_id
+	    JOIN game_list g ON p.game_id = g.game_id
+	    WHERE p.p_id = #{pId}
+	      AND UPPER(g.game_alias) = UPPER(#{gameAlias})
+</select>
 
     <select id="selectMediaListByPId" parameterType="long" resultType="Media">
         SELECT m_id, media_url, media_order, p_id, media_type

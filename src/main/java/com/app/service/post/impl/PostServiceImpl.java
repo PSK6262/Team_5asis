@@ -1,6 +1,8 @@
 package com.app.service.post.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetail getPostDetail(Long pId) {
-        PostDetail postDetail = postDAO.selectPostDetail(pId);
+    public PostDetail getPostDetail(Long pId, String gameAlias) {
+        // DAO로 전달할 파라미터 Map 생성
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("gameAlias", gameAlias);
+        paramMap.put("pId", pId);
+
+        // Map을 전달하여 조인 검증된 게시글 조회
+        PostDetail postDetail = postDAO.selectPostDetail(paramMap);
 
         if (postDetail != null) {
             List<Media> mediaList = postDAO.selectMediaListByPId(pId);

@@ -1,6 +1,7 @@
 package com.app.dao.post.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,10 @@ public class PostDAOImpl implements PostDAO {
         sql.update(NAMESPACE + "updateViewCount", pId);
     }
 
-    @Override
-    public PostDetail selectPostDetail(Long pId) {
-        return sql.selectOne(NAMESPACE + "selectPostDetail", pId);
-    }
+//    @Override
+//    public PostDetail selectPostDetail(Long pId) {
+//        return sql.selectOne(NAMESPACE + "selectPostDetail", pId);
+//    }
 
     @Override
     public List<Media> selectMediaListByPId(Long pId) {
@@ -39,4 +40,9 @@ public class PostDAOImpl implements PostDAO {
     public List<Comments> selectCommentListByPId(Long pId) {
         return sql.selectList(NAMESPACE + "selectCommentListByPId", pId);
     }
+
+	@Override
+	public PostDetail selectPostDetail(Map<String, Object> paramMap) {
+		return sql.selectOne("PostMapper.selectPostDetail", paramMap);
+	}
 }
