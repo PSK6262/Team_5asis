@@ -17,7 +17,6 @@
 		<typeAlias type="com.app.dto.board.Post" alias="Post"/>
 		<typeAlias type="com.app.dto.user.UserInfo" alias="UserInfo"/>
 		<typeAlias type="com.app.dto.user.UserStatus" alias="UserStatus"/>
-		
 		<typeAlias type="com.app.dto.post.PostDetail" alias="PostDetail"/>
 	</typeAliases>
 	

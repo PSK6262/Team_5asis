@@ -1,4 +1,4 @@
-package com.app.controller.mypage;
+package com.app.controller.board;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.app.dto.user.UserInfo;
-import com.app.service.UserService;
+import com.app.service.user.UserService;
 
 
 
@@ -37,9 +37,8 @@ public class MypageController {
 
         UserInfo myInfo = userService.getMyPageInfo(loginUserId);
         
-        
         model.addAttribute("user", myInfo);
 
-        return "mypage/mypage";
+        return "board/mypage";
     }
 }
