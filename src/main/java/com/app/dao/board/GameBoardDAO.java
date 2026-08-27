@@ -1,4 +1,4 @@
-package com.app.dao;
+package com.app.dao.board;
 
 import java.util.List;
 

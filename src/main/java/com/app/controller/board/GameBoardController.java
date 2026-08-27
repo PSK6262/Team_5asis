@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.app.dto.board.Post;
-import com.app.service.GameBoardService;
-import com.app.service.UserService;
+import com.app.service.board.GameBoardService;
+import com.app.service.user.UserService;
 
 @Controller
 @RequestMapping("/board")

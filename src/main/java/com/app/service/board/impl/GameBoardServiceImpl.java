@@ -1,14 +1,14 @@
-package com.app.service.impl;
+package com.app.service.board.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.dao.GameBoardDAO;
-import com.app.dao.UserDAO;
+import com.app.dao.board.GameBoardDAO;
+import com.app.dao.user.UserDAO;
 import com.app.dto.board.Post;
-import com.app.service.GameBoardService;
+import com.app.service.board.GameBoardService;
 
 @Service
 public class GameBoardServiceImpl implements GameBoardService {

@@ -1,4 +1,4 @@
-package com.app.dao.impl;
+package com.app.dao.board.impl;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.app.dao.GameBoardDAO;
+import com.app.dao.board.GameBoardDAO;
 import com.app.dto.board.Post;
 
 @Repository
