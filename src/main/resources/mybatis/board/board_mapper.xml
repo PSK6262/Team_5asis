@@ -14,4 +14,11 @@
 		from game_list
 		where game_alias = #{value}
 	</select>
+	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
+		select distinct category
+		from post
+		where game_id in (select game_id
+					      from game_list
+					      where game_alias = upper(#{value}))
+	</select>
 </mapper>

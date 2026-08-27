@@ -26,4 +26,10 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 		String gameName = sqlSessionTemplate.selectOne("board_mapper.findGameNameByGameAlias", gameAlias);
 		return gameName;
 	}
+
+	@Override
+	public List<String> findCategoriesByGameAlias(String gameAlias) {
+		List<String> categories = sqlSessionTemplate.selectList("board_mapper.findCategoriesByGameAlias",gameAlias);
+		return categories;
+	}
 }
