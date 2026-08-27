@@ -13,5 +13,7 @@ public class Comments {
     private Long parentCId; // NULL 허용
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt; // NULL 허용
+    
+    private String nickname; //닉네임
 }
 
