@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>						
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"			
+					"http://mybatis.org/dtd/mybatis-3-config.dtd">
+					
+<configuration>
+
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.app.dto.board.Comments" alias="Comments"/>
+		<typeAlias type="com.app.dto.board.GameList" alias="GameList"/>
+		<typeAlias type="com.app.dto.board.LikeHistory" alias="LikeHistory"/>
+		<typeAlias type="com.app.dto.board.Media" alias="Media"/>
+		<typeAlias type="com.app.dto.board.Post" alias="Post"/>
+		<typeAlias type="com.app.dto.user.UserInfo" alias="UserInfo"/>
+		<typeAlias type="com.app.dto.user.UserStatus" alias="UserStatus"/>
+	</typeAliases>
+	
+</configuration>
