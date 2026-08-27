@@ -4,5 +4,9 @@
 		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		   
 <mapper namespace="user_mapper">
-
+	<select id="findNickNameByUid" resultType="string" parameterType="Long">
+		select nickname
+		from user_info
+		where u_id = #{value}
+	</select>
 </mapper>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.app.dto.board.Post;
 import com.app.service.GameBoardService;
+import com.app.service.UserService;
 
 @Controller
 @RequestMapping("/board")
@@ -19,6 +20,9 @@ public class GameBoardController {
 	@Autowired
 	GameBoardService gameBoardService;
 	
+	@Autowired
+	UserService userService;
+	
 	@GetMapping("/{gameAlias}")
 	public String gameBoard(@PathVariable String gameAlias, Model model) {
 		
@@ -26,10 +30,14 @@ public class GameBoardController {
 		
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
 		List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
-		
+		selectedPost = gameBoardService.addNicknameToPostList(selectedPost);
+		List<String> categories = gameBoardService.findCategoriesByGameAlias(gameAlias);
+	
 		if(selectedPost == null || selectedPost.isEmpty()) {
 			return "redirect:/main";
 		}
+		model.addAttribute("categories",categories);
+		model.addAttribute("gameAlias",gameAlias);
 		model.addAttribute("selectedPost",selectedPost);
 		model.addAttribute("gameName",gameName);
 		

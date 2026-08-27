@@ -14,4 +14,3 @@ public class Comments {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt; // NULL 허용
 }
-
