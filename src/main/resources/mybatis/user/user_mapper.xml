@@ -3,10 +3,18 @@
 		   "-//mybatis.org//DTD Mapper 3.0//EN" 
 		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		   
+<<<<<<< HEAD
 <mapper namespace="user_mapper">
 	<select id="findNickNameByUid" resultType="string" parameterType="Long">
 		select nickname
 		from user_info
 		where u_id = #{value}
+=======
+<mapper namespace="com.app.dao.UserDAO">
+	<select id="findMyPageByUserId" resultType="com.app.dto.user.UserInfo">
+		SELECT u_id "uId", email, password,nickname
+		FROM user_info
+		WHERE u_id=#{userId}
+>>>>>>> feature/mypage-view
 	</select>
 </mapper>
