@@ -2,6 +2,7 @@ package com.app.service.user.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dao.user.UserDAO;
 import com.app.dto.user.UserInfo;
@@ -28,5 +29,14 @@ public class UserServiceImpl implements UserService {
         }
 		
 		return user;
+	}
+	
+	@Transactional
+	@Override
+	public void updatePassword(UserInfo userInfo) {
+		
+		
+		userDAO.updatePassword(userInfo);
+		
 	}
 }
