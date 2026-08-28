@@ -8,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.app.dto.board.GameNameTransferForm;
+import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
 import com.app.service.board.GameBoardService;
 import com.app.service.user.UserService;
@@ -24,23 +27,34 @@ public class GameBoardController {
 	UserService userService;
 	
 	@GetMapping("/{gameAlias}")
-	public String gameBoard(@PathVariable String gameAlias, Model model) {
-		
-		gameAlias = gameAlias.toUpperCase();
-		
+	public String gameBoard(@PathVariable String gameAlias, Model model , @RequestParam(defaultValue = "1") int page) {
+
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
-		List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
-		selectedPost = gameBoardService.addNicknameToPostList(selectedPost);
+		
+		System.out.println("pA : " + gameAlias + " pN : " +page);
+		// 전체 List 불러오기
+		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
+		
+		// Paging 된 List 불러오기
+		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page);
+		if(page < 0 || page > pagingPosts.getPostSize()) {
+			return "redirect:/board/" + gameAlias  + "?page=1";
+		}
+		List<Post> selectedTrendPost = gameBoardService.findTrendPostListByGameAlias(gameAlias);
+		pagingPosts.setPosts(gameBoardService.addNicknameToPostList(pagingPosts.getPosts()));
 		List<String> categories = gameBoardService.findCategoriesByGameAlias(gameAlias);
-	
-		if(selectedPost == null || selectedPost.isEmpty()) {
+		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
+		
+		
+		if(pagingPosts.getPosts() == null || pagingPosts.getPosts().isEmpty()) {
 			return "redirect:/main";
 		}
 		model.addAttribute("categories",categories);
 		model.addAttribute("gameAlias",gameAlias);
-		model.addAttribute("selectedPost",selectedPost);
+		model.addAttribute("pagingPosts",pagingPosts);
 		model.addAttribute("gameName",gameName);
-		
+		model.addAttribute("popularSixGames",popularSixGames);
+		model.addAttribute("selectedTrendPost",selectedTrendPost);
 		return "board/gameBoard";
 	}
 }
