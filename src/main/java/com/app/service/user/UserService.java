@@ -7,4 +7,5 @@ public interface UserService {
 	UserInfo getMyPageInfo(Long userId);
 	
 	void signup(UserInfo userInfo);
+	public void updatePassword(UserInfo userInfo);
 }

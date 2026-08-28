@@ -20,19 +20,19 @@
 			</div>
 
 			<div>
-				<label for="password">비밀번호</label> <input type="password"
-					id="password" name="password" placeholder="비밀번호 입력" required>
+				<label for="password">비밀번호</label>
+				<input type="password" id="password" name="password" placeholder="비밀번호 입력" required>
 			</div>
 
 			<div>
-				<label for="passwordConfirm">비밀번호 확인</label> <input type="password"
-					id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 재입력"
-					required>
+				<label for="passwordConfirm">비밀번호 확인</label> 
+				<input type="password" id="passwordConfirm" name="passwordConfirm"
+						placeholder="비밀번호 재입력" required>
 			</div>
 
 			<div>
-				<label for="nickname">닉네임</label> <input type="text" id="nickname"
-					name="nickname" placeholder="닉네임 입력" required>
+				<label for="nickname">닉네임</label>
+				<input type="text" id="nickname" name="nickname" placeholder="닉네임 입력" required>
 			</div>
 			
 			<div>

@@ -22,4 +22,19 @@ public class UserDAOImpl implements UserDAO {
 	public UserInfo findMyPageByUserId(Long userId) {
 		return sqlSessionTemplate.selectOne("user_mapper.findMyPageByUserId",userId);
 	}
+
+	//27일 수정 (콰디)
+	@Override
+	public void updatePassword(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sqlSessionTemplate.update("user_mapper.updatePassword", userInfo);
+	}
+
+	//27일 추가 (콰디)
+	@Override
+	public void insertUser(UserInfo userInfo) {
+		sqlSessionTemplate.insert("user_mapper.insertUser", userInfo);
+	}
+	
+	
 }
