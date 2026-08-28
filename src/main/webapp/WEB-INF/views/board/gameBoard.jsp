@@ -80,7 +80,7 @@
 						placeholder="게임, 게시글 검색.." aria-label="Search">
 				</div>
 			</form>
-			<button class="btn btn-info" id="navbarLoginButton">ë¡ê·¸ì¸</button>
+			<button class="btn btn-info" id="navbarLoginButton">로그인</button>
 		</div>
 	</nav>
 	<div class="pagebody">
@@ -121,16 +121,17 @@
 			<div>
 				<p>인기 게시글</p>
 				<c:forEach var="post" items="${selectedTrendPost}">
-					<c:if test="${post.rownum != null}">
+					<c:if test="${not empty post.rownum}">
 						<p><label class="gameboard-post-view" onclick="gameBoardPostClickEvent(${post.pid})"> ${post.rownum} 제목: ${post.title} 이름 : ${post.nickname} 조회수 : ${post.viewCount} 좋아요수 : ${post.likeCount} </label></p>
 					</c:if>
-					<c:if test="${post.rownum == null}">
+					<c:if test="${empty post.rownum}">
 						<label> 글이 없습니다 </label>
 					</c:if>
 				</c:forEach>
 			</div>
-			<c:forEach var="s" items="${categories}">
-				<button type="button" name="categories"> ${s} </button>
+				<button type="button" name="categories" onclick="categoryBtnClick('전체')"> 전체 </button>
+			<c:forEach var="category" items="${categories}">
+				<button type="button" name="categories" onclick="categoryBtnClick('${category}')"> ${category} </button>
 			</c:forEach>
 			<table class="table">
 			  <thead>
@@ -193,6 +194,10 @@
 		function pageMovement(currentPage, num){
 			let targetPage = currentPage + num;
 			location.href = window.location.pathname + "?page=" + targetPage;
+		}
+		function categoryBtnClick(categoryName) {
+			let gameAlias = '${gameAlias}';
+		    location.href = "/board/" + gameAlias + "?page=1&category=" + encodeURIComponent(categoryName);
 		}
 	</script>
 </body>

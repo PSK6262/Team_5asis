@@ -62,11 +62,12 @@ public class GameBoardServiceImpl implements GameBoardService {
 	}
 
 	@Override
-	public PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum) {
+	public PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category) {
 		PagingPosts pagingPosts = new PagingPosts();
 		pagingPosts.setCurrentPage(pageNum);
 		pagingPosts.setGameAlias(gameAlias);
 		pagingPosts.setSize(CommonCode.PAGING_SIZE);
+		pagingPosts.setCategory(category);
 		List<Post> selectedPagingPost = gameBoardDAO.findPostListByPagingPosts(pagingPosts);
 		pagingPosts.setPosts(selectedPagingPost);
 		int postSize = gameBoardDAO.findPostSizeByGameAlias(gameAlias);

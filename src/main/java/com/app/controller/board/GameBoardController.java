@@ -27,21 +27,24 @@ public class GameBoardController {
 	UserService userService;
 	
 	@GetMapping("/{gameAlias}")
-	public String gameBoard(@PathVariable String gameAlias, Model model , @RequestParam(defaultValue = "1") int page) {
+	public String gameBoard(@PathVariable String gameAlias, Model model , 
+										 @RequestParam(defaultValue = "1" , required=false) int page ,
+										 @RequestParam(defaultValue="전체", required=false) String category) {
 
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
 		
-		System.out.println("pA : " + gameAlias + " pN : " +page);
+		System.out.println("pA : " + gameAlias + " pN : " +page + " ctg : " + category);
 		// 전체 List 불러오기
 		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
 		
 		// Paging 된 List 불러오기
-		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page);
+		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category);
 		if(page < 0 || page > pagingPosts.getPostSize()) {
 			return "redirect:/board/" + gameAlias  + "?page=1";
 		}
 		List<Post> selectedTrendPost = gameBoardService.findTrendPostListByGameAlias(gameAlias);
 		pagingPosts.setPosts(gameBoardService.addNicknameToPostList(pagingPosts.getPosts()));
+		
 		List<String> categories = gameBoardService.findCategoriesByGameAlias(gameAlias);
 		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
 		
@@ -49,6 +52,7 @@ public class GameBoardController {
 		if(pagingPosts.getPosts() == null || pagingPosts.getPosts().isEmpty()) {
 			return "redirect:/main";
 		}
+		
 		model.addAttribute("categories",categories);
 		model.addAttribute("gameAlias",gameAlias);
 		model.addAttribute("pagingPosts",pagingPosts);
