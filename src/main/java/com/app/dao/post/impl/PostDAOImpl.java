@@ -45,4 +45,9 @@ public class PostDAOImpl implements PostDAO {
 	public PostDetail selectPostDetail(Map<String, Object> paramMap) {
 		return sql.selectOne("PostMapper.selectPostDetail", paramMap);
 	}
+
+	@Override
+	public int insertPost(Map<String, Object> paramMap) {
+		return sql.insert(NAMESPACE + "insertPost", paramMap);
+	}
 }

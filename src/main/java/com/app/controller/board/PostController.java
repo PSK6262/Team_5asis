@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.app.dto.board.Post;
 import com.app.dto.post.PostDetail;
 import com.app.service.post.PostService;
 
@@ -17,11 +20,30 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    // 게시글 작성 페이지
-    @GetMapping("/write")
-    public String writeForm() {
+    //게시글 작성 페이지 (/board/lol/write)
+    @GetMapping("/{gameAlias}/write")
+    public String writeForm(@PathVariable("gameAlias") String gameAlias,
+            Model model) {
+
+        model.addAttribute("gameAlias", gameAlias);
+
         return "post/write";
     }
+    
+    // 게시글 등록
+    @PostMapping("/{gameAlias}/write")
+    public String writePost(
+            @PathVariable("gameAlias") String gameAlias,
+            Post post) {
+
+        // 로그인 기능이 아직 없으므로 임시 사용자
+        post.setUid(1L);
+
+        postService.insertPost(post, gameAlias);
+
+        return "redirect:/board/" + gameAlias;
+    }
+    
 
     // 게시글 상세 조회 (/board/lol/5)
     @GetMapping("/{gameAlias}/{pId}")
