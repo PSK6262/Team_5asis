@@ -4,56 +4,92 @@
 
 <mapper namespace="PostMapper">
 
-    <update id="updateViewCount" parameterType="long">
-        UPDATE post
-        SET view_count = view_count + 1
-        WHERE p_id = #{pId}
-    </update>
+	<insert id="insertPost" parameterType="Post">
+		INSERT INTO post (
+			title,
+			content,
+			u_id,
+			like_count,
+			category,
+			game_id,
+			view_count,
+			created_at,
+			updated_at
+		) VALUES (
+			#{title},
+			#{content},
+			#{uId},
+			0,
+			#{category},
+			(
+				SELECT game_id
+				FROM game_list
+				WHERE UPPER(game_alias) = UPPER(#{gameAlias})
+			),
+			0,
+			CURRENT_TIMESTAMP,
+			NULL
+		)
+	</insert>
 
-    <select id="selectPostDetail" parameterType="map" resultType="PostDetail">
-	    SELECT 
-	        p.p_id,
-	        p.title,
-	        p.content,
-	        p.category,
-	        p.like_count,
-	        p.view_count,
-	        p.created_at,
-	        p.updated_at,
-	        u.u_id,
-	        u.nickname,
-	        g.game_id,
-	        g.game_name,
-	        g.game_alias
-	    FROM post p
-	    JOIN user_info u ON p.u_id = u.u_id
-	    JOIN game_list g ON p.game_id = g.game_id
-	    WHERE p.p_id = #{pId}
-	      AND UPPER(g.game_alias) = UPPER(#{gameAlias})
-</select>
+	<update id="updateViewCount" parameterType="long">
+		UPDATE post
+		SET
+		view_count = view_count + 1
+		WHERE p_id = #{pId}
+	</update>
 
-    <select id="selectMediaListByPId" parameterType="long" resultType="Media">
-        SELECT m_id, media_url, media_order, p_id, media_type
-        FROM media
-        WHERE p_id = #{pId}
-        ORDER BY media_order ASC
-    </select>
+	<select id="selectPostDetail" parameterType="map"
+		resultType="PostDetail">
+		SELECT
+		p.p_id,
+		p.title,
+		p.content,
+		p.category,
+		p.like_count,
+		p.view_count,
+		p.created_at,
+		p.updated_at,
+		u.u_id,
+		u.nickname,
+		g.game_id,
+		g.game_name,
+		g.game_alias
+		FROM post p
+		JOIN user_info u ON p.u_id = u.u_id
+		JOIN game_list g ON p.game_id = g.game_id
+		WHERE p.p_id = #{pId}
+		AND
+		UPPER(g.game_alias) = UPPER(#{gameAlias})
+	</select>
 
-    <select id="selectCommentListByPId" parameterType="long" resultType="Comments">
-        SELECT 
-            c.c_id,
-	        c."content",
-	        c.like_count,
-	        c.p_id,
-	        c.u_id,
-	        c.parent_c_id,
-	        c.created_at,
-	        c.updated_at,
-	        u.nickname
-        FROM comments c
-        JOIN user_info u ON c.u_id = u.u_id
-        WHERE c.p_id = #{pId}
-        ORDER BY COALESCE(c.parent_c_id, c.c_id) ASC, c.c_id ASC
-    </select>
+	<select id="selectMediaListByPId" parameterType="long"
+		resultType="Media">
+		SELECT m_id, media_url, media_order, p_id, media_type
+		FROM
+		media
+		WHERE p_id = #{pId}
+		ORDER BY media_order ASC
+	</select>
+
+	<select id="selectCommentListByPId" parameterType="long"
+		resultType="Comments">
+		SELECT
+		c.c_id,
+		c."content",
+		c.like_count,
+		c.p_id,
+		c.u_id,
+		c.parent_c_id,
+		c.created_at,
+		c.updated_at,
+		u.nickname
+		FROM comments c
+		JOIN
+		user_info u ON c.u_id = u.u_id
+		WHERE c.p_id = #{pId}
+		ORDER BY
+		COALESCE(c.parent_c_id, c.c_id) ASC, c.c_id ASC
+	</select>
 
 </mapper>
