@@ -14,5 +14,5 @@ public interface GameBoardService {
 	List<String> findCategoriesByGameAlias(String gameAlias);
 	List<GameNameTransferForm> findPopularSixGames();
 	List<Post> findTrendPostListByGameAlias(String gameAlias);
-	PagingPosts findPostListByPagingPosts(String gameAlias , int pageNum);
+	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category);
 }

@@ -45,6 +45,9 @@
 		select *
 		from post
 		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+		<if test="!category.equals('전체') and category != null and category != '' ">
+			and category = #{category}
+		</if>
 		order by p_id
 		offset #{offset} rows fetch next #{size} rows only
 	</select>
