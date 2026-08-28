@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class PostDetail {
 	// 게시글 정보
-    private Long pId;
+    private Long pid;
     private String title;
     private String content;
     private String category;
@@ -21,7 +21,7 @@ public class PostDetail {
     private Timestamp updatedAt;
     
     // 작성자 정보
-    private Long uId;
+    private Long uid;
     private String nickname;
     
     // 게임 정보 (NULL 가능)
