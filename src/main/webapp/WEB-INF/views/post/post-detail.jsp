@@ -286,18 +286,21 @@ body {
 				<!-- 댓글 목록 -->
 				<ul class="reply-list">
 					<c:choose>
-					    <c:when test="${not empty replyList}">
-					        <c:forEach var="reply" items="${replyList}">
-					            <li class="reply-item">
-					                <div class="reply-writer">${reply.nickname}</div>
-					                <div class="reply-content">${reply.content}</div>
-					                <div class="reply-date">${reply.createdAt}</div>
-					            </li>
-					        </c:forEach>
-					    </c:when>
-					    <c:otherwise>
-					        <div class="no-reply">작성된 댓글이 없습니다.</div>
-					    </c:otherwise>
+						<%-- 댓글이 있을 때 --%>
+						<c:when test="${not empty post.commentList}">
+							<c:forEach var="comment" items="${post.commentList}">
+								<li class="reply-item">
+									<div class="reply-writer">${comment.nickname}</div>
+									<div class="reply-content">${comment.content}</div>
+									<div class="reply-date">${comment.createdAt}</div>
+								</li>
+							</c:forEach>
+						</c:when>
+						
+						<%-- 댓글이 없을 때 --%>
+						<c:otherwise>
+							<div class="no-reply">작성된 댓글이 없습니다.</div>
+						</c:otherwise>
 					</c:choose>
 				</ul>
 			</div>
