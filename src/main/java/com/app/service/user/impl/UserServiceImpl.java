@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 		System.out.println("가입 이메일: " + userInfo.getEmail());
 		
 		// 나중에 DAO에 회원가입 메서드가 만들어지면 아래 주석을 풀고 연결!
-		userDAO.insertUser(userInfo); 
+		userDAO.insertUser(userInfo);
 	}
 
 	@Override
