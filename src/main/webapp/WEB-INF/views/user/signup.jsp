@@ -54,14 +54,19 @@ body {
 		cursor: pointer;
 }
 
-.btn-submit {
+.btn-check, .btn-submit {
 		width: 75px;
 		background-color: #333;
 		color: white;
 }
 
+.btn-check:hover {
+		background: darkgray;
+}
+
 .btn-submit:hover {
 		background: linear-gradient(135deg, #2F7778, #E0B85A);
+		transform: translateY(2px);
 }
 
 
@@ -74,10 +79,6 @@ body {
 .id-check .form-input {
    		flex: 1;
    	 	width: auto;
-}
-
-.email-check .btn {
-    	flex-shrink: 0;
 }
 
 .signup-btn {
@@ -102,23 +103,32 @@ body {
 }
 
 /* 체크박스, 폰트 높낮이 조정 */
-input[type="checkbox"] {
-    	vertical-align: middle;
+.agree-item {
+		display: flex;
+		align-items: center;
+		margin-bottom: 3px;
+}
+
+.agree-item input[type="checkbox"] {
     	margin: 0 3px 0 0;
 }
 
 .check-label {
-		font-size: 11px;
-		vertical-align: middle;
+    font-size: 11px;
 }
 
 .click-label {
-		font-size: 11px;		
+    font-size: 11px;
 }
+
+.agree-item .check-label {
+    margin-right: 3px;
+}
+
 
 /* 컨테이너 사이 여백 */
 .login-area {
-    margin-top: 10px;
+    	margin-top: 10px;
 }
 
 </style>
@@ -137,7 +147,7 @@ input[type="checkbox"] {
 
     				<div class="id-check">
         				<input class="form-input" type="text" id="email" name="email" placeholder="이메일 입력" required>
-        				<button type="button" class="btn btn-submit" id="btnCheckId">중복체크</button>
+        				<button type="button" class="btn btn-check" id="btnCheckId">중복체크</button>
 			    	</div>
 			</div>
 			
@@ -158,17 +168,15 @@ input[type="checkbox"] {
 				<input class="form-input" type="text" id="nickname" name="nickname" placeholder="닉네임 입력" required>
 			</div>
 			
-			<div>
-                <div>
-                    <input type="checkbox" id="termsService" name="agreeTerms" value="Y" required>
-                    <label class="check-label" for="termsService">[필수] 이용약관 동의</label>
-                    <a href="#none" class="click-label">전체보기</a>
-                </div>
-                <div>
-                    <input type="checkbox" id="termsPrivacy" name="agreePrivacy" value="Y" required>
-                    <label class="check-label" for="termsPrivacy">[필수] 개인정보 수집 및 이용 동의</label>
-                    <a href="#none" class="click-label">전체보기</a>
-                </div>
+			<div class="agree-item">
+                <input type="checkbox" id="termsService" name="agreeTerms" value="Y" required>
+                <label class="check-label" for="termsService">[필수] 이용약관 동의</label>
+                <a href="#none" class="click-label">전체보기</a>
+            </div>
+            <div class="agree-item">
+                <input type="checkbox" id="termsPrivacy" name="agreePrivacy" value="Y" required>
+                <label class="check-label" for="termsPrivacy">[필수] 개인정보 수집 및 이용 동의</label>
+                <a href="#none" class="click-label">전체보기</a>
             </div>
 			<div class="signup-btn">
 				<button type="submit" class="btn btn-submit" id="btnSignup">가입하기</button>
@@ -178,7 +186,7 @@ input[type="checkbox"] {
 		
 	<div class="login-area">
        	<span class="check-label">이미 계정이 있으신가요?</span>
-       	<a class="click-label" href="login.jsp" >로그인</a>
+       	<a class="click-label" href="${pageContext.request.contextPath}/user/login">로그인</a>
     </div>
 			
 </body>
