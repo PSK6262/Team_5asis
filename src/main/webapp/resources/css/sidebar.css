@@ -1,0 +1,20 @@
+.popular-games-label {
+	margin: 1%;
+}
+
+.popular-games-label:hover {
+	background-color: gray;
+}
+
+#leftside-login-btn {
+	width: 100%;
+}
+
+.pagebody-leftside {
+	width: 20%;
+	height: 100%;
+	border: 1px solid black;
+	margin-left: 0.2%;
+	margin-right: 0.2%;
+	padding: 1%;
+}
