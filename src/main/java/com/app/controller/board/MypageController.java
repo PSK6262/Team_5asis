@@ -72,7 +72,7 @@ public class MypageController {
 	        return "redirect:/main";
 	    }
 	    
-	    userInfo.setUId(userId);
+	    userInfo.setUid(userId);
 		
 	
 		
