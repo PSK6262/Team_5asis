@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.dto.board.Post;
 import com.app.dto.post.PostDetail;
@@ -66,6 +65,8 @@ public class PostController {
         }
 
         model.addAttribute("post", postDetail);
+        model.addAttribute("gameAlias", gameAlias);
+        
         return "post/post-detail";
     }
 }

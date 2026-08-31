@@ -278,8 +278,8 @@ body {
 				<h3 class="reply-title">댓글</h3>
 
 				<!-- 댓글 작성 폼 -->
-				<form class="reply-form" action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/reply" method="post">
-					<input type="text" name="replyContent" class="reply-input" placeholder="댓글을 입력하세요..." required>
+				<form class="reply-form" action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment" method="post">
+					<input type="text" name="commentContent" class="reply-input" placeholder="댓글을 입력하세요..." required>
 					<button type="submit" class="btn-reply-submit">등록</button>
 				</form>
 

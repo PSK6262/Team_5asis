@@ -1,6 +1,18 @@
 package com.app.common;
 
 public class CommonCode {
+	
+	// GAMEBOARD
 	// 하나의 페이지에서 몇 개의 Post를 보여줄 것인지
 	public static final int PAGING_SIZE = 5;
+	
+	
+	
+	
+	// API
+	// Chzzk API에서 한번에 몇개의 방송DATA를 가져올 것인지 ( 넉넉하게 )
+	public static final int CHZZK_API_RAW_DATA_SIZE = 10;
+	// 한번에 보여줄 개수
+	public static final int CHZZK_API_DATA_SIZE = 2;
+	
 }

@@ -34,8 +34,6 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public void updatePassword(UserInfo userInfo) {
-		
-		
 		userDAO.updatePassword(userInfo);
 		
 	}
