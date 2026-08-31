@@ -91,5 +91,20 @@
 		ORDER BY
 		COALESCE(c.parent_c_id, c.c_id) ASC, c.c_id ASC
 	</select>
+	
+	<select id="selectPostByUid" parameterType="long" resultType="Post">
+		SELECT 
+        p_id AS pId, 
+        category, 
+        title, 
+        created_at AS createdAt, 
+        view_count AS viewCount, 
+        like_count AS likeCount,   
+    	g.game_alias AS gameAlias  
+FROM post p
+JOIN game_List g ON p.game_id = g.game_id
+    WHERE u_id = #{loginUserId}     
+    ORDER BY p_id DESC
+	</select>
 
 </mapper>

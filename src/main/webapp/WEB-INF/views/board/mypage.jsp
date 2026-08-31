@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 
 <html>
@@ -256,18 +257,50 @@ input[type="password"] {
 
 				</div>
 				<div id="tab-posts" class="content-item">
+				
+				
 					<h3>📝 내 작성글 목록</h3>
-					<ul>
-						<li>[공략] 초보자를 위한 1~50레벨 가이드 (2026.05.10)</li>
-						<li>[질문] 이번 업데이트 아이템 드랍률 질문입니다 (2026.05.02)</li>
-					</ul>
+				 <table class="table table-hover mt-3">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">카테고리</th>
+              <th scope="col">제목</th>
+              <th scope="col">등록일</th>
+              <th scope="col">조회수</th>
+              <th scope="col">추천</th>
+            </tr>
+          </thead>
+          <tbody>
+            <c:choose>
+             
+                <c:when test="${empty myPostList}">
+                    <tr>
+                        <td colspan="6" class="text-center">작성한 게시글이 없습니다.</td>
+                    </tr>
+                </c:when>
+                
+                
+                <c:otherwise>
+                    <c:forEach var="post" items="${myPostList}">
+                       
+                        <tr style="cursor: pointer;" onclick="location.href='/board/${post.gameAlias}/${post.pid}'">
+                          <th scope="row">${post.pid}</th>
+                          <td>${post.category}</td>
+                          <td>${post.title}</td>
+                          <td>${post.createdAt}</td>
+                          <td>${post.viewCount}</td>
+                          <td>${post.likeCount}</td>
+                        </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+          </tbody>
+        </table>
 				</div>
 				<div id="tab-comments" class="content-item">
 					<h3>💬 내 댓글 목록</h3>
-					<ul>
-						<li>"저도 그 아이템 얻으려고 3시간 돌았습니다 ㅠㅠ"</li>
-						<li>"좋은 정보 감사합니다! 많은 도움이 되었어요."</li>
-					</ul>
+			
 				</div>
 				<div id="tab-likes" class="content-item">
 					<h3>❤️ 좋아요한 글</h3>
@@ -338,6 +371,10 @@ input[type="password"] {
 		    form.classList.toggle('is-hidden');
 		});
 		
+		/* function gameBoardPostClickEvent(pid){
+			location.href = window.location.pathname + "/" + pid;
+		}
+		 */
 	</script>
 </body>
 </html>
