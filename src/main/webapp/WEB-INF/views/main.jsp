@@ -59,8 +59,8 @@
 </head>
 <body>
 	<div class="main_container">
-		<header class="main_header"><jsp:include page="headerBar.jsp" /></header>
-		<aside class="main_sidebar"><jsp:include page="sideBar.jsp" /></aside>
+		<header class="main_header"><jsp:include page="common/navbar.jsp" /></header>
+		<aside class="main_sidebar"><jsp:include page="common/sidebar.jsp" /></aside>
 		<main class="main_content"></main>
 	</div>
 </body>
