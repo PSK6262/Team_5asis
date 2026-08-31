@@ -56,5 +56,9 @@
 		from post
 		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
 	</select>
-	
+	<select id="findChzzkCategoryNameByGameAlias" resultType="string" parameterType="string">
+		select chzzk_game_name
+		from game_list
+		where game_alias = upper(#{gameAlias})
+	</select>
 </mapper>
