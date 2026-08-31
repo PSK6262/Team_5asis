@@ -7,4 +7,5 @@ public interface UserDAO {
 	public UserInfo findMyPageByUserId(Long userId);
 	
 	public void updatePassword(UserInfo userInfo);
+	public void updateNickname(UserInfo userInfo);
 }

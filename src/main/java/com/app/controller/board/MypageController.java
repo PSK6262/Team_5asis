@@ -57,9 +57,28 @@ public class MypageController {
 		
 	
 		
-		System.out.println("HTML에서 넘어온 새 비밀번호: " + userInfo.getPassword());
+		System.out.println("변경된 비밀번호: " + userInfo.getPassword());
 		
 		userService.updatePassword(userInfo);
+		
+		return "redirect:/board/mypage";
+	}
+	
+	@PostMapping("/mypage/update-nickname")
+	public String updateNickname(UserInfo userInfo, HttpSession session) {
+		
+		Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+	    if (userId == null) {
+	        return "redirect:/main";
+	    }
+	    
+	    userInfo.setUId(userId);
+		
+	
+		
+		System.out.println("변경된 닉네임: " + userInfo.getNickname());
+		
+		userService.updateNickname(userInfo);
 		
 		return "redirect:/board/mypage";
 	}

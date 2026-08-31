@@ -19,4 +19,9 @@
     SET password = #{password} 
     WHERE u_id = #{uId}
 </update>
+	<update id="updateNickname">
+    UPDATE user_info
+    SET nickname = #{nickname} 
+    WHERE u_id = #{uId}
+</update>
 </mapper>

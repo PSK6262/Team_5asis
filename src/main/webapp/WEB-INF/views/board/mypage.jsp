@@ -202,10 +202,14 @@ input[type="password"] {
 					<input type="text" value="${user.email}" disabled>
 
 					<p style="font-size: 15px; font-weight: bold;">비밀번호</p>
-					<input type="password" value="${user.password}" disabled>
+					<input type="password" value="${user.password}" id="viewPassword" disabled>
+					<div>
+				    <input type="checkbox" id="showPasswordCheck">
+				    <label for="showPasswordCheck">비밀번호 보기</label>
+					</div>
 					
 					
-						<button type="button" id="toggleBtn" class="updateBtn">비밀번호 변경하기</button>
+						<button type="button" id="toggleBtnPw" class="updateBtn">비밀번호 변경하기</button>
 						
 
 					<form action="/board/mypage/update-password" method="post" id="pwUpdateForm" class="is-hidden">
@@ -226,7 +230,27 @@ input[type="password"] {
 					<p style="font-size: 15px; font-weight: bold;">닉네임</p>
 					<input type="text" value="${user.nickname}" disabled>
 
-					<button style="width: 15%;">닉네임 변경</button>
+					
+						<button type="button" id="toggleBtnNickname" class="updateBtn">닉네임 변경하기</button>
+						
+
+					<form action="/board/mypage/update-nickname" method="post" id="nicknameUpdateForm" class="is-hidden">
+
+						<div>
+							<label for="nickname">새로운 닉네임:</label> 
+							<input type="text" name="nickname" id="nickname" required style="width:285px;">
+						</div>
+
+						<br>
+
+						<div>
+							<button type="submit">변경 완료</button>
+						</div>
+
+					</form>
+					
+					
+					
 					<button class="quit_button">회원탈퇴</button>
 
 
@@ -284,8 +308,31 @@ input[type="password"] {
 			});
 		};
 		
-		document.getElementById('toggleBtn').addEventListener('click', function() {
+		document.getElementById('toggleBtnPw').addEventListener('click', function() {
 		    const form = document.getElementById('pwUpdateForm');
+		    
+		    
+		    form.classList.toggle('is-hidden');
+		});
+		
+		document.addEventListener('DOMContentLoaded', function() {
+		    const passwordInput = document.getElementById('viewPassword');
+		    const showPasswordCheck = document.getElementById('showPasswordCheck');
+
+		    // 체크박스 상태가 바뀔 때마다 실행
+		    showPasswordCheck.addEventListener('change', function() {
+		        if (this.checked) {
+		            // 체크되면 글자가 보이도록 text로 변경
+		            passwordInput.type = 'text';
+		        } else {
+		            // 체크 해제되면 다시 숨김 처리(password)로 변경
+		            passwordInput.type = 'password';
+		        }
+		    });
+		});
+		
+		document.getElementById('toggleBtnNickname').addEventListener('click', function() {
+		    const form = document.getElementById('nicknameUpdateForm');
 		    
 		    
 		    form.classList.toggle('is-hidden');

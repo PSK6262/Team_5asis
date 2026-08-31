@@ -8,4 +8,5 @@ public interface UserService {
 	
 	/* void updatePassword(Long userId, String newPassword); */
 	public void updatePassword(UserInfo userInfo);
+	public void updateNickname(UserInfo userInfo);
 }
