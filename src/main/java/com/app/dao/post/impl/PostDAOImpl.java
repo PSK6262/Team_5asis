@@ -50,4 +50,34 @@ public class PostDAOImpl implements PostDAO {
 	public int insertPost(Map<String, Object> paramMap) {
 		return sql.insert(NAMESPACE + "insertPost", paramMap);
 	}
+
+	@Override
+    public int checkLikeHistory(Map<String, Object> map) {
+        return sql.selectOne(NAMESPACE + "checkLikeHistory", map);
+    }
+
+    @Override
+    public void insertLikeHistory(Map<String, Object> map) {
+        sql.insert(NAMESPACE + "insertLikeHistory", map);
+    }
+
+    @Override
+    public void updateLikeCount(Long pId) {
+        sql.update(NAMESPACE + "updateLikeCount", pId);
+    }
+
+    @Override
+    public int getLikeCount(Long pId) {
+        return sql.selectOne(NAMESPACE + "getLikeCount", pId);
+    }
+    
+    @Override
+    public void deleteLikeHistory(Map<String, Object> map) {
+        sql.delete(NAMESPACE + "deleteLikeHistory", map);
+    }
+
+    @Override
+    public void decreaseLikeCount(Long pId) {
+        sql.update(NAMESPACE + "decreaseLikeCount", pId);
+    }
 }

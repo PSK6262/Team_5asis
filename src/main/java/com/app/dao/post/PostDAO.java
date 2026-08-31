@@ -14,5 +14,13 @@ public interface PostDAO {
     List<Media> selectMediaListByPId(Long pId);
     List<Comments> selectCommentListByPId(Long pId);
     int insertPost(Map<String, Object> paramMap);
+    
+    int checkLikeHistory(Map<String, Object> map);
+    void insertLikeHistory(Map<String, Object> map);
+    void updateLikeCount(Long pId);
+    int getLikeCount(Long pId);
+    
+    void deleteLikeHistory(Map<String, Object> map);
+    void decreaseLikeCount(Long pId);
 
 }

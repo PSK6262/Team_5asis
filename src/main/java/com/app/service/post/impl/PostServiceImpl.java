@@ -58,4 +58,65 @@ public class PostServiceImpl implements PostService {
 
 	    return postDAO.insertPost(paramMap);
 	}
+
+	@Override
+	public int increaseLike(Long pId, Long uId) {
+		Map<String, Object> map = new HashMap<>();
+        map.put("pId", pId);
+        map.put("uId", uId);
+
+        // 1. 중복 추천 여부 검증
+        int count = postDAO.checkLikeHistory(map);
+        if (count > 0) {
+            throw new IllegalStateException("ALREADY_LIKED");
+        }
+
+        // 2. 이력 추가 및 추천수 증가
+        postDAO.insertLikeHistory(map);
+        postDAO.updateLikeCount(pId);
+
+        // 3. 최신 추천수 반환
+        return postDAO.getLikeCount(pId);
+	}
+
+	@Override
+	public boolean isLiked(Long pId, Long uId) {
+		if (uId == null) return false;
+	    
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("pId", pId);
+	    map.put("uId", uId);
+	    
+	    return postDAO.checkLikeHistory(map) > 0;
+	}
+	
+	// 추천 및 추천 취소 처리
+	@Override
+    public Map<String, Object> processLike(Long pId, Long uId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pId", pId);
+        map.put("uId", uId);
+
+        int count = postDAO.checkLikeHistory(map);
+        boolean isLiked;
+
+        if (count > 0) {
+            // 이미 추천함 -> 추천 취소
+            postDAO.deleteLikeHistory(map);
+            postDAO.decreaseLikeCount(pId);
+            isLiked = false;
+        } else {
+            // 추천 안 함 -> 추천 추가
+            postDAO.insertLikeHistory(map);
+            postDAO.updateLikeCount(pId);
+            isLiked = true;
+        }
+
+        int updatedLikeCount = postDAO.getLikeCount(pId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("isLiked", isLiked);
+        result.put("updatedLikeCount", updatedLikeCount);
+        return result;
+    }
 }

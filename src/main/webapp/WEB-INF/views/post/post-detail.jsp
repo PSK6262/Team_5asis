@@ -138,11 +138,24 @@ body {
 	transition: all 0.3s ease;
 }
 
+/* 기본 버튼 스타일 */
 .btn-like {
-	background-color: #fff;
-	border: 1px solid #2F7778;
+    background-color: #fff;
+    border: 1px solid #2F7778;
 	color: #2F7778;
 	font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* 추천 완료 시 (active 클래스가 적용되었을 때) 스타일 */
+.btn-like.active {
+    background: linear-gradient(135deg, #2F7778, #E0B85A);
+    color: #ffffff;
+    border-color: #2F7778;
+    font-weight: bold;
 }
 
 .btn-like:hover {
@@ -266,11 +279,11 @@ body {
 			<!-- 게시글 본문 -->
 			<div class="post-content">${post.content}</div>
 
-			<!-- 하단 버튼 영역 -->
+			<!-- 버튼 영역: isLiked가 true면 active 클래스 추가 -->
 			<div class="button-area">
-				<button type="button" class="btn btn-like">
-					👍 추천 ${post.likeCount}
-				</button>
+			    <button type="button" class="btn btn-like ${isLiked ? 'active' : ''}" id="likeBtn" onclick="likePost(${post.pid})">
+			        👍 추천 <span id="likeCount">${post.likeCount}</span>
+			    </button>
 			</div>
 
 			<!-- 댓글 영역 -->
@@ -307,6 +320,39 @@ body {
 
 		</div>
 	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	
+	
+	<script>
+		function likePost(pId) {
+		    $.ajax({
+		        url: '${pageContext.request.contextPath}/board/' + pId + '/like',
+		        type: 'POST',
+		        success: function(response) {
+		            if (response.status === 'success') {
+		                // 추천 수 반영
+		                $('#likeCount').text(response.updatedLikeCount);
+		                
+		                // if/else를 통한 버튼 클래스 제어
+		                if (response.isLiked) {
+		                    $('#likeBtn').addClass('active');
+		                    alert('추천되었습니다.');
+		                } else {
+		                    $('#likeBtn').removeClass('active');
+		                    alert('추천이 취소되었습니다.');
+		                }
+		            } else {
+		                alert('처리에 실패했습니다.');
+		            }
+		        },
+		        error: function() {
+		            alert('서버 통신 중 오류가 발생했습니다.');
+		        }
+		    });
+		}
+	</script>
 
 </body>
 </html>

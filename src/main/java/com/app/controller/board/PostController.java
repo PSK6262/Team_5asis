@@ -1,5 +1,8 @@
 package com.app.controller.board;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.dto.board.Post;
 import com.app.dto.post.PostDetail;
@@ -58,6 +62,10 @@ public class PostController {
     	
         //조회수 1 증가
         postService.increaseViewCount(pId);
+        
+        // ★현재 사용자 추천 여부 확인 (임시 u_id = 1L 사용)
+        Long uId = 1L; // 추후 로그인 세션 도입 시 session.getAttribute("uId")로 변경
+        boolean isLiked = postService.isLiked(pId, uId);
 
         if (postDetail == null) {
         	// 해당 게임 게시판에 속한 글이 아닐 경우
@@ -66,7 +74,29 @@ public class PostController {
 
         model.addAttribute("post", postDetail);
         model.addAttribute("gameAlias", gameAlias);
+        model.addAttribute("isLiked", isLiked);
         
         return "post/post-detail";
+    }
+    
+    
+    // 추천 / 추천취소
+    @PostMapping("/{pId}/like")
+    @ResponseBody
+    public Map<String, Object> likePost(@PathVariable Long pId) {
+        Map<String, Object> result = new HashMap<>();
+        Long tempUid = 1L; 
+
+        try {
+            Map<String, Object> likeResult = postService.processLike(pId, tempUid);
+            result.put("status", "success");
+            result.put("isLiked", likeResult.get("isLiked"));
+            result.put("updatedLikeCount", likeResult.get("updatedLikeCount"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "error");
+        }
+
+        return result;
     }
 }

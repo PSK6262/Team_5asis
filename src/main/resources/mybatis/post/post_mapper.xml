@@ -91,5 +91,46 @@
 		ORDER BY
 		COALESCE(c.parent_c_id, c.c_id) ASC, c.c_id ASC
 	</select>
+	
+	
+	<!-- 1. 중복 추천 여부 확인 -->
+	<select id="checkLikeHistory" parameterType="map" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM like_history 
+	    WHERE p_id = #{pId} AND u_id = #{uId}
+	</select>
+	
+	<!-- 2. 추천 이력 추가 -->
+	<insert id="insertLikeHistory" parameterType="map">
+	    INSERT INTO like_history (u_id, p_id, c_id)
+	    VALUES (#{uId}, #{pId}, NULL)
+	</insert>
+	
+	<!-- 3. 게시글 추천 수 1 증가 -->
+	<update id="updateLikeCount" parameterType="long">
+	    UPDATE post 
+	    SET like_count = like_count + 1 
+	    WHERE p_id = #{pId}
+	</update>
+	
+	<!-- 4. 최신 추천 수 조회 -->
+	<select id="getLikeCount" parameterType="long" resultType="int">
+	    SELECT like_count 
+	    FROM post 
+	    WHERE p_id = #{pId}
+	</select>
+	
+	<!-- 5. 추천 이력 삭제 -->
+	<delete id="deleteLikeHistory" parameterType="map">
+	    DELETE FROM like_history 
+	    WHERE p_id = #{pId} AND u_id = #{uId}
+	</delete>
+	
+	<!-- 6. 게시글 추천 수 1 감소 -->
+	<update id="decreaseLikeCount" parameterType="long">
+	    UPDATE post 
+	    SET like_count = like_count - 1 
+	    WHERE p_id = #{pId}
+	</update>
 
 </mapper>
