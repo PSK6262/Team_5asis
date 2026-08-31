@@ -48,4 +48,11 @@ public class UserServiceImpl implements UserService {
 		
 	}
 	
+	
+	@Override
+	public void updateNickname(UserInfo userInfo) {
+	    // 팀원이 컨트롤러에서 호출해서 임시로 껍데기만 만들어둠
+	    // 나중에 DAO 쿼리 연결 예정
+	}
+	
 }

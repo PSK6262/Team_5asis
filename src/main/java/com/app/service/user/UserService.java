@@ -8,4 +8,6 @@ public interface UserService {
 	
 	void signup(UserInfo userInfo);
 	public void updatePassword(UserInfo userInfo);
+	
+	public void updateNickname(UserInfo userInfo);
 }

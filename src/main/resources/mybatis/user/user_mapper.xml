@@ -4,12 +4,12 @@
 		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		   
 <mapper namespace="user_mapper">
-	<select id="findNickNameByUid" resultType="string" parameterType="Long">
+	<select id="findNickNameByUid" resultType="string" parameterType="long">
 		select nickname
 		from user_info
 		where u_id = #{value}
 	</select>
-	<select id="findMyPageByUserId" resultType="UserInfo">
+	<select id="findMyPageByUserId" resultType="com.app.dto.user.UserInfo">
 		SELECT u_id "uId", email, password,nickname
 		FROM user_info
 		WHERE u_id=#{userId}	
@@ -21,7 +21,7 @@
 	</update>
 	
 	<!-- 회원가입: DB에 유저 정보 넣기 -->
-	<insert id="insertUser" parameterType="UserInfo">
+	<insert id="insertUser" parameterType="com.app.dto.user.UserInfo">
 		INSERT INTO user_info (email, password, nickname, status)
 		VALUES (#{email}, #{password}, #{nickname}, '1')
 	</insert>
