@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -12,15 +13,15 @@ p {
 }
 
 body {
-	min-height:100vh;
+	min-height: 100vh;
 	margin: 0;
 	display: flex;
 	justify-content: center;
-	background-color:#ffffff;
+	background-color: #ffffff;
 }
 
-button{
-	box-sizing:border-box;
+button {
+	box-sizing: border-box;
 }
 
 /* 상단 메인 배너 */
@@ -30,10 +31,9 @@ button{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	
 	border-radius: 8px;
 	gap: 20px;
-	background:linear-gradient(to top,#417370,#c2a065);
+	background: linear-gradient(to top, #417370, #c2a065);
 	margin-top: 80px;
 }
 
@@ -57,18 +57,16 @@ button{
 
 .nickname {
 	display: flex;
-	font-size:20px;
-	font-weight:bold;
+	font-size: 20px;
+	font-weight: bold;
 	margin-left: 15px;
-	
-	
 }
 
 /* 유저정보 */
 .middle {
 	width: 800px;
 	min-height: 500px;
-	background-color:#ffffff;
+	background-color: #ffffff;
 	border-radius: 8px;
 	display: flex;
 	align-items: center;
@@ -80,20 +78,19 @@ button{
 	width: 100%;
 	height: 80px;
 	display: flex;
-	background-color:#F8F6F0;
+	background-color: #F8F6F0;
 	box-sizing: border-box;
 }
 
 .box {
 	width: 25%;
 	height: 100%;
-	
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
 	box-sizing: border-box;
-	background-color:#FB7185;
+	background-color: #FB7185;
 }
 
 .box:last-child {
@@ -101,34 +98,31 @@ button{
 }
 
 .box.active {
-	background-color:#e9b4c3;
+	background-color: #e9b4c3;
 	font-weight: bold;
 }
 
 .info_box {
 	width: 700px;
-	min-height: 200px;
+	height:auto;
 	border: 1px solid black;
-	border-radius:6px;
+	border-radius: 6px;
 	margin-top: 20px;
 	margin-bottom: 20px;
 	padding: 20px;
 	box-sizing: border-box;
 }
-.quit_button{
-	width:80px;
-	margin-left:auto;
-	
-	 
-	
-	
-}
-.quit_button:active{
-	color:red;
-	border-color:red;
-	border-radius:4px;
+
+.quit_button {
+	width: 80px;
+	margin-left: auto;
 }
 
+.quit_button:active {
+	color: red;
+	border-color: red;
+	border-radius: 4px;
+}
 
 input[type="text"] {
 	width: 100%;
@@ -165,6 +159,13 @@ input[type="password"] {
 	flex-direction: column;
 	gap: 10px;
 }
+
+.is-hidden{
+	display:none;
+}
+.updateBtn{
+	width:150px;
+}
 </style>
 </head>
 <body>
@@ -175,7 +176,7 @@ input[type="password"] {
 			<div id="profileDiv" class="profile"></div>
 			<div class="nickname">
 				<p>${user.nickname}</p>
-				
+
 			</div>
 		</div>
 
@@ -197,19 +198,61 @@ input[type="password"] {
 
 			<div class="info_box">
 				<div id="tab-info" class="content-item active">
-					<p style="font-size: 15px; font-weight:bold;">이메일</p>
+					<p style="font-size: 15px; font-weight: bold;">이메일</p>
 					<input type="text" value="${user.email}" disabled>
+
+					<p style="font-size: 15px; font-weight: bold;">비밀번호</p>
+					<input type="password" value="${user.password}" id="viewPassword" disabled>
+					<div>
+				    <input type="checkbox" id="showPasswordCheck">
+				    <label for="showPasswordCheck">비밀번호 보기</label>
+					</div>
 					
-					<p style="font-size: 15px; font-weight:bold;">비밀번호</p>
-					<input type="password" value="${user.password}" disabled>
-					<button style="width: 15%;">비밀번호 변경</button>
 					
-					<p style="font-size: 15px; font-weight:bold;">닉네임</p>
+						<button type="button" id="toggleBtnPw" class="updateBtn">비밀번호 변경하기</button>
+						
+
+					<form action="/board/mypage/update-password" method="post" id="pwUpdateForm" class="is-hidden">
+
+						<div>
+							<label for="password">새로운 비밀번호:</label> 
+							<input type="text" name="password" id="password" required style="width:285px;">
+						</div>
+
+						<br>
+
+						<div>
+							<button type="submit">변경 완료</button>
+						</div>
+
+					</form>
+
+					<p style="font-size: 15px; font-weight: bold;">닉네임</p>
 					<input type="text" value="${user.nickname}" disabled>
+
 					
-					<button style="width: 15%;">닉네임 변경</button>
+						<button type="button" id="toggleBtnNickname" class="updateBtn">닉네임 변경하기</button>
+						
+
+					<form action="/board/mypage/update-nickname" method="post" id="nicknameUpdateForm" class="is-hidden">
+
+						<div>
+							<label for="nickname">새로운 닉네임:</label> 
+							<input type="text" name="nickname" id="nickname" required style="width:285px;">
+						</div>
+
+						<br>
+
+						<div>
+							<button type="submit">변경 완료</button>
+						</div>
+
+					</form>
+					
+					
+					
 					<button class="quit_button">회원탈퇴</button>
-					
+
 
 				</div>
 				<div id="tab-posts" class="content-item">
@@ -264,6 +307,37 @@ input[type="password"] {
 				});
 			});
 		};
+		
+		document.getElementById('toggleBtnPw').addEventListener('click', function() {
+		    const form = document.getElementById('pwUpdateForm');
+		    
+		    
+		    form.classList.toggle('is-hidden');
+		});
+		
+		document.addEventListener('DOMContentLoaded', function() {
+		    const passwordInput = document.getElementById('viewPassword');
+		    const showPasswordCheck = document.getElementById('showPasswordCheck');
+
+		    // 체크박스 상태가 바뀔 때마다 실행
+		    showPasswordCheck.addEventListener('change', function() {
+		        if (this.checked) {
+		            // 체크되면 글자가 보이도록 text로 변경
+		            passwordInput.type = 'text';
+		        } else {
+		            // 체크 해제되면 다시 숨김 처리(password)로 변경
+		            passwordInput.type = 'password';
+		        }
+		    });
+		});
+		
+		document.getElementById('toggleBtnNickname').addEventListener('click', function() {
+		    const form = document.getElementById('nicknameUpdateForm');
+		    
+		    
+		    form.classList.toggle('is-hidden');
+		});
+		
 	</script>
 </body>
 </html>

@@ -15,6 +15,8 @@
 		<typeAlias type="com.app.dto.board.LikeHistory" alias="LikeHistory"/>
 		<typeAlias type="com.app.dto.board.Media" alias="Media"/>
 		<typeAlias type="com.app.dto.board.Post" alias="Post"/>
+		<typeAlias type="com.app.dto.board.GameNameTransferForm" alias="GameNameTransferForm"/>
+		<typeAlias type="com.app.dto.board.PagingPosts" alias="PagingPosts"/>
 		<typeAlias type="com.app.dto.user.UserInfo" alias="UserInfo"/>
 		<typeAlias type="com.app.dto.user.UserStatus" alias="UserStatus"/>
 		<typeAlias type="com.app.dto.post.PostDetail" alias="PostDetail"/>

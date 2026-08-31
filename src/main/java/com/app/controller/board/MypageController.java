@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserService;
@@ -13,6 +15,7 @@ import com.app.service.user.UserService;
 
 
 @Controller
+@RequestMapping("/board")
 public class MypageController {
 	
 	UserService userService;
@@ -26,7 +29,7 @@ public class MypageController {
 	public String getMyPage(HttpSession session, Model model) {
 		
 		if (session.getAttribute("LOGIN_USER_ID") == null) {
-	        session.setAttribute("LOGIN_USER_ID", 3L); // 1번 회원이 로그인했다고 가정
+	        session.setAttribute("LOGIN_USER_ID", 1L); // 1번 회원이 로그인했다고 가정
 	    }
 		
         Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
@@ -41,4 +44,42 @@ public class MypageController {
 
         return "board/mypage";
     }
+	
+	@PostMapping("/mypage/update-password")
+	public String updatePassword(UserInfo userInfo, HttpSession session) {
+		
+		Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+	    if (userId == null) {
+	        return "redirect:/main";
+	    }
+	    
+	    userInfo.setUId(userId);
+		
+	
+		
+		System.out.println("변경된 비밀번호: " + userInfo.getPassword());
+		
+		userService.updatePassword(userInfo);
+		
+		return "redirect:/board/mypage";
+	}
+	
+	@PostMapping("/mypage/update-nickname")
+	public String updateNickname(UserInfo userInfo, HttpSession session) {
+		
+		Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+	    if (userId == null) {
+	        return "redirect:/main";
+	    }
+	    
+	    userInfo.setUId(userId);
+		
+	
+		
+		System.out.println("변경된 닉네임: " + userInfo.getNickname());
+		
+		userService.updateNickname(userInfo);
+		
+		return "redirect:/board/mypage";
+	}
 }
