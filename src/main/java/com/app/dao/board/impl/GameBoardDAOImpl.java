@@ -58,4 +58,10 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 		int postSize = sqlSessionTemplate.selectOne("board_mapper.findPostSizeByGameAlias",gameAlias);
 		return postSize;
 	}
+
+	@Override
+	public String findChzzkCategoryNameByGameAlias(String gameAlias) {
+		String chzzkCategoryName = sqlSessionTemplate.selectOne("board_mapper.findChzzkCategoryNameByGameAlias",gameAlias);
+		return chzzkCategoryName;
+	}
 }

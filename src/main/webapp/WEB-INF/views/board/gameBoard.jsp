@@ -145,6 +145,7 @@
 			<h4 class="">홈 > ${gameName} </h4> 
 			<p>방송중</p>
 			<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+			<c:if test="${not empty chzzkApiResponse}">
 				<c:forEach var="live" items="${chzzkApiResponse}">
 				<div class="col" id="streaming-card" onclick="streamingCardClick(${live.channelId})">
 					<div class="col">
@@ -188,6 +189,10 @@
 					</div>
 		        </div>
 				</c:forEach>
+			</c:if>
+			<c:if test="${empty chzzkApiResponse}">
+				<p>진행중인 방송이 없습니다.</p>
+			</c:if>
 			</div>
 			<div>
 				<p>인기 게시글</p>

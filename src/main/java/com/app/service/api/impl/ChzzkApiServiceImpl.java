@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.app.common.CommonCode;
+import com.app.dao.board.GameBoardDAO;
 import com.app.dto.api.ChzzkApiResponse;
 import com.app.dto.api.ChzzkRawResponse;
 import com.app.dto.api.ChzzkRawResponse.LiveData;
@@ -22,17 +23,23 @@ public class ChzzkApiServiceImpl implements ChzzkApiService {
 	@Autowired
 	GameBoardService gameBoardService;
 	
+	@Autowired
+	GameBoardDAO gameBoardDAO;
+	
 	@Override
 	public List<ChzzkApiResponse> getChzzkApiResponseByGameAlias(String gameAlias) {
 		List<ChzzkApiResponse> response = new ArrayList<>();
 		
+		String chzzkCategoryName = gameBoardDAO.findChzzkCategoryNameByGameAlias(gameAlias);
+		
 		// 인코딩
 		URI targetUri = UriComponentsBuilder.fromHttpUrl("https://api.chzzk.naver.com")
-		        .path("/service/v2/categories/GAME/League_of_Legends/lives")
+		        .path("/service/v2/categories/GAME/" + chzzkCategoryName + "/lives")
 		        .queryParam("size", CommonCode.CHZZK_API_RAW_DATA_SIZE)
 		        .queryParam("sortType", "POPULAR")
 		        .build().encode().toUri();
-
+		System.out.println(targetUri);
+		
 		// HTTP 클라이언트 객체 생성
 		RestTemplate restTemplate = new RestTemplate();
 
