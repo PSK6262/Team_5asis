@@ -48,13 +48,15 @@ public class ChzzkApiServiceImpl implements ChzzkApiService {
 			for(int i=0; i<length ;i++) {
 				if(rawData.getContent().getData().get(i).isAdult()) continue;
 				
-				String liveTitle = rawData.getContent().getData().get(i).getLiveTitle();
-				String streamerName = rawData.getContent().getData().get(i).getChannel().getChannelName();
-				String previewImageUrlOriginal = rawData.getContent().getData().get(i).getLiveImageUrl();
+				LiveData liveData = rawData.getContent().getData().get(i);
+				
+				String liveTitle = liveData.getLiveTitle();
+				String streamerName = liveData.getChannel().getChannelName();
+				String previewImageUrlOriginal = liveData.getLiveImageUrl();
 				String previewImageUrl = (previewImageUrlOriginal != null) ? previewImageUrlOriginal.replace("{type}","360") : "";
-				int concurrentUserCount = rawData.getContent().getData().get(i).getConcurrentUserCount();
-				String channelId = rawData.getContent().getData().get(i).getChannel().getChannelId();
-				String profileImageUrl = rawData.getContent().getData().get(i).getChannel().getChannelImageUrl();
+				int concurrentUserCount = liveData.getConcurrentUserCount();
+				String channelId = liveData.getChannel().getChannelId();
+				String profileImageUrl = liveData.getChannel().getChannelImageUrl();
 				
 				ChzzkApiResponse apiResponse = new ChzzkApiResponse(
 							liveTitle , streamerName , previewImageUrl , 

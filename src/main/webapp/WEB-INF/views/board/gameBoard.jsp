@@ -59,7 +59,6 @@
 	    border-radius: 6px;
 	    flex-shrink: 0;
 	    background-color: #f8f9fa;
-	    flex-shrink: 0; /* 텍스트가 길어져도 이미지 크기가 줄어들지 않도록 고정 */
 	}
 	.streaming-thumbnail {
 	    width: 100%;
@@ -67,7 +66,7 @@
 	    object-fit: cover; /* 비율 유지하며 꽉 차게 잘라냄 */
 	}
 	.streaming-info {
-	    min-width: 0; /* 부모 d-flex 안에서 text-truncate(말줄임)가 작동하기 위한 필수 속성 */
+	    min-width: 0; /* 부모 d-flex 안에서 text-truncate(말줄임)가 작동 */
 	}
 	#streaming-card:hover{
 	    transform: translateY(-2px);
