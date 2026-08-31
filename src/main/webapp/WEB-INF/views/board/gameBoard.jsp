@@ -37,11 +37,42 @@
 		margin-left:0.2%;
 		padding: 1%;
 	}
+	.chzzk-streamer-profile-img {
+	    width: 36px;       /* 아이콘보다 살짝 큰 최적의 크기 */
+	    height: 36px;
+	    object-shrink: 0;
+	    object-fit: cover;
+	    border-radius: 50%;
+	    border: 1px solid #e9ecef;
+	}
 	.streaming-card{
 		width:99%;
 		height:25vh;
 		border:1px solid black;
 		margin: 1%;
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	.streaming-image-wrapper {
+	    width: 150px;
+	    aspect-ratio: 16 / 9;
+	    overflow: hidden;
+	    border-radius: 6px;
+	    flex-shrink: 0;
+	    background-color: #f8f9fa;
+	    flex-shrink: 0; /* 텍스트가 길어져도 이미지 크기가 줄어들지 않도록 고정 */
+	}
+	.streaming-thumbnail {
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover; /* 비율 유지하며 꽉 차게 잘라냄 */
+	}
+	.streaming-info {
+	    min-width: 0; /* 부모 d-flex 안에서 text-truncate(말줄임)가 작동하기 위한 필수 속성 */
+	}
+	#streaming-card:hover{
+	    transform: translateY(-2px);
+	    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+	    border-color: #00ffaa !important; /* 치지직 시그니처 네온그린 포인트 색상 */
 	}
 	#leftside-login-btn{
 		width:100%;
@@ -114,9 +145,50 @@
 		<div class="pagebody-rightside">
 			<h4 class="">홈 > ${gameName} </h4> 
 			<p>방송중</p>
-			<div class="streaming-card d-flex border rounded p-3 mb-4">
-				<div class="streaming-left me-3 bg-light p-2 h-100" style="flex: 1;">1</div>
-				<div class="streaming-right bg-light p-2 h-100" style="flex: 1;">2</div>
+			<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+				<c:forEach var="live" items="${chzzkApiResponse}">
+				<div class="col" id="streaming-card" onclick="streamingCardClick(${live.channelId})">
+					<div class="col">
+					    <!-- 
+					      1. id="streaming-card"는 루프를 돌면 중복되므로 지우고 class로 대체합니다.
+					      2. 클릭할 수 있는 카드임을 알리기 위해 'cursor-pointer' 성격을 부여합니다.
+					    -->
+					    <div class="streaming-card d-flex border rounded p-3 h-100 align-items-center bg-white position-relative" 
+					         style="cursor: pointer;" 
+					         onclick="streamingCardClick('${live.channelId}')"> <!-- channelId가 문자열일 수 있으므로 따옴표로 감쌉니다 -->
+					         
+					        <!-- 왼쪽: 썸네일 이미지 영역 (16:9 비율) -->
+					        <div class="streaming-image-wrapper me-3">
+					            <img src="${live.previewImageUrl}" alt="Thumbnail" class="streaming-thumbnail">
+					        </div>
+					        
+					        <!-- 오른쪽: 방송 정보 영역 (상/하단 정렬 구조) -->
+					        <div class="streaming-info flex-grow-1 d-flex flex-column justify-content-between h-100" style="min-width: 0;">
+					            <!-- 상단: 방송 제목 -->
+					            <div>
+					                <h5 class="card-title text-truncate mb-1" style="font-size: 0.95rem; font-weight: 600;" title="${live.liveTitle}">
+					                    ${live.liveTitle}
+					                </h5>
+					            </div>
+					            
+					            <!-- 하단: 프로필 이미지 + 스트리머명 + 시청자 수 -->
+					            <div class="d-flex align-items-center justify-content-between mt-2">
+					                <!-- 프로필 및 스트리머 이름 -->
+					                <div class="d-flex align-items-center flex-grow-1 me-2" style="min-width: 0;">
+					                    <img class="chzzk-streamer-profile-img me-2" src="${live.profileImageUrl}" alt="Profile" />
+					                    <span class="card-text text-muted small text-truncate fw-semibold">${live.streamerName}</span>
+					                </div>
+					                
+					                <!-- 시청자 수 -->
+					                <span class="badge bg-danger bg-opacity-10 text-danger small px-2 py-1 flex-shrink-0" style="font-size: 0.75rem;">
+					                    • ${live.concurrentUserCount}명
+					                </span>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+		        </div>
+				</c:forEach>
 			</div>
 			<div>
 				<p>인기 게시글</p>
@@ -198,6 +270,9 @@
 		function categoryBtnClick(categoryName) {
 			let gameAlias = '${gameAlias}';
 		    location.href = "/board/" + gameAlias + "?page=1&category=" + encodeURIComponent(categoryName);
+		}
+		function streamingCardClick(channelId){
+			location.href = "https://chzzk.naver.com/live/" + channelId;
 		}
 	</script>
 </body>

@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.app.dto.api.ChzzkApiResponse;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
+import com.app.service.api.ChzzkApiService;
 import com.app.service.board.GameBoardService;
 import com.app.service.user.UserService;
 
@@ -26,6 +28,9 @@ public class GameBoardController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	ChzzkApiService chzzkApiService;
+	
 	@GetMapping("/{gameAlias}")
 	public String gameBoard(@PathVariable String gameAlias, Model model , 
 										 @RequestParam(defaultValue = "1" , required=false) int page ,
@@ -33,12 +38,17 @@ public class GameBoardController {
 
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
 		
-		System.out.println("pA : " + gameAlias + " pN : " +page + " ctg : " + category);
+		System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category);
 		// 전체 List 불러오기
 		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
 		
 		// Paging 된 List 불러오기
 		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category);
+		
+		if(gameName == null || gameName.isEmpty()) {
+			return "redirect:/main";
+		}
+		
 		if(page < 0 || page > pagingPosts.getPostSize()) {
 			return "redirect:/board/" + gameAlias  + "?page=1";
 		}
@@ -48,17 +58,18 @@ public class GameBoardController {
 		List<String> categories = gameBoardService.findCategoriesByGameAlias(gameAlias);
 		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
 		
-		
-		if(pagingPosts.getPosts() == null || pagingPosts.getPosts().isEmpty()) {
-			return "redirect:/main";
+		// api로 방송 썸네일 가져오기 / 미완
+		List<ChzzkApiResponse> chzzkApiResponse = chzzkApiService.getChzzkApiResponseByGameAlias(gameAlias);
+		if(chzzkApiResponse != null) {
+			model.addAttribute("chzzkApiResponse",chzzkApiResponse);
 		}
-		
 		model.addAttribute("categories",categories);
 		model.addAttribute("gameAlias",gameAlias);
 		model.addAttribute("pagingPosts",pagingPosts);
 		model.addAttribute("gameName",gameName);
 		model.addAttribute("popularSixGames",popularSixGames);
 		model.addAttribute("selectedTrendPost",selectedTrendPost);
+		
 		return "board/gameBoard";
 	}
 }
