@@ -45,16 +45,14 @@ public class AuthController {
 
     // 폼 전송 시 처리
     @PostMapping("/login")
-    public String loginTest(
-            @RequestParam("userId") String userId,
-            @RequestParam("userPw") String userPw) {
+    public String login(UserInfo userInfo) {
         
         System.out.println("====== 로그인 요청 수신 ======");
-        System.out.println("아이디: " + userId);
-        System.out.println("비밀번호: " + userPw);
+        System.out.println("아이디: " + userInfo.getEmail());
+        System.out.println("비밀번호: " + userInfo.getPassword());
         System.out.println("=============================");
 
-        return "user/login";
+        return "main";
     }
     
  
