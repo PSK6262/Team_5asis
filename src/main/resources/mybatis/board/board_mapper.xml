@@ -14,4 +14,51 @@
 		from game_list
 		where game_alias = #{value}
 	</select>
+	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
+		select distinct category
+		from post
+		where game_id in (select game_id
+					      from game_list
+					      where game_alias = upper(#{value}))
+	</select>
+	<select id="findPopularSixGames" resultType="GameNameTransferForm">
+		select g.game_name , g.game_alias
+		from post p 
+		    inner join game_list g
+		        on p.game_id = g.game_id
+		group by g.game_name , g.game_alias
+		order by sum(view_count) desc
+		fetch first 6 rows only
+	</select>
+	<select id="findTrendPostListByGameAlias" resultType="Post" parameterType="string">
+		select row_number() over (order by (p.view_count + (10*p.like_count)) desc ) as "rownum"
+			 , p.*
+		from post p 
+		    inner join game_list g
+		        on p.created_at >= sysdate - 7 
+		            and p.game_id = g.game_id 
+		            and g.game_alias = upper(#{value})
+		order by (p.view_count + (10*p.like_count)) desc
+		fetch first 3 rows only
+	</select>
+	<select id="findPostListByPagingPosts" resultType="Post" parameterType="PagingPosts">
+		select *
+		from post
+		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+		<if test="!category.equals('전체') and category != null and category != '' ">
+			and category = #{category}
+		</if>
+		order by p_id
+		offset #{offset} rows fetch next #{size} rows only
+	</select>
+	<select id="findPostSizeByGameAlias" resultType="int" parameterType="string">
+		select count(*)
+		from post
+		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+	</select>
+	<select id="findChzzkCategoryNameByGameAlias" resultType="string" parameterType="string">
+		select chzzk_game_name
+		from game_list
+		where game_alias = upper(#{gameAlias})
+	</select>
 </mapper>

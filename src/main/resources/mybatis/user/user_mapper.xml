@@ -4,5 +4,24 @@
 		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		   
 <mapper namespace="user_mapper">
-
+	<select id="findNickNameByUid" resultType="string" parameterType="Long">
+		select nickname
+		from user_info
+		where u_id = #{value}
+	</select>
+	<select id="findMyPageByUserId" resultType="UserInfo">
+		SELECT u_id "uId", email, password,nickname
+		FROM user_info
+		WHERE u_id=#{userId}	
+	</select>
+	<update id="updatePassword">
+    UPDATE user_info
+    SET password = #{password} 
+    WHERE u_id = #{uId}
+</update>
+	<update id="updateNickname">
+    UPDATE user_info
+    SET nickname = #{nickname} 
+    WHERE u_id = #{uId}
+</update>
 </mapper>
