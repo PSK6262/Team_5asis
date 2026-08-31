@@ -14,6 +14,16 @@
 		from game_list
 		where game_alias = #{value}
 	</select>
+	<select id="findGameNameByGameId" resultType="string" parameterType="Long">
+		select game_name
+		from game_list
+		where game_id = #{value}
+	</select>
+	<select id="findGameAliasByGameId" resultType="string" parameterType="Long">
+		select game_alias
+		from game_list
+		where game_id = #{value}
+	</select>
 	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
 		select distinct category
 		from post
@@ -60,5 +70,23 @@
 		select chzzk_game_name
 		from game_list
 		where game_alias = upper(#{gameAlias})
+	</select>
+	<select id="findTitleByKeyword" resultType="post"
+		parameterType="string">
+		select *
+		from post
+		where REPLACE(LOWER(title), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+	</select>
+	<select id="findContentByKeyword" resultType="post"
+		parameterType="string">
+		select *
+		from post
+		where REPLACE(LOWER(content), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+	</select>
+	<select id="findNicknameByKeyword" resultType="UserInfo"
+		parameterType="string">
+		select *
+		from user_info
+		where REPLACE(LOWER(nickname), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
 	</select>
 </mapper>
