@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.app.dao.post.PostDAO;
 import com.app.dto.board.Comments;
 import com.app.dto.board.Media;
+import com.app.dto.board.Post;
 import com.app.dto.post.PostDetail;
 import com.app.service.post.PostService;
 
@@ -44,4 +45,17 @@ public class PostServiceImpl implements PostService {
 
         return postDetail;
     }
+
+	@Override
+	public int insertPost(Post post, String gameAlias) {
+		Map<String, Object> paramMap = new HashMap<>();
+
+		paramMap.put("title", post.getTitle());
+	    paramMap.put("content", post.getContent());
+	    paramMap.put("uId", post.getUid());
+	    paramMap.put("category", post.getCategory());
+	    paramMap.put("gameAlias", gameAlias);
+
+	    return postDAO.insertPost(paramMap);
+	}
 }

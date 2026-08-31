@@ -168,42 +168,51 @@ body {
 
 <body>
 
-	<div class="page-container">
+<div class="page-container">
+    <div class="write-container">
 
-		<div class="write-container">
+        <h1 class="page-title">게시글 작성</h1>
 
-			<h1 class="page-title">게시글 작성</h1>
+        <form action="${pageContext.request.contextPath}/board/${gameAlias}/write" method="post">
 
-			<div class="form-group">
-				<label class="form-label">카테고리</label> <select class="category-select">
-					<option value="파티모집">파티모집</option>
-					<option value="정보">정보</option>
-					<option value="공략">공략</option>
-					<option value="질문">질문</option>
-					<option value="자유">자유</option>
-				</select>
-			</div>
+            <div class="form-group">
+                <label class="form-label">카테고리</label>
 
-			<div class="form-group">
-				<label class="form-label">제목</label> <input type="text"
-					class="title-input" placeholder="제목을 입력하세요.">
-			</div>
+                <select name="category" class="category-select">
+                    <option value="파티모집">파티모집</option>
+                    <option value="정보">정보</option>
+                    <option value="공략">공략</option>
+                    <option value="질문">질문</option>
+                    <option value="자유">자유</option>
+                </select>
+            </div>
 
-			<div class="form-group">
-				<label class="form-label">내용</label>
 
-				<textarea class="content-textarea" placeholder="내용을 입력하세요."></textarea>
-			</div>
+            <div class="form-group">
+                <label class="form-label">제목</label>
 
-			<div class="button-area">
-				<button type="button" class="btn btn-cancel">취소</button>
+                <input type="text" name="title"class="title-input" placeholder="제목을 입력하세요." required>
+            </div>
 
-				<button type="button" class="btn btn-submit">등록</button>
-			</div>
 
-		</div>
+            <div class="form-group">
+                <label class="form-label">내용</label>
 
-	</div>
+                <textarea name="content" class="content-textarea" placeholder="내용을 입력하세요." required></textarea>
+            </div>
+
+
+            <div class="button-area">
+
+                <button type="button" class="btn btn-cancel" onclick="history.back()">취소</button>
+                <button type="submit" class="btn btn-submit">등록</button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
 
 </body>
 </html>

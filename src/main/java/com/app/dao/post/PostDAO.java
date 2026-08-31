@@ -13,5 +13,6 @@ public interface PostDAO {
     PostDetail selectPostDetail(Map<String, Object> paramMap);
     List<Media> selectMediaListByPId(Long pId);
     List<Comments> selectCommentListByPId(Long pId);
+    int insertPost(Map<String, Object> paramMap);
 
 }
