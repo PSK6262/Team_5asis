@@ -31,4 +31,11 @@ public class UserDAOImpl implements UserDAO {
 		// TODO Auto-generated method stub
 	 sqlSession.update("user_mapper.updatePassword", userInfo);
 	}
+
+	@Override
+	public void updateNickname(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sqlSession.update("user_mapper.updateNickname", userInfo);
+		
+	}
 }

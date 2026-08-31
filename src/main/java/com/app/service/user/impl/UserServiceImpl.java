@@ -37,4 +37,11 @@ public class UserServiceImpl implements UserService {
 		userDAO.updatePassword(userInfo);
 		
 	}
+
+	@Override
+	public void updateNickname(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		userDAO.updateNickname(userInfo);
+		
+	}
 }
