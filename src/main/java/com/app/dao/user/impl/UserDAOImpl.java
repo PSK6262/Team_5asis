@@ -12,9 +12,6 @@ public class UserDAOImpl implements UserDAO {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
-	@Autowired // ⭐ 이 주입 코드가 있어야 sqlSession을 쓸 수 있습니다!
-    SqlSessionTemplate sqlSession;
-	
 	@Override
 	public String findNickNameByUid(Long uid) {
 		String nickname = sqlSessionTemplate.selectOne("user_mapper.findNickNameByUid",uid);
