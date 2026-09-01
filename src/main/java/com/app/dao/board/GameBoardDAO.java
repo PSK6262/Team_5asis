@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
+import com.app.dto.board.SearchResult;
 
 public interface GameBoardDAO {
 	List<Post> findPostListByGameAlias(String gameAlias);
@@ -17,4 +18,7 @@ public interface GameBoardDAO {
 	List<Post> findPostListByPagingPosts(PagingPosts pagingPosts);
 	int findPostSizeByGameAlias(String gameAlias);
 	String findChzzkCategoryNameByGameAlias(@Param("gameAlias") String gameAlias);
+	SearchResult findSearchResultByKeyword(String keyword);
+	String findGameNameByGameId(Long gameId);
+	String findGameAliasByGameId(Long gameId);
 }

@@ -14,6 +14,8 @@ import com.app.dto.api.ChzzkApiResponse;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
+import com.app.dto.board.SearchKeywordForm;
+import com.app.dto.board.SearchResult;
 import com.app.service.api.ChzzkApiService;
 import com.app.service.board.GameBoardService;
 import com.app.service.user.UserService;
@@ -71,5 +73,24 @@ public class GameBoardController {
 		model.addAttribute("selectedTrendPost",selectedTrendPost);
 		
 		return "board/gameBoard";
+	}
+	
+	@GetMapping("/search")
+	public String search(@RequestParam(value = "keyword" , required = false) String keyword ,
+								  @RequestParam(value = "type" , defaultValue="all" , required = false) String type ,
+								  Model model) {
+	
+		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
+		model.addAttribute("popularSixGames",popularSixGames);
+		model.addAttribute("keyword",keyword);
+		SearchKeywordForm searchKeywordForm = new SearchKeywordForm();
+		searchKeywordForm.setKeyword(keyword);
+		searchKeywordForm.setType(type);
+		
+		SearchResult searchResult = gameBoardService.findSearchResultByKeyword(keyword);
+		model.addAttribute("searchResult",searchResult);
+		model.addAttribute("searchKeywordForm",searchKeywordForm);
+		
+		return "board/search";
 	}
 }

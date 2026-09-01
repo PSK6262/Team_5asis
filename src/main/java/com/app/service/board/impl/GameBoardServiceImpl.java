@@ -11,6 +11,7 @@ import com.app.dao.user.UserDAO;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
+import com.app.dto.board.SearchResult;
 import com.app.service.board.GameBoardService;
 
 @Service
@@ -75,4 +76,44 @@ public class GameBoardServiceImpl implements GameBoardService {
 		
 		return pagingPosts;
 	}
+
+	@Override
+	public SearchResult findSearchResultByKeyword(String keyword) {
+		SearchResult searchResult = gameBoardDAO.findSearchResultByKeyword(keyword);
+		
+		List<Post> searchedByTitle = searchResult.getSearchedByTitle();
+		searchedByTitle = addGameNameToPostList(searchedByTitle);
+		searchedByTitle = addNicknameToPostList(searchedByTitle);
+		searchedByTitle = addGameAliasToPostList(searchedByTitle);
+		searchResult.setSearchedByTitle(searchedByTitle);
+		System.out.println(searchedByTitle);
+		
+		List<Post> searchedByContent = searchResult.getSearchedByContent();
+		searchedByContent = addGameNameToPostList(searchedByContent);
+		searchedByContent = addNicknameToPostList(searchedByContent);
+		searchedByContent = addGameAliasToPostList(searchedByContent);
+		
+		System.out.println(searchedByContent);
+		searchResult.setSearchedByContent(searchedByContent);
+		
+		return searchResult;
+	}
+	
+	@Override
+	public List<Post> addGameNameToPostList(List<Post> postList) {
+		for (int i = 0; i < postList.size(); i++) {
+			postList.get(i).setGameName(gameBoardDAO.findGameNameByGameId(postList.get(i).getGameId()));
+		}
+		return postList;
+	}
+
+	@Override
+	public List<Post> addGameAliasToPostList(List<Post> postList) {
+		for (int i =0 ; i< postList.size() ; i++) {
+			postList.get(i).setGameAlias(gameBoardDAO.findGameAliasByGameId(postList.get(i).getGameId()));
+		}
+		return postList;
+	}
+	
+	
 }

@@ -10,6 +10,8 @@ import com.app.dao.board.GameBoardDAO;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
+import com.app.dto.board.SearchResult;
+import com.app.dto.user.UserInfo;
 
 @Repository
 public class GameBoardDAOImpl implements GameBoardDAO {
@@ -63,5 +65,30 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	public String findChzzkCategoryNameByGameAlias(String gameAlias) {
 		String chzzkCategoryName = sqlSessionTemplate.selectOne("board_mapper.findChzzkCategoryNameByGameAlias",gameAlias);
 		return chzzkCategoryName;
+	}
+
+	@Override
+	public SearchResult findSearchResultByKeyword(String keyword) {
+		SearchResult searchResult = new SearchResult();
+		List<Post> searchedByTitle = sqlSessionTemplate.selectList("board_mapper.findTitleByKeyword",keyword);
+		searchResult.setSearchedByTitle(searchedByTitle);
+		List<Post> searchedByContent = sqlSessionTemplate.selectList("board_mapper.findContentByKeyword",keyword);
+		searchResult.setSearchedByContent(searchedByContent);
+		List<UserInfo> searchedByNickname = sqlSessionTemplate.selectList("board_mapper.findNicknameByKeyword",keyword);
+		searchResult.setSearchedByNickname(searchedByNickname);
+		
+		return searchResult;
+	}
+
+	@Override
+	public String findGameNameByGameId(Long gameId) {
+		String gameName = sqlSessionTemplate.selectOne("board_mapper.findGameNameByGameId",gameId);
+		return gameName;
+	}
+
+	@Override
+	public String findGameAliasByGameId(Long gameId) {
+		String gameName = sqlSessionTemplate.selectOne("board_mapper.findGameAliasByGameId",gameId);
+		return gameName;
 	}
 }
