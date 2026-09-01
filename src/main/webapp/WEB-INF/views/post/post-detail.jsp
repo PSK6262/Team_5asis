@@ -163,6 +163,60 @@ body {
 	color: white;
 }
 
+/* 전체 버튼 컨테이너 (relative 기준점) */
+.post-action-container {
+    position: relative;
+    display: flex;
+    justify-content: center; /* 추천 버튼을 중앙으로 */
+    align-items: center;
+    margin: 30px 0 20px 0;
+}
+
+/* 추천 버튼 감싸는 div */
+.like-button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+/* 오른쪽 끝 수정/삭제 버튼 묶음 (absolute 처리) */
+.author-buttons {
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 6px; /* 버튼 간격 */
+}
+
+/* 수정(a) 및 삭제(button) 공통 소형 통일 디자인 */
+.btn-sm {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 46px;        /* 작은 가로 */
+    height: 30px;       /* 작은 세로 */
+    font-size: 13px;    /* 작은 글씨 */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #555;
+    text-decoration: none; /* a태그 밑줄 제거 */
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+/* 수정 버튼 hover */
+.btn-edit:hover {
+    background-color: #e9e9e9;
+    color: #333;
+}
+
+/* 삭제 버튼 hover */
+.btn-delete:hover {
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
 /* 댓글 영역 */
 .reply-section {
 	margin-top: 50px;
@@ -279,11 +333,35 @@ body {
 			<!-- 게시글 본문 -->
 			<div class="post-content">${post.content}</div>
 
-			<!-- 버튼 영역: isLiked가 true면 active 클래스 추가 -->
-			<div class="button-area">
-			    <button type="button" class="btn btn-like ${isLiked ? 'active' : ''}" id="likeBtn" onclick="likePost(${post.pid})">
-			        👍 추천 <span id="likeCount">${post.likeCount}</span>
-			    </button>
+			<!-- 버튼 영역 전체 감싸기 -->
+			<div class="post-action-container">
+			
+			    <!-- 1. 추천 버튼 (중앙 정렬) -->
+			    <div class="like-button-wrapper">
+			        <button type="button" class="btn btn-like ${isLiked ? 'active' : ''}" id="likeBtn" onclick="likePost(${post.pid})">
+			            👍 추천 <span id="likeCount">${post.likeCount}</span>
+			        </button>
+			    </div>
+			
+			    <!-- 2. 수정/삭제 버튼 (오른쪽 끝 정렬) -->
+			    <c:if test="${post.uid == 1}">
+			        <div class="author-buttons">
+			            <a href="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/edit"
+			               class="btn-sm btn-edit">
+			                수정
+			            </a>
+			
+			            <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/delete"
+			                  method="post"
+			                  style="display:inline;"
+			                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
+			                <button type="submit" class="btn-sm btn-delete">
+			                    삭제
+			                </button>
+			            </form>
+			        </div>
+			    </c:if>
+			
 			</div>
 
 			<!-- 댓글 영역 -->
@@ -352,6 +430,7 @@ body {
 		        }
 		    });
 		}
+		
 	</script>
 
 </body>

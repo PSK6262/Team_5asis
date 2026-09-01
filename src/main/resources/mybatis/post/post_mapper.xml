@@ -92,6 +92,29 @@
 		COALESCE(c.parent_c_id, c.c_id) ASC, c.c_id ASC
 	</select>
 	
+	<!-- 게시글 수정 -->
+	<update id="updatePost" parameterType="map">
+
+	    UPDATE post
+	    SET
+	        title = #{title},
+	        content = #{content},
+	        category = #{category},
+	        updated_at = CURRENT_TIMESTAMP
+	    WHERE p_id = #{pId}
+	      AND u_id = #{uId}
+	
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deletePost" parameterType="map">
+
+	    DELETE FROM post
+	    WHERE p_id = #{pId}
+	      AND u_id = #{uId}
+	
+	</delete>
+	
 	
 	<!-- 1. 중복 추천 여부 확인 -->
 	<select id="checkLikeHistory" parameterType="map" resultType="int">

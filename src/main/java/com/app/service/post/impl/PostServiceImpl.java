@@ -60,26 +60,6 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public int increaseLike(Long pId, Long uId) {
-		Map<String, Object> map = new HashMap<>();
-        map.put("pId", pId);
-        map.put("uId", uId);
-
-        // 1. 중복 추천 여부 검증
-        int count = postDAO.checkLikeHistory(map);
-        if (count > 0) {
-            throw new IllegalStateException("ALREADY_LIKED");
-        }
-
-        // 2. 이력 추가 및 추천수 증가
-        postDAO.insertLikeHistory(map);
-        postDAO.updateLikeCount(pId);
-
-        // 3. 최신 추천수 반환
-        return postDAO.getLikeCount(pId);
-	}
-
-	@Override
 	public boolean isLiked(Long pId, Long uId) {
 		if (uId == null) return false;
 	    
@@ -119,4 +99,22 @@ public class PostServiceImpl implements PostService {
         result.put("updatedLikeCount", updatedLikeCount);
         return result;
     }
+
+	@Override
+	public int updatePost(Long pId, Long uId, String title, String content, String category) {
+		return postDAO.updatePost(
+	            pId,
+	            uId,
+	            title,
+	            content,
+	            category
+	    );
+	}
+
+	@Override
+	public int deletePost(Long pId, Long uId) {
+		
+		return postDAO.deletePost(pId, uId);
+		
+	}
 }

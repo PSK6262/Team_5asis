@@ -10,7 +10,9 @@ public interface PostService {
     PostDetail getPostDetail(Long pId, String gameAlias);
     int insertPost(Post post, String gameAlias);
     
-    int increaseLike(Long pId, Long uId);
     boolean isLiked(Long pId, Long uId);
 	Map<String, Object> processLike(Long pId, Long uId);
+	
+	int updatePost(Long pId, Long uId, String title, String content, String category);
+	int deletePost(Long pId, Long uId);
 }
