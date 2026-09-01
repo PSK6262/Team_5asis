@@ -32,12 +32,12 @@ public class PostController {
 
     //게시글 작성 페이지 (/board/lol/write)
     @GetMapping("/{gameAlias}/write")
-    public String writeForm(@PathVariable("gameAlias") String gameAlias,
-            Model model) {
-
+    public String writeForm(@PathVariable("gameAlias") String gameAlias, Model model) {
         model.addAttribute("gameAlias", gameAlias);
+        model.addAttribute("isEdit", false); 
+        model.addAttribute("post", new PostDetail()); // JSP에서 EL 표기 오류를 방지하기 위해 빈 객체 전달
 
-        return "post/write";
+        return "post/post-form";
     }
     
     // 게시글 등록
@@ -59,13 +59,9 @@ public class PostController {
     @GetMapping("/{gameAlias}/{pId}")
     public String postDetail(@PathVariable("gameAlias") String gameAlias, 
     		@PathVariable("pId") Long pId, Model model) {
-    	
-    	System.out.println(">>> 요청받은 gameAlias: " + gameAlias + ", pId: " + pId);
 
     	//게시글 상세 데이터 조회
     	PostDetail postDetail = postService.getPostDetail(pId, gameAlias);
-    	 
-        System.out.println(">>> 조회 결과 postDetail: " + postDetail);
     	
         //조회수 1 증가
         postService.increaseViewCount(pId);
@@ -105,8 +101,10 @@ public class PostController {
 
 		model.addAttribute("post", post);
 		model.addAttribute("gameAlias", gameAlias);
+		model.addAttribute("isEdit", true); 
 
-		return "post/post-edit";
+        return "post/post-form";
+
 	}
 
 	// 게시글 수정
