@@ -17,8 +17,8 @@ public interface PostDAO {
     int insertPost(Map<String, Object> paramMap);
     
 	List<Post> selectPostByUid(Long loginUserId);
-	List<Post> selectPostByLikeCount(Long userId);
-		
+	List<Post> selectPostByLikeCount(Long loginUserId);
+	
 	
     int checkLikeHistory(Map<String, Object> map);
     void insertLikeHistory(Map<String, Object> map);

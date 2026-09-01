@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.dto.board.Comments;
 import com.app.dto.board.Post;
@@ -42,7 +43,8 @@ public class MypageController {
 	
 	
 	@GetMapping("/mypage")
-	public String getMyPage(HttpSession session, Model model) {
+	public String getMyPage(@RequestParam(value = "category", required = false, defaultValue = "ALL") String category, 
+			HttpSession session, Model model) {
 		
 		if (session.getAttribute("LOGIN_USER_ID") == null) {
 	        session.setAttribute("LOGIN_USER_ID", 1L); // 1번 회원이 로그인했다고 가정
@@ -66,10 +68,12 @@ public class MypageController {
 		  List<Comments> commentList = commentService.getCommentsByUid(loginUserId);
 		  model.addAttribute("commentList", commentList);
 		  
+		  
 		 List<Post> postList = postService.selectPostByLikeCount(loginUserId);
 		 
 		 model.addAttribute("postList", postList);
-		 model.addAttribute("activeTab","likePosts");
+		 
+		
 		 
 		
         

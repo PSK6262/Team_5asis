@@ -20,4 +20,5 @@ public interface PostService {
 	int deletePost(Long pId, Long uId);
 	
 	
+	
 }

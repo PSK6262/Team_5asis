@@ -118,4 +118,6 @@ public class PostDAOImpl implements PostDAO {
 		// TODO Auto-generated method stub
 		return sql.selectList(NAMESPACE + "selectPostByLikeCount", loginUserId);
 	}
+
+	
 }
