@@ -18,8 +18,25 @@
 				<div class="search-result-main-header mb-4">
 				    <h4 class="fw-bold mb-0">🔍 <span class="text-primary">"${keyword}"</span> 의 검색 결과</h4>
 				</div>
+				<c:if test="${searchResult.searchedByBoardName != null && not empty searchResult.searchedByBoardName && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'board')}">
+					<h5 class="search-section-title fw-semibold mt-4 mb-2">📝 <span class="keyword-highlight">"${keyword}"</span> 과 관련된 게시판</h5>
+					<table class="table table-hover align-middle custom-search-table">
+					  <thead>
+					    <tr>
+					      <th scope="col">게임</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+						<c:forEach var="post" items="${searchResult.searchedByBoardName}">
+						    <tr class="gameboard-post-view" onclick="gameBoardClickEvent('${post.gameAlias}')">
+							  <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 small fw-semibold">${post.gameName}</span></td>
+						    </tr>
+						</c:forEach>
+					  </tbody>
+					</table>
+				</c:if>
 				<c:if test="${searchResult.searchedByTitle != null && not empty searchResult.searchedByTitle && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'title') } ">
-					<h5 class="search-section-title fw-semibold mt-4 mb-2">📝 제목에 <span class="keyword-highlight">"${keyword}"</span>를 포함하는 글</h5>
+					<h5 class="search-section-title fw-semibold mt-4 mb-2">📝 제목에 <span class="keyword-highlight">"${keyword}"</span>을(를) 포함하는 글</h5>
 					<table class="table table-hover align-middle custom-search-table">
 					  <thead>
 					    <tr>
@@ -46,7 +63,7 @@
 					</table>
 				</c:if>
 				<c:if test="${searchResult.searchedByContent != null && not empty searchResult.searchedByContent && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'content') }">
-					<h5 class="search-section-title fw-semibold mt-4 mb-2">📄 내용에 <span class="keyword-highlight">"${keyword}"</span>를 포함하는 글</h5>
+					<h5 class="search-section-title fw-semibold mt-4 mb-2">📄 내용에 <span class="keyword-highlight">"${keyword}"</span> 을(를) 포함하는 글</h5>
 					<table class="table table-hover align-middle custom-search-table">
 					  <thead>
 					    <tr>
@@ -61,7 +78,7 @@
 					  <tbody>
 						<c:forEach var="post" items="${searchResult.searchedByContent}">
 						    <tr class="gameboard-post-view" onclick="gameBoardPostClickEvent('${post.gameAlias}',${post.pid})">
-						      <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 small fw-semibold">${post.gameName}</span></td>
+						      <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 small fw-semibold"> ${post.gameName}</span></td>
 						      <td><span class="search-post-title text-truncate fw-medium">${post.title}</span></td>
 						      <td>${post.nickname}</td>
 						      <td>${post.createdAt}</td>
@@ -73,7 +90,7 @@
 					</table>
 				</c:if>
 				<c:if test="${searchResult.searchedByNickname != null && not empty searchResult.searchedByNickname && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'nickname') }">
-					<h5 class="search-section-title fw-semibold mt-4 mb-2">👥 닉네임에 <span class="keyword-highlight">"${keyword}"</span>를 포함하는 유저</h5>
+					<h5 class="search-section-title fw-semibold mt-4 mb-2">👥 닉네임에 <span class="keyword-highlight">"${keyword}"</span> 을(를) 포함하는 유저</h5>
 					<table class="table table-hover align-middle custom-search-table">
 					  <thead>
 					    <tr>

@@ -11,6 +11,7 @@ import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
 import com.app.dto.board.SearchResult;
+import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
 
 @Service
@@ -71,12 +72,15 @@ public class GameBoardServiceImpl implements GameBoardService {
 
 	@Override
 	public SearchResult findSearchResultByKeyword(String keyword) {
-		SearchResult searchResult = gameBoardDAO.findSearchResultByKeyword(keyword);
-		
-		List<Post> searchedByTitle = searchResult.getSearchedByTitle();
+		SearchResult searchResult = new SearchResult();
+		List<Post> searchedByTitle = gameBoardDAO.findTitleByKeyword(keyword);
+		List<Post> searchedByContent = gameBoardDAO.findContentByKeyword(keyword);
+		List<UserInfo> searchedByNickname = gameBoardDAO.findNicknameByKeyword(keyword);
+		List<GameNameTransferForm> searchedByBoardName = gameBoardDAO.findGameNameByKeyword(keyword);
 		searchResult.setSearchedByTitle(searchedByTitle);
-		List<Post> searchedByContent = searchResult.getSearchedByContent();
 		searchResult.setSearchedByContent(searchedByContent);
+		searchResult.setSearchedByNickname(searchedByNickname);
+		searchResult.setSearchedByBoardName(searchedByBoardName);
 		return searchResult;
 	}
 }

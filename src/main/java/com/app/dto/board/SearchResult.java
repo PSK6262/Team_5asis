@@ -15,4 +15,5 @@ public class SearchResult {
 		List<Post> searchedByTitle;
 		List<Post> searchedByContent;
 		List<UserInfo> searchedByNickname;
+		List<GameNameTransferForm> searchedByBoardName;
 }

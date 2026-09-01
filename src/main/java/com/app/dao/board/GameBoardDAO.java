@@ -8,6 +8,7 @@ import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
 import com.app.dto.board.SearchResult;
+import com.app.dto.user.UserInfo;
 
 public interface GameBoardDAO {
 	List<Post> findPostDetailListByGameAlias(String gameAlias);
@@ -18,5 +19,8 @@ public interface GameBoardDAO {
 	List<Post> findPostListByPagingPosts(PagingPosts pagingPosts);
 	int findPostSizeByGameAliasAndCategory(String gameAlias, String category);
 	String findChzzkCategoryNameByGameAlias(@Param("gameAlias") String gameAlias);
-	SearchResult findSearchResultByKeyword(String keyword);
+	List<Post> findTitleByKeyword(String keyword);
+	List<Post> findContentByKeyword(String keyword);
+	List<UserInfo> findNicknameByKeyword(String keyword);
+    List<GameNameTransferForm> findGameNameByKeyword(String keyword);
 }
