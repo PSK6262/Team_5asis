@@ -1,6 +1,8 @@
 package com.app.dto.post;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.app.dto.board.Comments;
@@ -17,8 +19,19 @@ public class PostDetail {
     private String category;
     private Long likeCount;
     private Long viewCount;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt; // NULL 허용
+    
+    public String getCreatedAt() {
+        if (this.createdAt == null) return null;
+        return this.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public String getUpdatedAt() {
+        if (this.updatedAt == null) return null;
+        return this.updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
     
     // 작성자 정보
     private Long uid;

@@ -27,16 +27,14 @@
 
     </insert>
    
-   
-    
-    <select id="selectCommentByUid" parameterType="Long" resultType="com.app.dto.board.Comments">
+    <select id="selectCommentByUid" parameterType="Long" resultType="Comments">
         SELECT          
          
 		c.c_id,
 		c."content",
 		c.like_count,
-		c.p_id AS "pid",
-		c.u_id AS "uid",
+		c.p_id AS "pId",
+		c.u_id AS "uId",
 		c.parent_c_id,
 		c.created_at,
 		p.view_count,
@@ -47,5 +45,21 @@
         WHERE c.u_id = #{value}  
         ORDER BY c.created_at DESC
     </select>
+    
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment" parameterType="map">
+        DELETE FROM comments
+        WHERE c_id = #{cId}
+          AND u_id = #{uId}
+    </delete>
+    
+    <!-- 댓글 수정 -->
+    <update id="updateComment" parameterType="map">
+        UPDATE comments
+        SET "content" = #{content},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE c_id = #{cId}
+          AND u_id = #{uId}
+    </update>
 
 </mapper>
