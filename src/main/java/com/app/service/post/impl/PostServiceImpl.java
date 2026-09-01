@@ -20,6 +20,8 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostDAO postDAO;
 
+    
+    
     @Override
     public void increaseViewCount(Long pId) {
     	postDAO.updateViewCount(pId);
@@ -57,5 +59,11 @@ public class PostServiceImpl implements PostService {
 	    paramMap.put("gameAlias", gameAlias);
 
 	    return postDAO.insertPost(paramMap);
+	}
+
+	@Override
+	public List<Post> getPostByUid(Long loginUserId) {
+		
+		return postDAO.selectPostByUid(loginUserId);
 	}
 }

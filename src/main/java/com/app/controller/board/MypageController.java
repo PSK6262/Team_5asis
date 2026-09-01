@@ -1,15 +1,22 @@
 package com.app.controller.board;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.app.dto.board.Comments;
+import com.app.dto.board.Post;
 import com.app.dto.user.UserInfo;
+import com.app.service.board.GameBoardService;
+import com.app.service.comment.CommentService;
+import com.app.service.post.PostService;
 import com.app.service.user.UserService;
 
 
@@ -19,6 +26,15 @@ import com.app.service.user.UserService;
 public class MypageController {
 	
 	UserService userService;
+	
+	@Autowired
+	GameBoardService GameBoardService;
+	
+	@Autowired
+	PostService postService;
+	
+	@Autowired
+	CommentService commentService;
 	
 	public MypageController(UserService userService) {
 	    this.userService = userService;
@@ -41,7 +57,20 @@ public class MypageController {
         UserInfo myInfo = userService.getMyPageInfo(loginUserId);
         
         model.addAttribute("user", myInfo);
-
+        
+        List<Post> myPostList = postService.getPostByUid(loginUserId);
+        
+        model.addAttribute("myPostList", myPostList);
+        
+		
+		  List<Comments> commentList = commentService.getCommentsByUid(loginUserId);
+		  model.addAttribute("commentList", commentList);
+		  
+		 
+		 
+		
+        
+        
         return "board/mypage";
     }
 	

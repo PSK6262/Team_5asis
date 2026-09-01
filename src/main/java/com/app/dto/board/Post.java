@@ -16,6 +16,8 @@ public class Post {
     private Long gameId;
     private Integer viewCount;
     
+    private String gameAlias;
+    
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt; // NULL 허용
     

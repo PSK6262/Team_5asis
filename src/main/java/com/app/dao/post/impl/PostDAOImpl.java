@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.app.dao.post.PostDAO;
 import com.app.dto.board.Comments;
 import com.app.dto.board.Media;
+import com.app.dto.board.Post;
 import com.app.dto.post.PostDetail;
 
 @Repository
@@ -49,5 +50,11 @@ public class PostDAOImpl implements PostDAO {
 	@Override
 	public int insertPost(Map<String, Object> paramMap) {
 		return sql.insert(NAMESPACE + "insertPost", paramMap);
+	}
+
+	@Override
+	public List<Post> selectPostByUid(Long loginUserId) {
+		
+		return sql.selectList(NAMESPACE + "selectPostByUid", loginUserId);
 	}
 }
