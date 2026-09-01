@@ -17,12 +17,12 @@
 	.pagebody {
 		display: flex;
 		width: 100vw;
-		height: 100vh;
+		min-height: 100vh;
 	}
 	
 	.pagebody-rightside {
 		width: 80%;
-		height: 100%;
+		height: auto;
 		border: 1px solid black;
 		margin-left: 0.2%;
 		padding: 1%;
@@ -92,22 +92,25 @@
 	#leftside-login-btn {
 		width: 100%;
 	}
-	
 	.pagebody-leftside {
 		width: 20%;
-		height: 100%;
+		height: auto;
 		border: 1px solid black;
 		margin-left: 0.2%;
 		margin-right: 0.2%;
 		padding: 1%;
 	}
+	.pagination-div{
+		display:flex;
+		justify-content: center;
+	}
 </style>
 </head>
 <body>
 	<%@ include file="../common/navbar.jsp" %>
-	<div class="pagebody">
+	<div class="pagebody d-flex align-items-stretch" style="min-height: 100vh;">
 		<%@ include file="../common/sidebar.jsp" %>
-		<div class="pagebody-rightside">
+		<div class="pagebody-rightside flex-grow-1">
 			<h4 class="">홈 > ${gameName} </h4> 
 			<p>방송중</p>
 			<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
@@ -173,7 +176,7 @@
 			      <th scope="col">추천</th>
 			    </tr>
 			  </thead>
-			  <tbody>
+			  <tbody id="board-table-body">
 				<c:forEach var="post" items="${pagingPosts.posts}">
 				    <tr class="gameboard-post-view" onclick="gameBoardPostClickEvent(${post.pid})">
 				      <th scope="row">${post.pid}</th>
@@ -192,21 +195,51 @@
 				<c:if test="${pagingPosts.size != 0}">
 				  <ul class="pagination">
 				  	<c:if test="${pagingPosts.hasPrev}">
-				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -2)">Previous</button></li>
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -5)">Previous</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage - 4 > 0}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -4)">${pagingPosts.currentPage - 4}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage - 3 > 0}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -3)">${pagingPosts.currentPage - 3}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage - 2 > 0}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -2)">${pagingPosts.currentPage - 2}</button></li>
 				    </c:if>
 				    <c:if test="${pagingPosts.currentPage - 1 > 0}">
 				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -1)">${pagingPosts.currentPage - 1}</button></li>
 				    </c:if>
+				    
 				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 0)">${pagingPosts.currentPage}</button></li>
+				    
 				    <c:if test="${pagingPosts.currentPage + 1 <= (pagingPosts.postSize + pagingPosts.size - 1) / pagingPosts.size}">
 				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 1)">${pagingPosts.currentPage + 1}</button></li>
 				    </c:if>
+				    <c:if test="${pagingPosts.currentPage + 2 <= (pagingPosts.postSize + pagingPosts.size - 2) / pagingPosts.size}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 2)">${pagingPosts.currentPage + 2}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage + 3 <= (pagingPosts.postSize + pagingPosts.size - 3) / pagingPosts.size}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 3)">${pagingPosts.currentPage + 3}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage + 4 <= (pagingPosts.postSize + pagingPosts.size - 4) / pagingPosts.size}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 4)">${pagingPosts.currentPage + 4}</button></li>
+				    </c:if>
 				    <c:if test="${pagingPosts.hasNext}">
-				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 2)">Next</button></li>
+				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 5)">Next</button></li>
 				  	</c:if>
 				  </ul>
 				</c:if>
 				</nav>
+			</div>
+			<div class="d-flex justify-content-end mb-3">
+			    <div class="btn-group" role="group">
+			        <!-- pSize가 5(SMALL)이면 active 클래스 추가 -->
+			        <button type="button" class="btn btn-outline-primary ${pSize == 5 ? 'active' : ''}" onclick="changePageSize(5)">5개</button>
+			        <!-- pSize가 10(MEDIUM)이면 active 클래스 추가 -->
+			        <button type="button" class="btn btn-outline-primary ${pSize == 10 ? 'active' : ''}" onclick="changePageSize(10)">10개</button>
+			        <!-- pSize가 20(LARGE)이면 active 클래스 추가 -->
+			        <button type="button" class="btn btn-outline-primary ${pSize == 20 ? 'active' : ''}" onclick="changePageSize(20)">20개</button>
+			    </div>
 			</div>
 		</div>
 	</div>
@@ -219,14 +252,106 @@
 	}
 	function pageMovement(currentPage, num){
 		let targetPage = currentPage + num;
-		location.href = window.location.pathname + "?page=" + targetPage;
+		
+	    const urlParams = new URLSearchParams(window.location.search);
+	    let currentSize = urlParams.get('pSize'); 
+		
+	    if (!currentSize) {
+	        const activeSizeBtn = document.querySelector('.btn-group .btn.active');
+	        if (activeSizeBtn) {
+	            currentSize = parseInt(activeSizeBtn.textContent.trim());
+	        } else {
+	            currentSize = 5;
+	        }
+	    }
+	    location.href = window.location.pathname + "?page=" + targetPage + "&pSize=" + currentSize;
 	}
 	function categoryBtnClick(gameAlias, categoryName) {
-	    location.href = "/board/" + gameAlias + "?page=1&category=" + encodeURIComponent(categoryName);
+		const urlParams = new URLSearchParams(window.location.search);
+		const currentSize = urlParams.get('pSize') || '5';
+	    location.href = "/board/" + gameAlias + "?page=1&category=" + encodeURIComponent(categoryName) + "&pSize=" + currentSize;
 	}
 	function streamingCardClick(channelId){
 		location.href = "https://chzzk.naver.com/live/" + channelId;
 	}
+	function changePageSize(size) {
+	    const currentUrl = new URL(window.location.href);
+	    currentUrl.searchParams.set('page', '1');
+	    currentUrl.searchParams.set('pSize', size);
+
+	    fetch(currentUrl.toString())
+	        .then(response => {
+	            if (!response.ok) throw new Error('네트워크 응답 에러');
+	            return response.text();
+	        })
+	        .then(html => {
+	            // 가상 공간 DOM
+	            const parser = new DOMParser();
+	            const doc = parser.parseFromString(html, 'text/html');
+	            // 예시) size가 10이다 -> size가 10일 때의 출력을 DOM에 저장해두고, DOM에서 바꿔야 하는 부분만 가져옴
+	            const newTableBody = doc.querySelector('#board-table-body').innerHTML;
+	            document.querySelector('#board-table-body').innerHTML = newTableBody;
+	            const newPagination = doc.querySelector('.pagination-div').innerHTML;
+	            document.querySelector('.pagination-div').innerHTML = newPagination;
+	            // 그리고 querySelector를 이용해서, 변경하는 방식으로 새로고침 없이 출력된다.
+	            
+	            // 새로고침 효과 없이 주소창만 바꾸기
+                history.pushState(null, '', currentUrl.toString());
+
+	            // 페이지 번호 몇번인지 확인 , 표시되는 개수 바꾸면 바로 1페이지로 넘어가게.
+	            const urlParams = new URLSearchParams(currentUrl.search);
+	            const currentPage = urlParams.get('page') || '1';
+	            document.querySelectorAll('.page-link').forEach(link => {
+	                link.classList.remove('active');
+	                if (link.textContent.trim() === currentPage) {
+	                    link.classList.add('active');
+	                }
+	            });
+	            
+	            // active 효과
+	            updateButtonState(size,2);
+	        })
+	        .catch(error => {
+	            console.error('데이터를 불러오는 중 오류가 발생했습니다:', error);
+	            alert('게시글 목록을 업데이트하지 못했습니다.');
+	        });
+	}
+
+	function updateButtonState(size) {
+	    // .btn과 .btn-group이 포함된 모든것들을 찾아서, 각각의 클래스에 active가 붙은게 있다면 삭제한다
+	    const docs = document.querySelectorAll('.btn-group .btn');
+	    docs.forEach(btn => btn.classList.remove('active'));
+	    
+	    // 저장해둔거중에 내가 원하는 size에 해당하는 버튼을 찾아서 active 붙임
+	    const targetBtn = Array.from(docs).find(btn => btn.textContent.trim() === (size + '개'));
+	    if (targetBtn) {
+	        targetBtn.classList.add('active');
+	    }
+	}
+	document.addEventListener("DOMContentLoaded",function() {
+	    const urlParams = new URLSearchParams(window.location.search);
+	    let currentPage = urlParams.get('page'); 
+	    
+	    if (!currentPage) {
+	        currentPage = '1';
+	    }
+	    
+	    const pageLinks = document.querySelectorAll('.page-link');
+	    
+	    pageLinks.forEach(link => {
+	        link.classList.remove('active');
+	        if (link.textContent.trim() === currentPage) {
+	            link.classList.add('active');
+	        }
+	    });
+	    let currentSize = urlParams.get('pSize');
+	    
+	    if (currentSize) {
+	        updateButtonState(currentSize); 
+	    } else {
+	        updateButtonState(5); 
+	    }
+	})
 	</script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>

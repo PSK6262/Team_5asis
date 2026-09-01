@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.common.CommonCode;
 import com.app.dao.board.GameBoardDAO;
 import com.app.dao.user.UserDAO;
 import com.app.dto.board.GameNameTransferForm;
@@ -54,11 +53,11 @@ public class GameBoardServiceImpl implements GameBoardService {
 	}
 
 	@Override
-	public PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category) {
+	public PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , int pSize) {
 		PagingPosts pagingPosts = new PagingPosts();
 		pagingPosts.setCurrentPage(pageNum);
 		pagingPosts.setGameAlias(gameAlias);
-		pagingPosts.setSize(CommonCode.PAGING_SIZE);
+		pagingPosts.setSize(pSize);
 		pagingPosts.setCategory(category);
 		
 		List<Post> selectedPagingPost = gameBoardDAO.findPostListByPagingPosts(pagingPosts);

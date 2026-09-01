@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.app.common.CommonCode;
 import com.app.dto.api.ChzzkApiResponse;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
@@ -36,16 +37,21 @@ public class GameBoardController {
 	@GetMapping("/{gameAlias}")
 	public String gameBoard(@PathVariable String gameAlias, Model model , 
 										 @RequestParam(defaultValue = "1" , required=false) int page ,
-										 @RequestParam(defaultValue="전체", required=false) String category) {
+										 @RequestParam(defaultValue ="전체", required=false) String category ,
+										 @RequestParam(required=false) Integer pSize) {
 
+		if(pSize == null || pSize <= 0) {
+			pSize = CommonCode.PAGING_SIZE_SMALL;
+		}
+		
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
 		
-		System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category);
+		System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category + " pSize : " + pSize);
 		// 전체 List 불러오기
 		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
 		
 		// Paging 된 List 불러오기
-		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category);
+		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category,pSize);
 		
 		if(gameName == null || gameName.isEmpty()) { 
 			System.out.println("gamename empty");
