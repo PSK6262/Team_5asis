@@ -1,7 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- 부트스트랩 css CDN 연결 부분 -->
@@ -56,7 +53,6 @@
 	background-color: #e0e0e0;
 }
 </style>
-</head>
 <body>
 	<div class="headerBar_container">
 		<!-- 로고 + 팀명 -->
@@ -79,4 +75,3 @@
 		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
 		crossorigin="anonymous"></script> -->
 </body>
-</html>

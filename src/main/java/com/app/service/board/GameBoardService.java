@@ -13,6 +13,6 @@ public interface GameBoardService {
 	List<String> findCategoriesByGameAlias(String gameAlias);
 	List<GameNameTransferForm> findPopularSixGames();
 	List<Post> findTrendPostListByGameAlias(String gameAlias);
-	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category);
+	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , int pSize);
 	SearchResult findSearchResultByKeyword(String keyword);
 }

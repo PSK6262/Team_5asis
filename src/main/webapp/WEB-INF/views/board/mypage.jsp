@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 
-<html>
-<head>
 <meta charset="UTF-8">
 <title>마이페이지</title>
 <link rel="shortcut icon" href="#">
@@ -167,9 +164,7 @@ input[type="password"] {
 	width:150px;
 }
 </style>
-</head>
 <body>
-
 	<!-- 상단 프로필 배너 -->
 	<div class="main">
 		<div class="banner">

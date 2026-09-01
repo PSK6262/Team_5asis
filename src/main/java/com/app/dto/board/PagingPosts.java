@@ -12,7 +12,7 @@ public class PagingPosts {
 	private List<Post> posts;
 	private String gameAlias;
 	private int currentPage;
-	private int size = CommonCode.PAGING_SIZE; // 한 페이지에 몇개씩 가져올 것인지?
+	private int size; // 한 페이지에 몇개씩 가져올 것인지?
 	private boolean hasNext; // 다음페이지가 있는지?
 	private boolean hasPrev;
 	private int postSize;
@@ -28,7 +28,7 @@ public class PagingPosts {
 		int maxPage = (int) Math.ceil((double) this.postSize / this.size);
 		if (maxPage == 0) maxPage = 1;
 
-		this.hasPrev = (this.currentPage - 2) > 0;
-		this.hasNext = (this.currentPage + 2) <= maxPage;
+		this.hasPrev = (this.currentPage - CommonCode.PAGING_BTN_SIZE) > 0;
+		this.hasNext = (this.currentPage + CommonCode.PAGING_BTN_SIZE) <= maxPage;
 	}
 }
