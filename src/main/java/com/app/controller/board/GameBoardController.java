@@ -47,20 +47,21 @@ public class GameBoardController {
 		// Paging 된 List 불러오기
 		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category);
 		
-		if(gameName == null || gameName.isEmpty()) {
-			return "redirect:/main";
+		if(gameName == null || gameName.isEmpty()) { 
+			System.out.println("gamename empty");
+			return "redirect:/main"; 
 		}
-		
-		if(page < 0 || page > pagingPosts.getPostSize()) {
-			return "redirect:/board/" + gameAlias  + "?page=1";
+		if(page < 0 || page > pagingPosts.getPostSize()) { 
+			System.out.println("page empty");
+			return "redirect:/board/" + gameAlias  + "?page=1"; 
 		}
 		List<Post> selectedTrendPost = gameBoardService.findTrendPostListByGameAlias(gameAlias);
-		pagingPosts.setPosts(gameBoardService.addNicknameToPostList(pagingPosts.getPosts()));
+		//pagingPosts.setPosts(gameBoardService.addNicknameToPostList(pagingPosts.getPosts()));
 		
 		List<String> categories = gameBoardService.findCategoriesByGameAlias(gameAlias);
 		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
 		
-		// api로 방송 썸네일 가져오기 / 미완
+		// api로 방송 썸네일 가져오기
 		List<ChzzkApiResponse> chzzkApiResponse = chzzkApiService.getChzzkApiResponseByGameAlias(gameAlias);
 		if(chzzkApiResponse != null) {
 			model.addAttribute("chzzkApiResponse",chzzkApiResponse);

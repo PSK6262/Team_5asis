@@ -10,7 +10,7 @@ import com.app.dto.board.Post;
 import com.app.dto.board.SearchResult;
 
 public interface GameBoardDAO {
-	List<Post> findPostListByGameAlias(String gameAlias);
+	List<Post> findPostDetailListByGameAlias(String gameAlias);
 	String findGameNameByGameAlias(String gameAlias);
 	List<String> findCategoriesByGameAlias(String gameAlias);
 	List<GameNameTransferForm> findPopularSixGames();
@@ -19,6 +19,4 @@ public interface GameBoardDAO {
 	int findPostSizeByGameAlias(String gameAlias);
 	String findChzzkCategoryNameByGameAlias(@Param("gameAlias") String gameAlias);
 	SearchResult findSearchResultByKeyword(String keyword);
-	String findGameNameByGameId(Long gameId);
-	String findGameAliasByGameId(Long gameId);
 }

@@ -20,9 +20,9 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public List<Post> findPostListByGameAlias(String gameAlias) {
-		List<Post> postList = sqlSessionTemplate.selectList("board_mapper.findPostListByGameAlias",gameAlias);
-		return postList;
+	public List<Post> findPostDetailListByGameAlias(String gameAlias) {
+		List<Post> postDetailList = sqlSessionTemplate.selectList("board_mapper.findPostDetailListByGameAlias",gameAlias);
+		return postDetailList;
 	}
 
 	@Override
@@ -78,17 +78,5 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 		searchResult.setSearchedByNickname(searchedByNickname);
 		
 		return searchResult;
-	}
-
-	@Override
-	public String findGameNameByGameId(Long gameId) {
-		String gameName = sqlSessionTemplate.selectOne("board_mapper.findGameNameByGameId",gameId);
-		return gameName;
-	}
-
-	@Override
-	public String findGameAliasByGameId(Long gameId) {
-		String gameName = sqlSessionTemplate.selectOne("board_mapper.findGameAliasByGameId",gameId);
-		return gameName;
 	}
 }
