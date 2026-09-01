@@ -1,6 +1,8 @@
 package com.app.dao.board.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import com.app.dao.board.GameBoardDAO;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
+import com.app.dto.board.SearchResult;
+import com.app.dto.user.UserInfo;
 
 @Repository
 public class GameBoardDAOImpl implements GameBoardDAO {
@@ -18,9 +22,9 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public List<Post> findPostListByGameAlias(String gameAlias) {
-		List<Post> postList = sqlSessionTemplate.selectList("board_mapper.findPostListByGameAlias",gameAlias);
-		return postList;
+	public List<Post> findPostDetailListByGameAlias(String gameAlias) {
+		List<Post> postDetailList = sqlSessionTemplate.selectList("board_mapper.findPostDetailListByGameAlias",gameAlias);
+		return postDetailList;
 	}
 
 	@Override
@@ -54,8 +58,31 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	}
 
 	@Override
-	public int findPostSizeByGameAlias(String gameAlias) {
-		int postSize = sqlSessionTemplate.selectOne("board_mapper.findPostSizeByGameAlias",gameAlias);
+	public int findPostSizeByGameAliasAndCategory(String gameAlias,String category) {
+		Map<String , String> paramMap = new HashMap<>();
+		paramMap.put("gameAlias", gameAlias);
+		paramMap.put("category", category);
+		
+		int postSize = sqlSessionTemplate.selectOne("board_mapper.findPostSizeByGameAliasAndCategory",paramMap);
 		return postSize;
+	}
+
+	@Override
+	public String findChzzkCategoryNameByGameAlias(String gameAlias) {
+		String chzzkCategoryName = sqlSessionTemplate.selectOne("board_mapper.findChzzkCategoryNameByGameAlias",gameAlias);
+		return chzzkCategoryName;
+	}
+
+	@Override
+	public SearchResult findSearchResultByKeyword(String keyword) {
+		SearchResult searchResult = new SearchResult();
+		List<Post> searchedByTitle = sqlSessionTemplate.selectList("board_mapper.findTitleByKeyword",keyword);
+		searchResult.setSearchedByTitle(searchedByTitle);
+		List<Post> searchedByContent = sqlSessionTemplate.selectList("board_mapper.findContentByKeyword",keyword);
+		searchResult.setSearchedByContent(searchedByContent);
+		List<UserInfo> searchedByNickname = sqlSessionTemplate.selectList("board_mapper.findNicknameByKeyword",keyword);
+		searchResult.setSearchedByNickname(searchedByNickname);
+		
+		return searchResult;
 	}
 }

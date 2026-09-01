@@ -4,22 +4,15 @@
 		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		   
 <mapper namespace="board_mapper">
-	<select id="findPostListByGameAlias" resultType="Post" parameterType="string">
-		select *
-		from post
-		where game_id in (select game_id from game_list where game_alias = #{value})
-	</select>
-	<select id="findGameNameByGameAlias" resultType="string" parameterType="string">
-		select game_name
-		from game_list
-		where game_alias = #{value}
-	</select>
-	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
-		select distinct category
-		from post
-		where game_id in (select game_id
-					      from game_list
-					      where game_alias = upper(#{value}))
+	<select id="findPostDetailListByGameAlias" resultType="post" parameterType="string">
+		select p.* , g.game_name , g.game_alias 
+		     , g.chzzk_game_name , u.nickname
+		from post p
+		    inner join game_list g
+		        on p.game_id = g.game_id
+		            inner join user_info u
+		                on p.u_id = u.u_id
+		where game_alias = upper(#{value})
 	</select>
 	<select id="findPopularSixGames" resultType="GameNameTransferForm">
 		select g.game_name , g.game_alias
@@ -30,31 +23,101 @@
 		order by sum(view_count) desc
 		fetch first 6 rows only
 	</select>
+	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
+		select distinct category
+		from post
+		where game_id in (select game_id
+					      from game_list
+					      where game_alias = upper(#{value}))
+	</select>
 	<select id="findTrendPostListByGameAlias" resultType="Post" parameterType="string">
 		select row_number() over (order by (p.view_count + (10*p.like_count)) desc ) as "rownum"
 			 , p.*
+			 , u.nickname
 		from post p 
 		    inner join game_list g
 		        on p.created_at >= sysdate - 7 
 		            and p.game_id = g.game_id 
 		            and g.game_alias = upper(#{value})
+		    inner join user_info u
+                on p.u_id = u.u_id
 		order by (p.view_count + (10*p.like_count)) desc
 		fetch first 3 rows only
 	</select>
 	<select id="findPostListByPagingPosts" resultType="Post" parameterType="PagingPosts">
+		select p.* , u.nickname
+		from post p 
+			inner join user_info u
+				on p.u_id = u.u_id
+		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+		<if test="!category.equals('전체') and category != null and category != '' ">
+			and category = #{category}
+		</if>
+		order by p_id desc
+		offset #{offset} rows fetch next #{size} rows only
+	</select>
+	<select id="findTitleByKeyword" resultType="post"
+		parameterType="string">
+		select p.* , u.nickname , g.game_name , g.game_alias
+		from post p
+			inner join user_info u
+				on p.u_id = u.u_id
+			inner join game_list g
+				on p.game_id = g.game_id
+		where REPLACE(LOWER(title), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+	</select>
+	<select id="findContentByKeyword" resultType="post"
+		parameterType="string">
+		select p.*, u.nickname , g.game_name , g.game_alias
+		from post p
+			inner join user_info u
+				on p.u_id = u.u_id
+			inner join game_list g
+				on p.game_id = g.game_id
+		where REPLACE(LOWER(content), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+	</select>
+	<select id="findNicknameByKeyword" resultType="UserInfo"
+		parameterType="string">
 		select *
+		from user_info
+		where REPLACE(LOWER(nickname), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+	</select>
+	<select id="findPostSizeByGameAliasAndCategory" resultType="int" parameterType="map">
+		select count(*)
 		from post
 		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
 		<if test="!category.equals('전체') and category != null and category != '' ">
 			and category = #{category}
 		</if>
-		order by p_id
-		offset #{offset} rows fetch next #{size} rows only
 	</select>
-	<select id="findPostSizeByGameAlias" resultType="int" parameterType="string">
-		select count(*)
-		from post
-		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+	<select id="findChzzkCategoryNameByGameAlias" resultType="string" parameterType="string">
+		select chzzk_game_name
+		from game_list
+		where game_alias = upper(#{gameAlias})
 	</select>
 	
+	
+	
+	
+	
+	<select id="findPostListByGameAlias" resultType="Post" parameterType="string">
+		select *
+		from post
+		where game_id in (select game_id from game_list where game_alias = #{value})
+	</select>
+	<select id="findGameNameByGameAlias" resultType="string" parameterType="string">
+		select game_name
+		from game_list
+		where game_alias = #{value}
+	</select>
+	<select id="findGameNameByGameId" resultType="string" parameterType="Long">
+		select game_name
+		from game_list
+		where game_id = #{value}
+	</select>
+	<select id="findGameAliasByGameId" resultType="string" parameterType="Long">
+		select game_alias
+		from game_list
+		where game_id = #{value}
+	</select>
 </mapper>

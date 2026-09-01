@@ -138,16 +138,83 @@ body {
 	transition: all 0.3s ease;
 }
 
+/* 기본 버튼 스타일 */
 .btn-like {
-	background-color: #fff;
-	border: 1px solid #2F7778;
+    background-color: #fff;
+    border: 1px solid #2F7778;
 	color: #2F7778;
 	font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* 추천 완료 시 (active 클래스가 적용되었을 때) 스타일 */
+.btn-like.active {
+    background: linear-gradient(135deg, #2F7778, #E0B85A);
+    color: #ffffff;
+    border-color: #2F7778;
+    font-weight: bold;
 }
 
 .btn-like:hover {
 	background: linear-gradient(135deg, #2F7778, #E0B85A);
 	color: white;
+}
+
+/* 전체 버튼 컨테이너 (relative 기준점) */
+.post-action-container {
+    position: relative;
+    display: flex;
+    justify-content: center; /* 추천 버튼을 중앙으로 */
+    align-items: center;
+    margin: 30px 0 20px 0;
+}
+
+/* 추천 버튼 감싸는 div */
+.like-button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+/* 오른쪽 끝 수정/삭제 버튼 묶음 (absolute 처리) */
+.author-buttons {
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 6px; /* 버튼 간격 */
+}
+
+/* 수정(a) 및 삭제(button) 공통 소형 통일 디자인 */
+.btn-sm {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 46px;        /* 작은 가로 */
+    height: 30px;       /* 작은 세로 */
+    font-size: 13px;    /* 작은 글씨 */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #555;
+    text-decoration: none; /* a태그 밑줄 제거 */
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+/* 수정 버튼 hover */
+.btn-edit:hover {
+    background-color: #e9e9e9;
+    color: #333;
+}
+
+/* 삭제 버튼 hover */
+.btn-delete:hover {
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
 }
 
 /* 댓글 영역 */
@@ -266,11 +333,35 @@ body {
 			<!-- 게시글 본문 -->
 			<div class="post-content">${post.content}</div>
 
-			<!-- 하단 버튼 영역 -->
-			<div class="button-area">
-				<button type="button" class="btn btn-like">
-					👍 추천 ${post.likeCount}
-				</button>
+			<!-- 버튼 영역 전체 감싸기 -->
+			<div class="post-action-container">
+			
+			    <!-- 1. 추천 버튼 (중앙 정렬) -->
+			    <div class="like-button-wrapper">
+			        <button type="button" class="btn btn-like ${isLiked ? 'active' : ''}" id="likeBtn" onclick="likePost(${post.pid})">
+			            👍 추천 <span id="likeCount">${post.likeCount}</span>
+			        </button>
+			    </div>
+			
+			    <!-- 2. 수정/삭제 버튼 (오른쪽 끝 정렬) -->
+			    <c:if test="${post.uid == 1}">
+			        <div class="author-buttons">
+			            <a href="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/edit"
+			               class="btn-sm btn-edit">
+			                수정
+			            </a>
+			
+			            <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/delete"
+			                  method="post"
+			                  style="display:inline;"
+			                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
+			                <button type="submit" class="btn-sm btn-delete">
+			                    삭제
+			                </button>
+			            </form>
+			        </div>
+			    </c:if>
+			
 			</div>
 
 			<!-- 댓글 영역 -->
@@ -307,6 +398,40 @@ body {
 
 		</div>
 	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	
+	
+	<script>
+		function likePost(pId) {
+		    $.ajax({
+		        url: '${pageContext.request.contextPath}/board/' + pId + '/like',
+		        type: 'POST',
+		        success: function(response) {
+		            if (response.status === 'success') {
+		                // 추천 수 반영
+		                $('#likeCount').text(response.updatedLikeCount);
+		                
+		                // if/else를 통한 버튼 클래스 제어
+		                if (response.isLiked) {
+		                    $('#likeBtn').addClass('active');
+		                    alert('추천되었습니다.');
+		                } else {
+		                    $('#likeBtn').removeClass('active');
+		                    alert('추천이 취소되었습니다.');
+		                }
+		            } else {
+		                alert('처리에 실패했습니다.');
+		            }
+		        },
+		        error: function() {
+		            alert('서버 통신 중 오류가 발생했습니다.');
+		        }
+		    });
+		}
+		
+	</script>
 
 </body>
 </html>

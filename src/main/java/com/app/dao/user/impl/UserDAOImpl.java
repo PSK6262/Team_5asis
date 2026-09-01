@@ -12,9 +12,6 @@ public class UserDAOImpl implements UserDAO {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
-	@Autowired // ⭐ 이 주입 코드가 있어야 sqlSession을 쓸 수 있습니다!
-    SqlSessionTemplate sqlSession;
-	
 	@Override
 	public String findNickNameByUid(Long uid) {
 		String nickname = sqlSessionTemplate.selectOne("user_mapper.findNickNameByUid",uid);
@@ -29,13 +26,20 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void updatePassword(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-	 sqlSession.update("user_mapper.updatePassword", userInfo);
+		sqlSessionTemplate.update("user_mapper.updatePassword", userInfo);
 	}
 
+	//회원 정보
 	@Override
-	public void updateNickname(UserInfo userInfo) {
-		// TODO Auto-generated method stub
-		sqlSession.update("user_mapper.updateNickname", userInfo);
-		
+	public void insertUser(UserInfo userInfo) {
+		sqlSessionTemplate.insert("user_mapper.insertUser", userInfo);
 	}
+
+	//아이디(이메일) 중복체크
+	@Override
+	public int checkEmailDuplicate(String email) {
+		return sqlSessionTemplate.selectOne("user_mapper.checkEmailDuplicate", email);
+	}
+	
+	
 }

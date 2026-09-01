@@ -62,8 +62,66 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Post> getPostByUid(Long loginUserId) {
+	public boolean isLiked(Long pId, Long uId) {
+		if (uId == null) return false;
+	    
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("pId", pId);
+	    map.put("uId", uId);
+	    
+	    return postDAO.checkLikeHistory(map) > 0;
+	}
+	
+	// 추천 및 추천 취소 처리
+	@Override
+    public Map<String, Object> processLike(Long pId, Long uId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pId", pId);
+        map.put("uId", uId);
+
+        int count = postDAO.checkLikeHistory(map);
+        boolean isLiked;
+
+        if (count > 0) {
+            // 이미 추천함 -> 추천 취소
+            postDAO.deleteLikeHistory(map);
+            postDAO.decreaseLikeCount(pId);
+            isLiked = false;
+        } else {
+            // 추천 안 함 -> 추천 추가
+            postDAO.insertLikeHistory(map);
+            postDAO.updateLikeCount(pId);
+            isLiked = true;
+        }
+
+        int updatedLikeCount = postDAO.getLikeCount(pId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("isLiked", isLiked);
+        result.put("updatedLikeCount", updatedLikeCount);
+        return result;
+    }
+
+	@Override
+	public int updatePost(Long pId, Long uId, String title, String content, String category) {
+		return postDAO.updatePost(
+	            pId,
+	            uId,
+	            title,
+	            content,
+	            category
+	    );
+	}
+
+	@Override
+	public int deletePost(Long pId, Long uId) {
 		
+		return postDAO.deletePost(pId, uId);
+		
+	}
+	
+	@Override
+	public List<Post> getPostByUid(Long loginUserId) {
 		return postDAO.selectPostByUid(loginUserId);
 	}
 

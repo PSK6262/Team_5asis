@@ -85,7 +85,7 @@ public class MypageController {
 	        return "redirect:/main";
 	    }
 	    
-	    userInfo.setUId(userId);
+	    userInfo.setUid(userId);
 		
 	
 		
@@ -104,7 +104,7 @@ public class MypageController {
 	        return "redirect:/main";
 	    }
 	    
-	    userInfo.setUId(userId);
+	    userInfo.setUid(userId);
 		
 	
 		

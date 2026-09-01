@@ -4,8 +4,11 @@ public class CommonCode {
 	
 	// GAMEBOARD
 	// 하나의 페이지에서 몇 개의 Post를 보여줄 것인지
-	public static final int PAGING_SIZE = 5;
+	public static final int PAGING_SIZE_SMALL = 5;
+	public static final int PAGING_SIZE_MEDIUM = 10;
+	public static final int PAGING_SIZE_LARGE = 20;
 	
+	public static final int PAGING_BTN_SIZE = 5;
 	
 	
 	

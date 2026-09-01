@@ -5,180 +5,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/gameBoard.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<title>Insert title here</title>
-<!-- 이후 gameboard-style.css 로 빼기-->
-<style>
-	*{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-	}
-	#centerSearchBar{
-		width:30%;
-	}
-	.pagebody{ 
-		display:flex;
-		width:100vw;
-		height:100vh;
-	}
-	.pagebody-leftside{
-		width:20%;
-		height:100%;
-		border:1px solid black;
-		margin-left: 0.2%;
-		margin-right:0.2%;
-		padding : 1%;
-	}
-	.pagebody-rightside{
-		width:80%;
-		height:100%;
-		border:1px solid black;
-		margin-left:0.2%;
-		padding: 1%;
-	}
-	.chzzk-streamer-profile-img {
-	    width: 36px;       /* 아이콘보다 살짝 큰 최적의 크기 */
-	    height: 36px;
-	    object-shrink: 0;
-	    object-fit: cover;
-	    border-radius: 50%;
-	    border: 1px solid #e9ecef;
-	}
-	.streaming-card{
-		width:99%;
-		height:25vh;
-		border:1px solid black;
-		margin: 1%;
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
-	}
-	.streaming-image-wrapper {
-	    width: 150px;
-	    aspect-ratio: 16 / 9;
-	    overflow: hidden;
-	    border-radius: 6px;
-	    flex-shrink: 0;
-	    background-color: #f8f9fa;
-	}
-	.streaming-thumbnail {
-	    width: 100%;
-	    height: 100%;
-	    object-fit: cover; /* 비율 유지하며 꽉 차게 잘라냄 */
-	}
-	.streaming-info {
-	    min-width: 0; /* 부모 d-flex 안에서 text-truncate(말줄임)가 작동 */
-	}
-	#streaming-card:hover{
-	    transform: translateY(-2px);
-	    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-	    border-color: #00ffaa !important; /* 치지직 시그니처 네온그린 포인트 색상 */
-	}
-	#leftside-login-btn{
-		width:100%;
-	}
-	.popular-games-label{
-		margin:1%;
-	}
-	.popular-games-label:hover{
-		background-color:gray;
-	}
-	.gameboard-post-view:hover{
-		background-color:gray;
-		cursor:pointer;
-	}
-	.pagination-div{
-		width:100%;
-	}
-</style>
+<title>5ASIS</title>
 </head>
 <body>
-	<nav class="navbar bg-body-tertiary">
-		<div
-			class="container-fluid d-flex justify-content-between align-items-center">
-			<div id="navbarLeftMost">
-				<a class="navbar-brand" href="#">5ASIS</a>
-			</div>
-			<form class="form-inline my-2 my-lg-0" id="centerSearchBar">
-				<div class="position-relative d-flex align-items-center">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-						fill="currentColor"
-						class="bi bi-search position-absolute ms-2 text-muted"
-						viewBox="0 0 16 16" style="z-index: 5;">
-		          <path	d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-		        </svg>
-					<input class="form-control ps-4 mr-sm-2" type="search"
-						placeholder="게임, 게시글 검색.." aria-label="Search">
-				</div>
-			</form>
-			<button class="btn btn-info" id="navbarLoginButton">로그인</button>
-		</div>
-	</nav>
-	<div class="pagebody">
-		<div class="pagebody-leftside">
-			<form class="p-4">
-			  <div class="form-group">
-			    <label for="leftside-login-id">아이디</label>
-			    <input type="email" class="form-control" id="leftside-login-id" placeholder="email@example.com">
-			  </div>
-			  <div class="form-group">
-			    <label for="leftside-login-pw">비밀번호</label>
-			    <input type="password" class="form-control" id="leftside-login-pw" placeholder="Password">
-			  </div>
-			  <div class="form-check">
-			    <input type="checkbox" class="form-check-input" id="dropdownCheck2">
-			    <label class="form-check-label" for="dropdownCheck2">
-			      아이디 기억
-			    </label>
-			  </div>
-			  <button type="submit" class="btn btn-primary" id="leftside-login-btn">로그인</button>
-			</form>
-			<div class="pagebody-leftside-gameboard-list">
-				<div class="popular-games-header">
-					<h5>인기 게시판 TOP 6</h5>
-				</div>
-				<c:forEach var="game" items="${popularSixGames}">
-					<p><label class="popular-games-label" onclick="popularGamesOnclickEvent('${game.gameAlias}')">${game.gameName}</label></p>
-				</c:forEach>
-			</div>
-		</div>
-		<div class="pagebody-rightside">
+	<%@ include file="../common/navbar.jsp" %>
+	<div class="pagebody d-flex align-items-stretch" style="min-height: 100vh;">
+		<%@ include file="../common/sidebar.jsp" %>
+		<div class="pagebody-rightside flex-grow-1">
 			<h4 class="">홈 > ${gameName} </h4> 
 			<p>방송중</p>
 			<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+			<c:if test="${not empty chzzkApiResponse}">
 				<c:forEach var="live" items="${chzzkApiResponse}">
 				<div class="col" id="streaming-card" onclick="streamingCardClick(${live.channelId})">
 					<div class="col">
-					    <!-- 
-					      1. id="streaming-card"는 루프를 돌면 중복되므로 지우고 class로 대체합니다.
-					      2. 클릭할 수 있는 카드임을 알리기 위해 'cursor-pointer' 성격을 부여합니다.
-					    -->
 					    <div class="streaming-card d-flex border rounded p-3 h-100 align-items-center bg-white position-relative" 
 					         style="cursor: pointer;" 
-					         onclick="streamingCardClick('${live.channelId}')"> <!-- channelId가 문자열일 수 있으므로 따옴표로 감쌉니다 -->
-					         
-					        <!-- 왼쪽: 썸네일 이미지 영역 (16:9 비율) -->
+					         onclick="streamingCardClick('${live.channelId}')">
 					        <div class="streaming-image-wrapper me-3">
 					            <img src="${live.previewImageUrl}" alt="Thumbnail" class="streaming-thumbnail">
 					        </div>
-					        
-					        <!-- 오른쪽: 방송 정보 영역 (상/하단 정렬 구조) -->
 					        <div class="streaming-info flex-grow-1 d-flex flex-column justify-content-between h-100" style="min-width: 0;">
-					            <!-- 상단: 방송 제목 -->
 					            <div>
 					                <h5 class="card-title text-truncate mb-1" style="font-size: 0.95rem; font-weight: 600;" title="${live.liveTitle}">
 					                    ${live.liveTitle}
 					                </h5>
 					            </div>
-					            
-					            <!-- 하단: 프로필 이미지 + 스트리머명 + 시청자 수 -->
 					            <div class="d-flex align-items-center justify-content-between mt-2">
-					                <!-- 프로필 및 스트리머 이름 -->
 					                <div class="d-flex align-items-center flex-grow-1 me-2" style="min-width: 0;">
 					                    <img class="chzzk-streamer-profile-img me-2" src="${live.profileImageUrl}" alt="Profile" />
 					                    <span class="card-text text-muted small text-truncate fw-semibold">${live.streamerName}</span>
 					                </div>
-					                
-					                <!-- 시청자 수 -->
 					                <span class="badge bg-danger bg-opacity-10 text-danger small px-2 py-1 flex-shrink-0" style="font-size: 0.75rem;">
 					                    • ${live.concurrentUserCount}명
 					                </span>
@@ -188,6 +47,10 @@
 					</div>
 		        </div>
 				</c:forEach>
+			</c:if>
+			<c:if test="${empty chzzkApiResponse}">
+				<p>진행중인 방송이 없습니다.</p>
+			</c:if>
 			</div>
 			<div>
 				<p>인기 게시글</p>
@@ -200,9 +63,9 @@
 					</c:if>
 				</c:forEach>
 			</div>
-				<button type="button" name="categories" onclick="categoryBtnClick('전체')"> 전체 </button>
+				<button type="button" name="categories" onclick="categoryBtnClick('${gameAlias}','전체')"> 전체 </button>
 			<c:forEach var="category" items="${categories}">
-				<button type="button" name="categories" onclick="categoryBtnClick('${category}')"> ${category} </button>
+				<button type="button" name="categories" onclick="categoryBtnClick('${gameAlias}' ,'${category}')"> ${category} </button>
 			</c:forEach>
 			<table class="table">
 			  <thead>
@@ -216,7 +79,7 @@
 			      <th scope="col">추천</th>
 			    </tr>
 			  </thead>
-			  <tbody>
+			  <tbody id="board-table-body">
 				<c:forEach var="post" items="${pagingPosts.posts}">
 				    <tr class="gameboard-post-view" onclick="gameBoardPostClickEvent(${post.pid})">
 				      <th scope="row">${post.pid}</th>
@@ -235,44 +98,55 @@
 				<c:if test="${pagingPosts.size != 0}">
 				  <ul class="pagination">
 				  	<c:if test="${pagingPosts.hasPrev}">
-				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -2)">Previous</button></li>
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -5 ,'${pagingPosts.category}' )">Previous</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage - 4 > 0}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -4 ,'${pagingPosts.category}' )">${pagingPosts.currentPage - 4}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage - 3 > 0}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -3 ,'${pagingPosts.category}' )">${pagingPosts.currentPage - 3}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage - 2 > 0}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -2 ,'${pagingPosts.category}' )">${pagingPosts.currentPage - 2}</button></li>
 				    </c:if>
 				    <c:if test="${pagingPosts.currentPage - 1 > 0}">
-				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -1)">${pagingPosts.currentPage - 1}</button></li>
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , -1 ,'${pagingPosts.category}' )">${pagingPosts.currentPage - 1}</button></li>
 				    </c:if>
-				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 0)">${pagingPosts.currentPage}</button></li>
+				    
+				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 0 ,'${pagingPosts.category}' )">${pagingPosts.currentPage}</button></li>
+				    
 				    <c:if test="${pagingPosts.currentPage + 1 <= (pagingPosts.postSize + pagingPosts.size - 1) / pagingPosts.size}">
-				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 1)">${pagingPosts.currentPage + 1}</button></li>
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 1 ,'${pagingPosts.category}' )">${pagingPosts.currentPage + 1}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage + 2 <= (pagingPosts.postSize + pagingPosts.size - 2) / pagingPosts.size}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 2 ,'${pagingPosts.category}' )">${pagingPosts.currentPage + 2}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage + 3 <= (pagingPosts.postSize + pagingPosts.size - 3) / pagingPosts.size}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 3 ,'${pagingPosts.category}' )">${pagingPosts.currentPage + 3}</button></li>
+				    </c:if>
+				    <c:if test="${pagingPosts.currentPage + 4 <= (pagingPosts.postSize + pagingPosts.size - 4) / pagingPosts.size}">
+				    	<li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 4 ,'${pagingPosts.category}' )">${pagingPosts.currentPage + 4}</button></li>
 				    </c:if>
 				    <c:if test="${pagingPosts.hasNext}">
-				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 2)">Next</button></li>
+				    <li class="page-item"><button type="button" class="page-link" onclick="pageMovement(${pagingPosts.currentPage} , 5 ,'${pagingPosts.category}' )">Next</button></li>
 				  	</c:if>
 				  </ul>
 				</c:if>
 				</nav>
 			</div>
+			<div class="d-flex justify-content-end mb-3">
+			    <div class="btn-group" role="group">
+			        <!-- pSize가 5(SMALL)이면 active 클래스 추가 -->
+			        <button type="button" class="btn btn-outline-primary ${pSize == 5 ? 'active' : ''}" onclick="changePageSize(5)">5개</button>
+			        <!-- pSize가 10(MEDIUM)이면 active 클래스 추가 -->
+			        <button type="button" class="btn btn-outline-primary ${pSize == 10 ? 'active' : ''}" onclick="changePageSize(10)">10개</button>
+			        <!-- pSize가 20(LARGE)이면 active 클래스 추가 -->
+			        <button type="button" class="btn btn-outline-primary ${pSize == 20 ? 'active' : ''}" onclick="changePageSize(20)">20개</button>
+			    </div>
+			</div>
 		</div>
-	</div>	
+	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-	<!-- 스크립트는 이후 새로운 파일로 뺄 것 -->
-	<script>
-		function popularGamesOnclickEvent(gameName){
-			location.href = "/board/" + gameName;
-		}
-		function gameBoardPostClickEvent(pid){
-			location.href = window.location.pathname + "/" + pid;
-		}
-		function pageMovement(currentPage, num){
-			let targetPage = currentPage + num;
-			location.href = window.location.pathname + "?page=" + targetPage;
-		}
-		function categoryBtnClick(categoryName) {
-			let gameAlias = '${gameAlias}';
-		    location.href = "/board/" + gameAlias + "?page=1&category=" + encodeURIComponent(categoryName);
-		}
-		function streamingCardClick(channelId){
-			location.href = "https://chzzk.naver.com/live/" + channelId;
-		}
-	</script>
+<script src="${pageContext.request.contextPath}/resources/js/gameBoard.js"></script>
 </body>
 </html>

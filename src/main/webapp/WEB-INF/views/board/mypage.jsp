@@ -3,8 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 
-<html>
-<head>
 <meta charset="UTF-8">
 <title>마이페이지</title>
 <link rel="shortcut icon" href="#">
@@ -171,9 +169,7 @@ input[type="password"] {
 
 
 </style>
-</head>
 <body>
-
 	<!-- 상단 프로필 배너 -->
 	<div class="main">
 		<div class="banner">
