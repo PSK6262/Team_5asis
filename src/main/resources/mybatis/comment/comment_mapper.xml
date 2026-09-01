@@ -26,5 +26,25 @@
         )
 
     </insert>
+   
+   
+    
+    <select id="selectCommentByUid" parameterType="Long" resultType="com.app.dto.board.Comments">
+        SELECT          
+         
+		c.c_id,
+		c."content",
+		c.like_count,
+		c.p_id AS "pid",
+		c.u_id AS "uid",
+		c.parent_c_id,
+		c.created_at,
+		g.game_alias
+        FROM comments c
+        JOIN post p ON c.p_id = p.p_id
+        JOIN game_list g ON p.game_id = g.game_id
+        WHERE c.u_id = #{value}  
+        ORDER BY c.created_at DESC
+    </select>
 
 </mapper>

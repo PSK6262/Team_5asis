@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 
 <html>
@@ -105,7 +105,7 @@ button {
 
 .info_box {
 	width: 700px;
-	height:auto;
+	height: auto;
 	border: 1px solid black;
 	border-radius: 6px;
 	margin-top: 20px;
@@ -161,11 +161,12 @@ input[type="password"] {
 	gap: 10px;
 }
 
-.is-hidden{
-	display:none;
+.is-hidden {
+	display: none;
 }
-.updateBtn{
-	width:150px;
+
+.updateBtn {
+	width: 150px;
 }
 </style>
 </head>
@@ -203,21 +204,24 @@ input[type="password"] {
 					<input type="text" value="${user.email}" disabled>
 
 					<p style="font-size: 15px; font-weight: bold;">비밀번호</p>
-					<input type="password" value="${user.password}" id="viewPassword" disabled>
+					<input type="password" value="${user.password}" id="viewPassword"
+						disabled>
 					<div>
-				    <input type="checkbox" id="showPasswordCheck">
-				    <label for="showPasswordCheck">비밀번호 보기</label>
+						<input type="checkbox" id="showPasswordCheck"> <label
+							for="showPasswordCheck">비밀번호 보기</label>
 					</div>
-					
-					
-						<button type="button" id="toggleBtnPw" class="updateBtn">비밀번호 변경하기</button>
-						
 
-					<form action="/board/mypage/update-password" method="post" id="pwUpdateForm" class="is-hidden">
+
+					<button type="button" id="toggleBtnPw" class="updateBtn">비밀번호
+						변경하기</button>
+
+
+					<form action="/board/mypage/update-password" method="post"
+						id="pwUpdateForm" class="is-hidden">
 
 						<div>
-							<label for="password">새로운 비밀번호:</label> 
-							<input type="text" name="password" id="password" required style="width:285px;">
+							<label for="password">새로운 비밀번호:</label> <input type="text"
+								name="password" id="password" required style="width: 285px;">
 						</div>
 
 						<br>
@@ -231,15 +235,17 @@ input[type="password"] {
 					<p style="font-size: 15px; font-weight: bold;">닉네임</p>
 					<input type="text" value="${user.nickname}" disabled>
 
-					
-						<button type="button" id="toggleBtnNickname" class="updateBtn">닉네임 변경하기</button>
-						
 
-					<form action="/board/mypage/update-nickname" method="post" id="nicknameUpdateForm" class="is-hidden">
+					<button type="button" id="toggleBtnNickname" class="updateBtn">닉네임
+						변경하기</button>
+
+
+					<form action="/board/mypage/update-nickname" method="post"
+						id="nicknameUpdateForm" class="is-hidden">
 
 						<div>
-							<label for="nickname">새로운 닉네임:</label> 
-							<input type="text" name="nickname" id="nickname" required style="width:285px;">
+							<label for="nickname">새로운 닉네임:</label> <input type="text"
+								name="nickname" id="nickname" required style="width: 285px;">
 						</div>
 
 						<br>
@@ -249,58 +255,111 @@ input[type="password"] {
 						</div>
 
 					</form>
-					
-					
-					
+
+
+
 					<button class="quit_button">회원탈퇴</button>
 
 
 				</div>
 				<div id="tab-posts" class="content-item">
-				
-				
+
+
 					<h3>📝 내 작성글 목록</h3>
-				 <table class="table table-hover mt-3">
-          <thead>
+					<table class="table1">
+						<thead>
+							<tr>
+								<th scope="col">번호</th>
+								<th scope="col">카테고리</th>
+								<th scope="col">제목</th>
+								<th scope="col">등록일</th>
+								<th scope="col">조회수</th>
+								<th scope="col">추천</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+
+								<c:when test="${empty myPostList}">
+									<tr>
+										<td colspan="6" class="text-center">작성한 게시글이 없습니다.</td>
+									</tr>
+								</c:when>
+
+
+								<c:otherwise>
+									<c:forEach var="post" items="${myPostList}">
+
+										<tr style="cursor: pointer;"
+											onclick="location.href='/board/${post.gameAlias}/${post.pid}'">
+											<th scope="row">${post.pid}</th>
+											<td>${post.category}</td>
+											<td>${post.title}</td>
+											<td>${post.createdAt}</td>
+											<td>${post.viewCount}</td>
+											<td>${post.likeCount}</td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
+				</div>
+				<div id="tab-comments" class="content-item">
+					<h3>💬 내 댓글 목록</h3>
+					 
+					<table class="comment-table">
+        <thead>
             <tr>
-              <th scope="col">번호</th>
-              <th scope="col">카테고리</th>
-              <th scope="col">제목</th>
-              <th scope="col">등록일</th>
-              <th scope="col">조회수</th>
-              <th scope="col">추천</th>
+                <th>게임</th>
+                <th>댓글 내용</th>
+                <th>좋아요</th>
+                <th>작성일</th>
             </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
             <c:choose>
-             
-                <c:when test="${empty myPostList}">
+                <%-- 댓글 리스트가 비어있거나 없는 경우 --%>
+                <c:when test="${empty commentList}">
                     <tr>
-                        <td colspan="6" class="text-center">작성한 게시글이 없습니다.</td>
+                        <td colspan="4" class="no-data">작성한 댓글이 없습니다.</td>
                     </tr>
                 </c:when>
                 
-                
+                <%-- 댓글 리스트가 있는 경우 반복문 출력 --%>
                 <c:otherwise>
-                    <c:forEach var="post" items="${myPostList}">
-                       
-                        <tr style="cursor: pointer;" onclick="location.href='/board/${post.gameAlias}/${post.pid}'">
-                          <th scope="row">${post.pid}</th>
-                          <td>${post.category}</td>
-                          <td>${post.title}</td>
-                          <td>${post.createdAt}</td>
-                          <td>${post.viewCount}</td>
-                          <td>${post.likeCount}</td>
+                    <c:forEach var="comment" items="${commentList}">
+                        <tr>
+                           
+                            <td class="game-alias">
+                                <span class="badge">${comment.gameAlias != null ? comment.gameAlias : '일반'}</span>
+                            </td>
+                            
+                            
+                            <td class="comment-content">
+                                <a onclick="location.href='/board/${comment.gameAlias}/${comment.pid} '">
+                                    ${comment.content}
+                                   
+                                </a>
+                            </td>
+                            
+                            <!-- 좋아요 수 -->
+                            <td class="like-count">
+                                ❤️ ${comment.likeCount}
+                            </td>
+                            
+                            <!-- 작성일  -->
+                            <td class="created-at">
+                                <c:out value="${comment.createdAt}" />
+                            </td>
                         </tr>
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
-          </tbody>
-        </table>
-				</div>
-				<div id="tab-comments" class="content-item">
-					<h3>💬 내 댓글 목록</h3>
-			
+        </tbody>
+    </table>
+					
+
 				</div>
 				<div id="tab-likes" class="content-item">
 					<h3>❤️ 좋아요한 글</h3>
@@ -315,66 +374,64 @@ input[type="password"] {
 
 	<script>
 		// 스크립트 실행 타이밍 문제를 완전히 방지하기 위해 window.onload 사용
-		window.onload = function() {
-			const boxes = document.querySelectorAll('.box');
-			const contentItems = document.querySelectorAll('.content-item');
-
-			boxes.forEach(box => {
-				box.addEventListener('click', function() {
-					const targetTab = this.getAttribute('data-tab');
-
-					// 1. 모든 탭 버튼 상단의 active 제거 후 클릭한 것에만 부여
-					boxes.forEach(b => b.classList.remove('active'));
-					this.classList.add('active');
-
-					// 2. 모든 컨텐츠 영역 상단의 active 제거
-					contentItems.forEach(item => {
-						item.classList.remove('active');
-					});
-
-					// 3. 해당 id를 가진 컨텐츠 상단에 active 추가
-					const targetElement = document.getElementById('tab-' + targetTab);
-					if (targetElement) {
-						targetElement.classList.add('active');
-					}
-				});
-			});
-		};
-		
-		document.getElementById('toggleBtnPw').addEventListener('click', function() {
-		    const form = document.getElementById('pwUpdateForm');
-		    
-		    
-		    form.classList.toggle('is-hidden');
-		});
-		
 		document.addEventListener('DOMContentLoaded', function() {
-		    const passwordInput = document.getElementById('viewPassword');
-		    const showPasswordCheck = document.getElementById('showPasswordCheck');
+    // 1. 탭 전환 기능
+    const boxes = document.querySelectorAll('.box');
+    const contentItems = document.querySelectorAll('.content-item');
 
-		    // 체크박스 상태가 바뀔 때마다 실행
-		    showPasswordCheck.addEventListener('change', function() {
-		        if (this.checked) {
-		            // 체크되면 글자가 보이도록 text로 변경
-		            passwordInput.type = 'text';
-		        } else {
-		            // 체크 해제되면 다시 숨김 처리(password)로 변경
-		            passwordInput.type = 'password';
-		        }
-		    });
-		});
+    boxes.forEach(box => {
+        box.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+
+            boxes.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            contentItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const targetElement = document.getElementById('tab-' + targetTab);
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+        });
+    });
+
+    // 2. 비밀번호 변경 토글 버튼
+    const toggleBtnPw = document.getElementById('toggleBtnPw');
+    if (toggleBtnPw) {
+        toggleBtnPw.addEventListener('click', function() {
+            const form = document.getElementById('pwUpdateForm');
+            if (form) form.classList.toggle('is-hidden');
+        });
+    }
+
+    // 3. 비밀번호 보기 체크박스
+    const passwordInput = document.getElementById('viewPassword');
+    const showPasswordCheck = document.getElementById('showPasswordCheck');
+    if (showPasswordCheck && passwordInput) {
+        showPasswordCheck.addEventListener('change', function() {
+            passwordInput.type = this.checked ? 'text' : 'password';
+        });
+    }
+
+    // 4. 닉네임 변경 토글 버튼
+    const toggleBtnNickname = document.getElementById('toggleBtnNickname');
+    if (toggleBtnNickname) {
+        toggleBtnNickname.addEventListener('click', function() {
+            const form = document.getElementById('nicknameUpdateForm');
+            if (form) form.classList.toggle('is-hidden');
+        });
+    }
+});
 		
-		document.getElementById('toggleBtnNickname').addEventListener('click', function() {
-		    const form = document.getElementById('nicknameUpdateForm');
-		    
-		    
-		    form.classList.toggle('is-hidden');
-		});
-		
-		/* function gameBoardPostClickEvent(pid){
-			location.href = window.location.pathname + "/" + pid;
+		function moveBoard(gameAlias, pId) {
+		    if (!gameAlias || gameAlias === 'null' || !pId || pId === 'null') {
+		        alert('올바르지 않은 게시글 정보입니다.');
+		        return;
+		    }
+		    location.href = '/board/' + gameAlias + '/' + pId;
 		}
-		 */
 	</script>
 </body>
 </html>

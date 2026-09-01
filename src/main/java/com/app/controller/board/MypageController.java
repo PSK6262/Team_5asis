@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.app.dto.board.Comments;
 import com.app.dto.board.Post;
 import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
+import com.app.service.comment.CommentService;
 import com.app.service.post.PostService;
 import com.app.service.user.UserService;
 
@@ -30,6 +32,9 @@ public class MypageController {
 	
 	@Autowired
 	PostService postService;
+	
+	@Autowired
+	CommentService commentService;
 	
 	public MypageController(UserService userService) {
 	    this.userService = userService;
@@ -56,7 +61,16 @@ public class MypageController {
         List<Post> myPostList = postService.getPostByUid(loginUserId);
         
         model.addAttribute("myPostList", myPostList);
-
+        
+		
+		  List<Comments> commentList = commentService.getCommentsByUid(loginUserId);
+		  model.addAttribute("commentList", commentList);
+		  
+		 
+		 
+		
+        
+        
         return "board/mypage";
     }
 	
