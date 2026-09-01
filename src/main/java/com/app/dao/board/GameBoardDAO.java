@@ -16,7 +16,7 @@ public interface GameBoardDAO {
 	List<GameNameTransferForm> findPopularSixGames();
 	List<Post> findTrendPostListByGameAlias(String gameAlias);
 	List<Post> findPostListByPagingPosts(PagingPosts pagingPosts);
-	int findPostSizeByGameAlias(String gameAlias);
+	int findPostSizeByGameAliasAndCategory(String gameAlias, String category);
 	String findChzzkCategoryNameByGameAlias(@Param("gameAlias") String gameAlias);
 	SearchResult findSearchResultByKeyword(String keyword);
 }

@@ -82,10 +82,13 @@
 		from user_info
 		where REPLACE(LOWER(nickname), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
 	</select>
-	<select id="findPostSizeByGameAlias" resultType="int" parameterType="string">
+	<select id="findPostSizeByGameAliasAndCategory" resultType="int" parameterType="map">
 		select count(*)
 		from post
 		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+		<if test="!category.equals('전체') and category != null and category != '' ">
+			and category = #{category}
+		</if>
 	</select>
 	<select id="findChzzkCategoryNameByGameAlias" resultType="string" parameterType="string">
 		select chzzk_game_name
