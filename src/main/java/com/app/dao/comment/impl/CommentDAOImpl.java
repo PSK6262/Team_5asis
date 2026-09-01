@@ -38,4 +38,29 @@ public class CommentDAOImpl implements CommentDAO {
 		return sql.selectList(NAMESPACE + "selectCommentByUid", loginUserId);
 	}
 
+	@Override
+	public void deleteComment(Long cId, Long uId) {
+		Map<String, Object> paramMap = new HashMap<>();
+
+        paramMap.put("cId", cId);
+        paramMap.put("uId", uId);
+
+        sql.insert(NAMESPACE + "deleteComment", paramMap);
+		
+	}
+
+	@Override
+	public void updateComment(Long cId, Long uId, String content) {
+		Map<String, Object> paramMap = new HashMap<>();
+
+        paramMap.put("cId", cId);
+        paramMap.put("uId", uId);
+        paramMap.put("content", content);
+
+        sql.insert(NAMESPACE + "updateComment", paramMap);
+		
+	}
+	
+
+
 }

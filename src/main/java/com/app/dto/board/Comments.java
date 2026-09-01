@@ -1,6 +1,8 @@
 package com.app.dto.board;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import lombok.Data;
 
 @Data
@@ -19,6 +21,16 @@ public class Comments {
     private String gameAlias;
     
     private int viewCount;
+    
+    public String getCreatedAt() {
+        if (this.createdAt == null) return null;
+        return this.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public String getUpdatedAt() {
+        if (this.updatedAt == null) return null;
+        return this.updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
     
     
 }

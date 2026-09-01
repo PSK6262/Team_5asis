@@ -27,4 +27,17 @@ public class CommentServiceImpl implements CommentService {
 		return commentDAO.selectCommentByUid(loginUserId);
 	}
 
+	@Override
+	public void updateComment(Long cId, Long uId, String content) {
+		commentDAO.updateComment(cId, uId, content);
+		
+	}
+
+	@Override
+	public void deleteComment(Long cId, Long uId) {
+		commentDAO.deleteComment(cId, uId);
+		
+	}
+    
+
 }
