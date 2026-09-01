@@ -23,17 +23,22 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSessionTemplate.selectOne("user_mapper.findMyPageByUserId",userId);
 	}
 
-	//27일 수정 (콰디)
 	@Override
 	public void updatePassword(UserInfo userInfo) {
 		// TODO Auto-generated method stub
 		sqlSessionTemplate.update("user_mapper.updatePassword", userInfo);
 	}
 
-	//27일 추가 (콰디)
+	//회원 정보
 	@Override
 	public void insertUser(UserInfo userInfo) {
 		sqlSessionTemplate.insert("user_mapper.insertUser", userInfo);
+	}
+
+	//아이디(이메일) 중복체크
+	@Override
+	public int checkEmailDuplicate(String email) {
+		return sqlSessionTemplate.selectOne("user_mapper.checkEmailDuplicate", email);
 	}
 	
 	

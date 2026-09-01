@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserService;
@@ -55,7 +56,12 @@ public class AuthController {
         return "main";
     }
     
- 
+    @ResponseBody
+    @PostMapping("/checkEmail")
+    public int checkEmail(@RequestParam("email") String email) {
+    	int result = userService.checkEmailDuplicate(email);
+    	return result;
+    }
     
     
 }

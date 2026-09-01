@@ -147,8 +147,10 @@ body {
 
     				<div class="id-check">
         				<input class="form-input" type="text" id="email" name="email" placeholder="이메일 입력" required>
-        				<button type="button" class="btn btn-check" id="btnCheckId">중복체크</button>
+        				<button type="button" class="btn btn-check" id="btnCheckId" onclick="checkDuplicate()">중복체크</button>
 			    	</div>
+				<!-- 중복체크 글씨출력 -->
+			    	<div id="msgBox" style="font-size: 13px; margin-top: 5px; font-weight: bold;"></div>
 			</div>
 			
 			<div class="form-group">
@@ -189,5 +191,38 @@ body {
        	<a class="click-label" href="${pageContext.request.contextPath}/user/login">로그인</a>
     </div>
 			
+	
+	<!-- 백엔드통신 스크립트 -->
+	<script>
+		function checkDuplicate(){
+			var email = document.getElementById("email").value;
+			
+			if (email == ""){
+				alert("이메일을 먼저 입력해주세요!");
+				return;
+			}
+			
+			fetch("${pageContext.request.contextPath}/user/checkEmail", {
+				method: "POST",
+				headers: { "Content-Type": "application/x-www-form-urlencoded"},
+				body: "email=" + email
+			})
+			.then(response => response.text())
+			.then(result => {
+				var msg = document.getElementById("msgBox");
+				
+				if (result == "1"){
+					msg.innerText = "이미 사용 중인 이메일입니다.";
+					msg.style.color = "red"
+				} else {
+					msg.innerText = "사용 가능한 이메일입니다.";
+					msg.style.color = "green";
+				}
+			
+			});
+			
+		}
+	</script>
+	
 </body>
 </html>

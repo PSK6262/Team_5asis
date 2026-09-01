@@ -25,4 +25,12 @@
 		INSERT INTO user_info (email, password, nickname, status)
 		VALUES (#{email}, #{password}, #{nickname}, '1')
 	</insert>
+	
+	<!-- 아이디(이메일) 중복체크 -->
+	<select id="checkEmailDuplicate" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM user_info
+		WHERE email = #{email}		
+	</select>
+	
 </mapper>

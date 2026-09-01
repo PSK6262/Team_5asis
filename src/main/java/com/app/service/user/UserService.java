@@ -10,4 +10,5 @@ public interface UserService {
 	public void updatePassword(UserInfo userInfo);
 	
 	public void updateNickname(UserInfo userInfo);
+	int checkEmailDuplicate(String email);
 }

@@ -47,6 +47,11 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public int checkEmailDuplicate(String email) {
+		return userDAO.checkEmailDuplicate(email);
+	}
 	
 	
 	@Override
