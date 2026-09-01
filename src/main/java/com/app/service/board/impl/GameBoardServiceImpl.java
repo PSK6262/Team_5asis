@@ -24,8 +24,8 @@ public class GameBoardServiceImpl implements GameBoardService {
 	UserDAO userDAO;
 
 	@Override
-	public List<Post> findPostListByGameAlias(String gameAlias) {
-		List<Post> postList = gameBoardDAO.findPostListByGameAlias(gameAlias);
+	public List<Post> findPostDetailListByGameAlias(String gameAlias) {
+		List<Post> postList = gameBoardDAO.findPostDetailListByGameAlias(gameAlias);
 		return postList;
 	}
 
@@ -33,14 +33,6 @@ public class GameBoardServiceImpl implements GameBoardService {
 	public String findGameNameByGameAlias(String gameAlias) {
 		String gameName = gameBoardDAO.findGameNameByGameAlias(gameAlias.toUpperCase());
 		return gameName;
-	}
-
-	@Override
-	public List<Post> addNicknameToPostList(List<Post> postList) {
-		for (int i = 0; i < postList.size(); i++) {
-			postList.get(i).setNickname(userDAO.findNickNameByUid(postList.get(i).getUid()));
-		}
-		return postList;
 	}
 
 	@Override
@@ -58,7 +50,6 @@ public class GameBoardServiceImpl implements GameBoardService {
 	@Override
 	public List<Post> findTrendPostListByGameAlias(String gameAlias) {
 		List<Post> selectedTrendPost = gameBoardDAO.findTrendPostListByGameAlias(gameAlias);
-		selectedTrendPost = addNicknameToPostList(selectedTrendPost);
 		return selectedTrendPost;
 	}
 
@@ -69,8 +60,10 @@ public class GameBoardServiceImpl implements GameBoardService {
 		pagingPosts.setGameAlias(gameAlias);
 		pagingPosts.setSize(CommonCode.PAGING_SIZE);
 		pagingPosts.setCategory(category);
+		
 		List<Post> selectedPagingPost = gameBoardDAO.findPostListByPagingPosts(pagingPosts);
 		pagingPosts.setPosts(selectedPagingPost);
+		
 		int postSize = gameBoardDAO.findPostSizeByGameAlias(gameAlias);
 		pagingPosts.setPostSize(postSize);
 		
@@ -82,38 +75,9 @@ public class GameBoardServiceImpl implements GameBoardService {
 		SearchResult searchResult = gameBoardDAO.findSearchResultByKeyword(keyword);
 		
 		List<Post> searchedByTitle = searchResult.getSearchedByTitle();
-		searchedByTitle = addGameNameToPostList(searchedByTitle);
-		searchedByTitle = addNicknameToPostList(searchedByTitle);
-		searchedByTitle = addGameAliasToPostList(searchedByTitle);
 		searchResult.setSearchedByTitle(searchedByTitle);
-		System.out.println(searchedByTitle);
-		
 		List<Post> searchedByContent = searchResult.getSearchedByContent();
-		searchedByContent = addGameNameToPostList(searchedByContent);
-		searchedByContent = addNicknameToPostList(searchedByContent);
-		searchedByContent = addGameAliasToPostList(searchedByContent);
-		
-		System.out.println(searchedByContent);
 		searchResult.setSearchedByContent(searchedByContent);
-		
 		return searchResult;
 	}
-	
-	@Override
-	public List<Post> addGameNameToPostList(List<Post> postList) {
-		for (int i = 0; i < postList.size(); i++) {
-			postList.get(i).setGameName(gameBoardDAO.findGameNameByGameId(postList.get(i).getGameId()));
-		}
-		return postList;
-	}
-
-	@Override
-	public List<Post> addGameAliasToPostList(List<Post> postList) {
-		for (int i =0 ; i< postList.size() ; i++) {
-			postList.get(i).setGameAlias(gameBoardDAO.findGameAliasByGameId(postList.get(i).getGameId()));
-		}
-		return postList;
-	}
-	
-	
 }

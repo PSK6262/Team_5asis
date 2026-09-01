@@ -46,8 +46,6 @@ public class ChzzkApiServiceImpl implements ChzzkApiService {
 		// GET 요청
 		ChzzkRawResponse rawData = restTemplate.getForObject(targetUri, ChzzkRawResponse.class);
 
-		System.out.println(rawData);
-		
 		if(rawData == null) return response;
 
 		if(rawData != null && rawData.getContent() != null && rawData.getContent().getData() != null) {
