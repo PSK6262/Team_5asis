@@ -129,7 +129,7 @@ input[type="checkbox"] {
 	        <div class="form-group">
             	<label class="form-label" for="password">비밀번호</label>
 	            <input class="form-input" type="password" id="password" name="password" placeholder="비밀번호 입력" required>
-	        <!-- 비밀번호 맞지않을 때 -->
+	        <!-- 회원정보 일치하지 않을 때 -->
 	        <p class="login-error-msg" style="color: red; font-size:13px; margin: 8px 0 0 0; text-align: left;">
 	        	${loginError}
 	        </p>
