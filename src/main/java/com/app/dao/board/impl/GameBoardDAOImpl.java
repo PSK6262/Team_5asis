@@ -1,6 +1,8 @@
 package com.app.dao.board.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +58,12 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	}
 
 	@Override
-	public int findPostSizeByGameAlias(String gameAlias) {
-		int postSize = sqlSessionTemplate.selectOne("board_mapper.findPostSizeByGameAlias",gameAlias);
+	public int findPostSizeByGameAliasAndCategory(String gameAlias,String category) {
+		Map<String , String> paramMap = new HashMap<>();
+		paramMap.put("gameAlias", gameAlias);
+		paramMap.put("category", category);
+		
+		int postSize = sqlSessionTemplate.selectOne("board_mapper.findPostSizeByGameAliasAndCategory",paramMap);
 		return postSize;
 	}
 

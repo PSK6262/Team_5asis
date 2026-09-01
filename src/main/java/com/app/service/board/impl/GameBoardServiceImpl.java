@@ -63,7 +63,7 @@ public class GameBoardServiceImpl implements GameBoardService {
 		List<Post> selectedPagingPost = gameBoardDAO.findPostListByPagingPosts(pagingPosts);
 		pagingPosts.setPosts(selectedPagingPost);
 		
-		int postSize = gameBoardDAO.findPostSizeByGameAlias(gameAlias);
+		int postSize = gameBoardDAO.findPostSizeByGameAliasAndCategory(gameAlias,category);
 		pagingPosts.setPostSize(postSize);
 		
 		return pagingPosts;
