@@ -124,4 +124,10 @@ public class PostServiceImpl implements PostService {
 	public List<Post> getPostByUid(Long loginUserId) {
 		return postDAO.selectPostByUid(loginUserId);
 	}
+
+	@Override
+	public List<Post> selectPostByLikeCount(Long loginUserId) {
+		// TODO Auto-generated method stub
+		return postDAO.selectPostByUid(loginUserId);
+	}
 }

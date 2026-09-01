@@ -28,4 +28,5 @@ public interface PostDAO {
 	int deletePost(Long pId, Long uId);
 
 	List<Post> selectPostByUid(Long loginUserId);
+	List<Post> selectPostByLikeCount(Long userId);
 }

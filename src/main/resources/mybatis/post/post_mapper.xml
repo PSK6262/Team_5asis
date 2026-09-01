@@ -170,5 +170,19 @@ JOIN game_List g ON p.game_id = g.game_id
 	    SET like_count = like_count - 1 
 	    WHERE p_id = #{pId}
 	</update>
+	<select id="selectPostByLikeCount" parameterType="long" resultType="Post">
+		SELECT 
+        p.p_id AS pId, 
+        p.u_id AS uId, 
+        p.title, 
+        p.created_at AS createdAt, 
+        p.view_count AS viewCount,         
+    	g.game_alias AS gameAlias
+		FROM post p
+		JOIN game_List g ON p.game_id = g.game_id
+		JOIN like_history l on l.p_id = p.p_id
+		WHERE l.u_id = #{loginUserId}
+        ORDER BY like_count DESC
+	</select>
 
 </mapper>

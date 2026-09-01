@@ -112,4 +112,10 @@ public class PostDAOImpl implements PostDAO {
 		
 		return sql.selectList(NAMESPACE + "selectPostByUid", loginUserId);
 	}
+
+	@Override
+	public List<Post> selectPostByLikeCount(Long loginUserId) {
+		// TODO Auto-generated method stub
+		return sql.selectList(NAMESPACE + "selectPostByLikeCount", loginUserId);
+	}
 }

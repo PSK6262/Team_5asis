@@ -18,4 +18,5 @@ public interface PostService {
 	int deletePost(Long pId, Long uId);
 	
 	List<Post> getPostByUid(Long loginUserId);
+    List<Post> selectPostByLikeCount(Long loginUserId);
 }
