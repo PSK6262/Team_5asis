@@ -10,5 +10,6 @@ public interface PostService {
     PostDetail getPostDetail(Long pId, String gameAlias);
     int insertPost(Post post, String gameAlias);
     List<Post> getPostByUid(Long loginUserId);
+    List<Post> selectPostByLikeCount(Long loginUserId);
 	
 }

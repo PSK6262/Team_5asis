@@ -39,6 +39,7 @@
 		c.u_id AS "uid",
 		c.parent_c_id,
 		c.created_at,
+		p.view_count,
 		g.game_alias
         FROM comments c
         JOIN post p ON c.p_id = p.p_id

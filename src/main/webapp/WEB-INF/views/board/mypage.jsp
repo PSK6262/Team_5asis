@@ -168,6 +168,8 @@ input[type="password"] {
 .updateBtn {
 	width: 150px;
 }
+
+
 </style>
 </head>
 <body>
@@ -313,7 +315,7 @@ input[type="password"] {
             <tr>
                 <th>게임</th>
                 <th>댓글 내용</th>
-                <th>좋아요</th>
+                <th>조회수</th>
                 <th>작성일</th>
             </tr>
         </thead>
@@ -337,15 +339,15 @@ input[type="password"] {
                             
                             
                             <td class="comment-content">
-                                <a onclick="location.href='/board/${comment.gameAlias}/${comment.pid} '">
+                                <a style="cursor: pointer;" onclick="location.href='/board/${comment.gameAlias}/${comment.pid} '">
                                     ${comment.content}
                                    
                                 </a>
                             </td>
                             
-                            <!-- 좋아요 수 -->
-                            <td class="like-count">
-                                ❤️ ${comment.likeCount}
+                            <!-- 조회 수 -->
+                            <td class="view-count">
+                                 ${comment.viewCount}
                             </td>
                             
                             <!-- 작성일  -->
@@ -363,10 +365,29 @@ input[type="password"] {
 				</div>
 				<div id="tab-likes" class="content-item">
 					<h3>❤️ 좋아요한 글</h3>
-					<ul>
-						<li>[뉴스] 5월 대규모 패치 노트 미리보기</li>
-						<li>[팬아트] 직접 그린 캐릭터 4등신 일러스트</li>
-					</ul>
+					<table class="comment-table">
+    <c:forEach var="post" items="${postList}">
+        <tr>
+            <td class="game-alias">
+                <span class="badge">${post.gameAlias != null ? post.gameAlias : '일반'}</span>
+            </td>
+            
+            <td class="comment-content">
+                <a style="cursor: pointer;" onclick="location.href='/board/${post.gameAlias}/${post.pid}'">
+                    ${post.title}
+                </a>
+            </td>
+            
+            <td class="view-count">
+                ${post.viewCount}
+            </td>
+            
+            <td class="created-at">
+                <c:out value="${post.createdAt}" />
+            </td>
+        </tr>
+    </c:forEach>
+</table>
 				</div>
 			</div>
 		</div>

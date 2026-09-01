@@ -18,6 +18,8 @@ public class Comments {
     
     private String gameAlias;
     
+    private int viewCount;
+    
     
 }
 

@@ -66,7 +66,10 @@ public class MypageController {
 		  List<Comments> commentList = commentService.getCommentsByUid(loginUserId);
 		  model.addAttribute("commentList", commentList);
 		  
+		 List<Post> postList = postService.selectPostByLikeCount(loginUserId);
 		 
+		 model.addAttribute("postList", postList);
+		 model.addAttribute("activeTab","likePosts");
 		 
 		
         
