@@ -12,4 +12,5 @@ public interface UserDAO {
 	public void insertUser(UserInfo userInfo);
 	// 이메일 중복체크
 	public int checkEmailDuplicate(String email);
+	UserInfo findUserByEmail(String email);	
 }
