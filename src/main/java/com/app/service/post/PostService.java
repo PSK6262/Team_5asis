@@ -1,5 +1,6 @@
 package com.app.service.post;
 
+import java.util.List;
 import java.util.Map;
 
 import com.app.dto.board.Post;
@@ -15,4 +16,6 @@ public interface PostService {
 	
 	int updatePost(Long pId, Long uId, String title, String content, String category);
 	int deletePost(Long pId, Long uId);
+	
+	List<Post> getPostByUid(Long loginUserId);
 }

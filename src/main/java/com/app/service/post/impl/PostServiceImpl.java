@@ -119,4 +119,9 @@ public class PostServiceImpl implements PostService {
 		return postDAO.deletePost(pId, uId);
 		
 	}
+	
+	@Override
+	public List<Post> getPostByUid(Long loginUserId) {
+		return postDAO.selectPostByUid(loginUserId);
+	}
 }

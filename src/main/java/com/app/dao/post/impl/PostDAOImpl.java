@@ -106,4 +106,10 @@ public class PostDAOImpl implements PostDAO {
 	            paramMap
 	    );
 	}
+	
+	@Override
+	public List<Post> selectPostByUid(Long loginUserId) {
+		
+		return sql.selectList(NAMESPACE + "selectPostByUid", loginUserId);
+	}
 }
