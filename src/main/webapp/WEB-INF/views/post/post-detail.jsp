@@ -48,7 +48,7 @@
 			    </div>
 			
 			    <!-- 2. 수정/삭제 버튼 (오른쪽 끝 정렬) -->
-			    <c:if test="${post.uid == 1}">
+			    <c:if test="${not empty sessionScope.LOGIN_USER and post.uid == sessionScope.LOGIN_USER.uid}">
 			        <div class="author-buttons">
 			            <a href="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/edit"
 			               class="btn-sm btn-edit">
@@ -118,7 +118,7 @@
 			                                    👍 <span id="comment-like-count-${comment.cid}">${comment.likeCount}</span>
 			                                </button>
 
-			                                <c:if test="${comment.uid == 1}">
+			                                <c:if test="${not empty sessionScope.LOGIN_USER and comment.uid == sessionScope.LOGIN_USER.uid}">
 			                                    <button type="button" class="btn-reply-sm" onclick="showEditForm(${comment.cid})">수정</button>
 			                                    
 			                                    <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete" 
@@ -133,7 +133,7 @@
 			                    </div>
 			
 			                    <!-- 2. 수정 입력 폼 -->
-			                    <c:if test="${comment.uid == 1}">
+			                    <c:if test="${not empty sessionScope.LOGIN_USER and comment.uid == sessionScope.LOGIN_USER.uid}">
 			                        <form id="reply-edit-form-${comment.cid}" 
 			                              action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/edit" 
 			                              method="post" 
@@ -183,7 +183,9 @@
 	<script>
 	    window.PAGE_CONFIG = {
 	        contextPath: "${pageContext.request.contextPath}",
-	        gameAlias: "${gameAlias}"
+	        gameAlias: "${gameAlias}",
+	        pId: "${post.pid}",
+	        isLoggedIn: ${not empty sessionScope.LOGIN_USER ? 'true' : 'false'}
 	    };
 	</script>
 	<script src="${pageContext.request.contextPath}/resources/js/postDetail.js"></script>

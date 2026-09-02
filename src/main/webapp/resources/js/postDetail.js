@@ -1,11 +1,19 @@
+// 게시글 추천 기능
 function likePost(pId) {
-    // JSP 전역 변수에서 contextPath 가져오기
     const contextPath = window.PAGE_CONFIG ? window.PAGE_CONFIG.contextPath : '';
 
     $.ajax({
         url: contextPath + '/board/' + pId + '/like',
         type: 'POST',
         success: function(response) {
+            // 1. 비로그인 상태 체크
+            if (response.status === 'require_login') {
+                alert('로그인 후 이용 가능합니다.');
+                location.href = contextPath + '/user/login'; // 로그인 페이지로 이동
+                return;
+            }
+
+            // 2. 추천 성공 처리
             if (response.status === 'success') {
                 $('#likeCount').text(response.updatedLikeCount);
 
@@ -46,15 +54,14 @@ window.addEventListener('popstate', function(event) {
     location.replace(contextPath + "/board/" + gameAlias);
 });
 
-// 히스토리 더미 상태 추가 (popstate 이벤트를 발생시키기 위함)
+// 히스토리 더미 상태 추가
 history.pushState(null, null, location.href);
 
-// 답글
+// 답글 폼 토글
 function showReplyForm(cid) {
     const form = document.getElementById("reply-form-" + cid);
     if (!form) return;
 
-    // computedStyle을 확인하여 display 상태 검사
     const currentDisplay = window.getComputedStyle(form).display;
 
     if (currentDisplay === "none") {
@@ -64,8 +71,57 @@ function showReplyForm(cid) {
     }
 }
 
-// 댓글 추천 클릭 함수 (이후 백엔드 API 연동 시 구현)
+// 댓글 추천 기능
 function likeComment(cId) {
-    console.log("댓글 추천 클릭 - 댓글 ID:", cId);
-    // 추후 AJAX 연동 예정
+    const contextPath = window.PAGE_CONFIG ? window.PAGE_CONFIG.contextPath : '';
+    const gameAlias = window.PAGE_CONFIG ? window.PAGE_CONFIG.gameAlias : '';
+
+    $.ajax({
+        url: contextPath + '/board/' + gameAlias + '/' + window.PAGE_CONFIG.pId + '/comment/' + cId + '/like',
+        type: 'POST',
+        success: function(response) {
+            // 1. 비로그인 상태 체크
+            if (response.status === 'require_login') {
+                alert('로그인 후 이용 가능합니다.');
+                location.href = contextPath + '/user/login'; // 로그인 페이지로 이동
+                return;
+            }
+
+            // 2. 추천 성공 처리
+            if (response.status === 'success') {
+                $('#comment-like-count-' + cId).text(response.updatedLikeCount);
+
+                const $likeBtn = $('#comment-like-btn-' + cId);
+                
+                if (response.isLiked) {
+                    $likeBtn.addClass('active');
+                    alert('댓글을 추천했습니다.');
+                } else {
+                    $likeBtn.removeClass('active');
+                    alert('댓글 추천을 취소했습니다.');
+                }
+            } else {
+                alert('처리에 실패했습니다.');
+            }
+        },
+        error: function() {
+            alert('서버 통신 중 오류가 발생했습니다.');
+        }
+    });
 }
+
+// 페이지 로드 시 이벤트 등록
+document.addEventListener('DOMContentLoaded', function() {
+    const replyForm = document.querySelector('.reply-form');
+    
+    if (replyForm) {
+        replyForm.addEventListener('submit', function(e) {
+            // 비로그인 상태일 때
+            if (!window.PAGE_CONFIG || !window.PAGE_CONFIG.isLoggedIn) {
+                e.preventDefault(); // 폼 제출 중단
+                alert('로그인 후 이용 가능합니다.');
+                location.href = window.PAGE_CONFIG.contextPath + '/user/login';
+            }
+        });
+    }
+});
