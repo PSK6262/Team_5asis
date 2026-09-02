@@ -64,8 +64,35 @@ function showReplyForm(cid) {
     }
 }
 
-// 댓글 추천 클릭 함수 (이후 백엔드 API 연동 시 구현)
+//추천수 기능
 function likeComment(cId) {
-    console.log("댓글 추천 클릭 - 댓글 ID:", cId);
-    // 추후 AJAX 연동 예정
+    const contextPath = window.PAGE_CONFIG ? window.PAGE_CONFIG.contextPath : '';
+    const gameAlias = window.PAGE_CONFIG ? window.PAGE_CONFIG.gameAlias : '';
+
+    $.ajax({
+        url: contextPath + '/board/' + gameAlias + '/' + window.PAGE_CONFIG.pId + '/comment/' + cId + '/like',
+        type: 'POST',
+        success: function(response) {
+            if (response.status === 'success') {
+                // 1. 추천 수 DOM 업데이트
+                $('#comment-like-count-' + cId).text(response.updatedLikeCount);
+
+                // 2. 추천 상태에 따른 알림 및 버튼 스타일 토글
+                const $likeBtn = $('#comment-like-btn-' + cId);
+                
+                if (response.isLiked) {
+                    $likeBtn.addClass('active');
+                    alert('댓글을 추천했습니다.');
+                } else {
+                    $likeBtn.removeClass('active');
+                    alert('댓글 추천을 취소했습니다.');
+                }
+            } else {
+                alert('처리에 실패했습니다.');
+            }
+        },
+        error: function() {
+            alert('서버 통신 중 오류가 발생했습니다.');
+        }
+    });
 }

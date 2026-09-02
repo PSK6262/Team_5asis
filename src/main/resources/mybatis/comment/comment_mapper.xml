@@ -118,4 +118,38 @@
 		from comments
 		where p_id = #{pId}
 	</select>
+    
+    <!-- 1. 로그인 유저의 댓글 추천 내역 확인 -->
+    <select id="checkCommentLike" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM like_history
+        WHERE u_id = #{uId} AND c_id = #{cId}
+    </select>
+
+    <!-- 2. 추천 내역 추가 -->
+    <insert id="insertCommentLike" parameterType="map">
+	    INSERT INTO like_history (u_id, p_id, c_id)
+    	VALUES (#{uId}, NULL, #{cId})
+	</insert>
+
+    <!-- 3. 추천 내역 삭제 (취소) -->
+    <delete id="deleteCommentLike" parameterType="map">
+        DELETE FROM like_history
+        WHERE u_id = #{uId} AND c_id = #{cId}
+    </delete>
+
+    <!-- 4. 댓글 테이블의 like_count 수 변경 (+1 또는 -1) -->
+    <update id="updateCommentLikeCount" parameterType="map">
+        UPDATE comments
+        SET like_count = like_count + #{amount}
+        WHERE c_id = #{cId}
+    </update>
+
+    <!-- 5. 최신 like_count 조회 -->
+    <select id="getCommentLikeCount" parameterType="long" resultType="int">
+        SELECT like_count
+        FROM comments
+        WHERE c_id = #{cId}
+    </select>
+
 </mapper>

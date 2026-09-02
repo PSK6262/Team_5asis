@@ -3,7 +3,6 @@ package com.app.dao.comment;
 import java.util.List;
 
 import com.app.dto.board.Comments;
-import com.app.dto.board.Post;
 
 public interface CommentDAO {
 	
@@ -24,6 +23,12 @@ public interface CommentDAO {
 	void deleteCommentById(Long cId);
 
 	Long countCommentsByPostId(Long pid);
+	
+	int checkCommentLike(Long uId, Long cId);
+    void insertCommentLike(Long uId, Long cId);
+    void deleteCommentLike(Long uId, Long cId);
+    void updateCommentLikeCount(Long cId, int amount);
+    int getCommentLikeCount(Long cId);
 	
 	
 }
