@@ -119,5 +119,10 @@ public class PostDAOImpl implements PostDAO {
 		return sql.selectList(NAMESPACE + "selectPostByLikeCount", loginUserId);
 	}
 
-	
+	@Override
+	public String findGameAliasByPostId(Long pId) {
+		String gameAlias = sql.selectOne(NAMESPACE + "findGameAliasByPostId",pId);
+		return gameAlias;
+	}
+
 }
