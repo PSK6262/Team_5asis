@@ -107,9 +107,11 @@
 				        </c:forEach>
 			    	</div>
 				    <div class="write-btn-wrapper">
+				    <c:if test="${loginUser != null}">
 				        <button type="button" class="btn-board-write" onclick="location.href='${pageContext.request.contextPath}/board/${gameAlias}/write' ">
 				            글쓰기
 				        </button>
+				    </c:if>
 				    </div>
 				</div>	
 			</c:if>
