@@ -50,5 +50,5 @@
 	</div>
 	<!-- 스크립트 -->
 	<!-- 인기 게임 게시판 이동 함수 -->
-	<script type="text/javascript" src="js/sidebar.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/sidebar.js"></script>
 </body>
