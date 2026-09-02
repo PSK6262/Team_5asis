@@ -94,5 +94,23 @@
 	    DELETE FROM comments
 	    WHERE c_id = #{cId}
 	</delete>
+	
+	<!-- 특정 게시글의 댓글 목록 조회 -->
+    <select id="getCommentsByPostId" parameterType="long" resultType="Comments">
+        SELECT 
+            c.c_id AS cid,
+            c.content,
+            c.like_count AS likeCount,
+            c.p_id AS pid,
+            c.u_id AS uid,
+            c.parent_c_id AS parentCId,
+            c.created_at AS createdAt,
+            c.updated_at AS updatedAt,
+            u.nickname AS nickname
+        FROM comments c
+        JOIN user_info u ON c.u_id = u.u_id
+        WHERE c.p_id = #{pId}
+        ORDER BY COALESCE(c.parent_c_id, c.c_id) ASC, c.created_at ASC
+    </select>
 
 </mapper>
