@@ -33,6 +33,10 @@
 				<div class="meta-item">추천: <span>${post.likeCount}</span></div>
 				<div class="meta-item">|</div>
 				<div class="meta-item">작성일: <span>${post.createdAt}</span></div>
+				<c:if test="${not empty post.updatedAt}">
+				    <div class="meta-item">|</div>
+				    <div class="meta-item">수정일: <span>${post.updatedAt}</span></div>
+				</c:if>
 			</div>
 
 			<!-- 게시글 본문 -->
@@ -94,7 +98,13 @@
 			                            </c:if>
 			                            ${comment.nickname}
 			                        </span>
-			                        <span class="reply-date">${comment.createdAt}</span>
+			                        <span class="reply-date">
+			                        	${comment.createdAt}
+			                        	<!-- ★ 댓글 수정일이 존재할 때만 날짜 옆에 (수정됨) 표시 -->
+			                        	<c:if test="${not empty comment.updatedAt}">
+			                        		<span class="updated-text" style="font-size: 0.85em; color: #888; margin-left: 4px;">(수정됨)</span>
+			                        	</c:if>
+			                        </span>
 			                    </div>
 			
 			                    <!-- 1. 일반 조회용 영역 -->
