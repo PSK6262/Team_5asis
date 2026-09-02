@@ -183,7 +183,8 @@
 	<script>
 	    window.PAGE_CONFIG = {
 	        contextPath: "${pageContext.request.contextPath}",
-	        gameAlias: "${gameAlias}"
+	        gameAlias: "${gameAlias}",
+	        pId: "${post.pid}"
 	    };
 	</script>
 	<script src="${pageContext.request.contextPath}/resources/js/postDetail.js"></script>

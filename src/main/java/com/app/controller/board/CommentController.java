@@ -1,11 +1,14 @@
 package com.app.controller.board;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.service.comment.CommentService;
 
@@ -72,6 +75,20 @@ public class CommentController {
         commentService.insertComment(pId, uId, commentContent, parentCId);
 
         return "redirect:/board/" + gameAlias + "/" + pId;
+    }
+    
+    @PostMapping("/{gameAlias}/{pId}/comment/{cId}/like")
+    @ResponseBody
+    public Map<String, Object> toggleCommentLike(
+            @PathVariable("gameAlias") String gameAlias,
+            @PathVariable("pId") Long pId,
+            @PathVariable("cId") Long cId) {
+
+        // 임시 사용자 계정 사용 (추후 세션 로그인 유저 ID로 변경 예정)
+        Long uId = TEMP_USER_ID; 
+
+        // 추천 또는 추천 취소 처리 실행 후 결과 반환
+        return commentService.toggleCommentLike(uId, cId);
     }
     
 
