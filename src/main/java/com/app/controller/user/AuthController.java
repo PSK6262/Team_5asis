@@ -67,7 +67,7 @@ public class AuthController {
         session.setAttribute("LOGIN_USER_ID", loginUser.getUid());
         session.setAttribute("LOGIN_USER", loginUser);
         
-        return "redirect:/5asis";	//메인경로
+        return "redirect:/main";	//메인경로
     }
     
     //이메일 중복체크
