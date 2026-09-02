@@ -1,5 +1,6 @@
 package com.app.controller.user;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +45,19 @@ public class AuthController {
 		}
 	
     @GetMapping("/login")
-    public String loginform(HttpSession session) {	//이미 로그인한 상태면 메인으로
+    public String loginform(HttpServletRequest request, HttpSession session) {
     	if (session.getAttribute("LOGIN_USER_ID") != null) {
 			return "redirect:/main";
 		}
+    	
+    	//직전 페이지 URL 가져오기 (게시글 상세페이지 주소 등)
+    	String referer = request.getHeader("Referer");
+    	
+    	//이전 페이지가 있고, 로그인/회원가입 페이지 자체가 아닌 경우에만 세션에 저장
+    	if (referer != null && !referer.contains("/user/login") && !referer.contains("/user/signup")) {
+    		session.setAttribute("prevPage", referer);
+    	}
+    	
         return "user/login";
     }
 
@@ -76,7 +86,14 @@ public class AuthController {
         session.setAttribute("LOGIN_USER_ID", loginUser.getUid());
         session.setAttribute("LOGIN_USER", loginUser);
         
-        return "redirect:/main";	//메인경로
+        //수정(이전페이지가 있으면 거기로, 없으면 메인으로 이동)
+        String prevPage = (String) session.getAttribute("prevPage");
+        if (prevPage != null) {
+        	session.removeAttribute("prevPage");	//사용 후 세션에서 제거
+        	return "redirect:" + prevPage;
+        }
+        
+        return "redirect:/main";	//기본값은 메인으로
     }
     
     //이메일 중복체크
