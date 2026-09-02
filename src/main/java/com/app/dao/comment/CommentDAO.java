@@ -20,5 +20,8 @@ public interface CommentDAO {
 	int countReplies(Long cId);
 	void markAsDeleted(Long cId, Long uId);
 	
+	Comments selectCommentById(Long cId);
+	void deleteCommentById(Long cId);
+	
 	
 }

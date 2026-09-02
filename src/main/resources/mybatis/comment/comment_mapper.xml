@@ -76,5 +76,23 @@
         WHERE c_id = #{cId}
           AND u_id = #{uId}
     </update>
+    
+    <!-- CommentMapper.xml -->
+
+	<!-- 댓글 단건 조회 (부모 댓글 정보 확인용) -->
+	<select id="selectCommentById" parameterType="long" resultType="Comments">
+	    SELECT 
+		    c_id, 
+		    "content", 
+		    parent_c_id AS parentCId
+	    FROM comments
+	    WHERE c_id = #{cId}
+	</select>
+	
+	<!-- c_id 기준 완전 삭제 (부모 댓글 자동 정리용) -->
+	<delete id="deleteCommentById" parameterType="long">
+	    DELETE FROM comments
+	    WHERE c_id = #{cId}
+	</delete>
 
 </mapper>
