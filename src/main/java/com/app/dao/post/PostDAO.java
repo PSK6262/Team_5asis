@@ -16,6 +16,10 @@ public interface PostDAO {
     List<Comments> selectCommentListByPId(Long pId);
     int insertPost(Map<String, Object> paramMap);
     
+	List<Post> selectPostByUid(Long loginUserId);
+	List<Post> selectPostByLikeCount(Long loginUserId);
+	
+	
     int checkLikeHistory(Map<String, Object> map);
     void insertLikeHistory(Map<String, Object> map);
     void updateLikeCount(Long pId);
@@ -27,6 +31,5 @@ public interface PostDAO {
 	int updatePost(Long pId, Long uId, String title, String content, String category);
 	int deletePost(Long pId, Long uId);
 
-	List<Post> selectPostByUid(Long loginUserId);
-	List<Post> selectPostByLikeCount(Long userId);
+	
 }

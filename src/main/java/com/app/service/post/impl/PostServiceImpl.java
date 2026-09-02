@@ -128,6 +128,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<Post> selectPostByLikeCount(Long loginUserId) {
 		// TODO Auto-generated method stub
-		return postDAO.selectPostByUid(loginUserId);
+		return postDAO.selectPostByLikeCount(loginUserId);
 	}
+
+	
 }
