@@ -22,11 +22,28 @@
 			<label id="label_profile">프로필</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_profile">
-				<img class="sideBar_profileImg"
-					src="${empty profileImg ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10' : profileImg}"
-					alt="프로필 이미지">
+				<c:choose>
+					<c:when test="${not empty loginUser}">
+						<!-- 로그인 상태 -->
+						<img class="sideBar_profileImg" src="${profileImg}" alt="프로필 이미지">
+					</c:when>
+					<c:otherwise>
+						<!-- 비로그인 상태 -->
+						<img class="sideBar_profileImg" src="${profileImg}" alt="프로필 이미지">
+					</c:otherwise>
+				</c:choose>
 				<div class="sideBar_profileInfo">
-					<div class="name">${empty nickname ? '게스트' : nickname}</div>
+					<c:choose>
+						<c:when test="${not empty loginUser}">
+							<!-- 로그인 상태 -->
+							<div class="name">${nickname}</div>
+						</c:when>
+						<c:otherwise>
+							<!-- 비로그인 상태 -->
+							<div class="name">${nickname}</div>
+						</c:otherwise>
+					</c:choose>
+
 					<div class="mypage">
 						<a href="/board/mypage">마이페이지</a>
 					</div>
@@ -39,11 +56,16 @@
 			<label id="label_board">게시판</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_links">
-				<a href="${pageContext.request.contextPath}/board/all?category=전체">통합 게시판</a> 
-				<a href="${pageContext.request.contextPath}/board/all?category=자유">자유 게시판</a> 
-				<a href="${pageContext.request.contextPath}/board/all?category=구인">모집 게시판</a> 
-				<a href="${pageContext.request.contextPath}/board/all?category=정보">정보 게시판</a> 
-				<a href="${pageContext.request.contextPath}/board/all?category=질문">질문 게시판</a>
+				<a href="${pageContext.request.contextPath}/board/all?category=전체">통합
+					게시판</a> <a
+					href="${pageContext.request.contextPath}/board/all?category=자유">자유
+					게시판</a> <a
+					href="${pageContext.request.contextPath}/board/all?category=구인">모집
+					게시판</a> <a
+					href="${pageContext.request.contextPath}/board/all?category=정보">정보
+					게시판</a> <a
+					href="${pageContext.request.contextPath}/board/all?category=질문">질문
+					게시판</a>
 			</div>
 		</div>
 
