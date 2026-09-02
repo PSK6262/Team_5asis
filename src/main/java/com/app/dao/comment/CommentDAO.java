@@ -7,13 +7,18 @@ import com.app.dto.board.Post;
 
 public interface CommentDAO {
 	
-	void insertComment(Long pId, Long uId, String content);
+	void insertComment(Long pId, Long uId, String content, Long parentCId);
 
 	List<Comments> selectCommentByUid(Long loginUserId);
 	
 	void deleteComment(Long cId, Long uId);
 
 	void updateComment(Long cId, Long uId, String content);
+
+	void insertReply(Long pId, Long uId, Long parentCId, String content);
+
+	int countReplies(Long cId);
+	void markAsDeleted(Long cId, Long uId);
 	
 	
 }

@@ -7,8 +7,6 @@
 <meta charset="UTF-8">
 <title>${post.title}</title>
 
-<title>${post.title}</title>
-
 <style>
 * {
 	box-sizing: border-box;
@@ -367,6 +365,55 @@ body {
 	background-color: #d8d8d8;
 }
 
+.deleted-comment {
+    color: #999;
+    font-style: italic;
+}
+
+/* 대댓글 버튼 및 폼 스타일 */
+.btn-nested-reply {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #2F7778;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0;
+}
+
+.btn-nested-reply:hover {
+    text-decoration: underline;
+}
+
+.nested-reply-form {
+    display: none;
+    margin-top: 10px;
+    padding-left: 20px;
+    gap: 8px;
+}
+
+.nested-reply-form.active {
+    display: flex !important;
+}
+
+/* 대댓글 아이템 스타일 */
+.reply-item.nested-reply {
+    margin-left: 35px; /* 왼쪽 들여쓰기 */
+    padding-left: 15px;
+    background-color: #fafafa; /* 배경색을 약간 다르게 구분 */
+    border-left: 2px solid #2F7778; /* 왼쪽에 구분선 추가 */
+    border-bottom: 1px solid #eee;
+    border-radius: 0 6px 6px 0;
+}
+
+/* 대댓글 화살표 표시 */
+.nested-icon {
+    color: #2F7778;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
 </style>
 </head>
 <body>
@@ -439,58 +486,94 @@ body {
 				</form>
 			
 				<ul class="reply-list">
-					<c:choose>
-						<c:when test="${not empty post.commentList}">
-							<c:forEach var="comment" items="${post.commentList}">
-								<li class="reply-item">
-									
-									<!-- 헤더: 작성자 및 작성일 -->
-									<div class="reply-header">
-										<span class="reply-writer">${comment.nickname}</span>
-										<span class="reply-date">${comment.createdAt}</span>
-									</div>
-				
-									<!-- 1. 일반 조회용 영역 -->
-									<div class="reply-body" id="reply-body-${comment.cid}">
-										<div class="reply-content">${comment.content}</div>
-										
-										<c:if test="${comment.uid == 1}">
-											<div class="reply-actions">
-												<button type="button" class="btn-reply-sm" onclick="showEditForm(${comment.cid})">수정</button>
-												
-												<form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete" 
-												      method="post" 
-												      style="display:inline;" 
-												      onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-													<button type="submit" class="btn-reply-sm btn-reply-delete">삭제</button>
-												</form>
-											</div>
-										</c:if>
-									</div>
-				
-									<!-- 2. 수정 입력 폼 -->
-									<c:if test="${comment.uid == 1}">
-										<form id="reply-edit-form-${comment.cid}" 
-										      action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/edit" 
-										      method="post" 
-										      class="reply-edit-form">
-											<input type="text" name="commentContent" class="reply-edit-input" value="${comment.content}" required>
-											<div class="reply-edit-buttons">
-												<button type="submit" class="btn-reply-edit-save">완료</button>
-												<button type="button" class="btn-reply-edit-cancel" onclick="hideEditForm(${comment.cid})">취소</button>
-											</div>
-										</form>
-									</c:if>
-
-								</li>
-							</c:forEach>
-						</c:when>
-						
-						<c:otherwise>
-							<div class="no-reply">작성된 댓글이 없습니다.</div>
-						</c:otherwise>
-					</c:choose>
-				</ul>
+			    <c:choose>
+			        <c:when test="${not empty post.commentList}">
+			            <c:forEach var="comment" items="${post.commentList}">
+			                
+			                <!-- parentCId가 있으면 대댓글 클래스(nested-reply) 추가 -->
+			                <li class="reply-item ${not empty comment.parentCId ? 'nested-reply' : ''}">
+			                    
+			                    <!-- 헤더: 작성자 및 작성일 -->
+			                    <div class="reply-header">
+			                        <span class="reply-writer">
+			                            <!-- 대댓글인 경우 화살표 아이콘 표시 -->
+			                            <c:if test="${not empty comment.parentCId}">
+			                                <span class="nested-icon">↳</span>
+			                            </c:if>
+			                            ${comment.nickname}
+			                        </span>
+			                        <span class="reply-date">${comment.createdAt}</span>
+			                    </div>
+			
+			                    <!-- 1. 일반 조회용 영역 -->
+			                    <div class="reply-body" id="reply-body-${comment.cid}">
+			                        <div class="reply-content">
+			                            <c:choose>
+			                                <c:when test="${comment.content == '삭제된 댓글입니다.'}">
+			                                    <span class="deleted-comment">삭제된 댓글입니다.</span>
+			                                </c:when>
+			                                <c:otherwise>
+			                                    ${comment.content}
+			                                </c:otherwise>
+			                            </c:choose>
+			                        </div>
+			                        
+			                        <c:if test="${comment.uid == 1}">
+			                            <div class="reply-actions">
+			                                <button type="button" class="btn-reply-sm" onclick="showEditForm(${comment.cid})">수정</button>
+			                                
+			                                <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete" 
+			                                      method="post" 
+			                                      style="display:inline;" 
+			                                      onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+			                                    <button type="submit" class="btn-reply-sm btn-reply-delete">삭제</button>
+			                                </form>
+			                            </div>
+			                        </c:if>
+			                    </div>
+			
+			                    <!-- 2. 수정 입력 폼 -->
+			                    <c:if test="${comment.uid == 1}">
+			                        <form id="reply-edit-form-${comment.cid}" 
+			                              action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/edit" 
+			                              method="post" 
+			                              class="reply-edit-form">
+			                            <input type="text" name="commentContent" class="reply-edit-input" value="${comment.content}" required>
+			                            <div class="reply-edit-buttons">
+			                                <button type="submit" class="btn-reply-edit-save">완료</button>
+			                                <button type="button" class="btn-reply-edit-cancel" onclick="hideEditForm(${comment.cid})">취소</button>
+			                            </div>
+			                        </form>
+			                    </c:if>
+			                    
+			                    <!-- 최상위 댓글이면서 + '삭제된 댓글'이 아닌 경우에만 답글 버튼 노출 -->
+								<c:if test="${empty comment.parentCId and comment.content != '삭제된 댓글입니다.'}">
+								    <button type="button" class="btn-nested-reply" onclick="showReplyForm(${comment.cid})">
+								        답글
+								    </button>
+								
+								    <!-- 대댓글 작성 폼 -->
+								    <form id="reply-form-${comment.cid}"
+								          action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/reply"
+								          method="post"
+								          class="nested-reply-form reply-edit-form">
+								
+								        <input type="text" name="commentContent" class="reply-edit-input" placeholder="답글을 입력하세요..." required>
+								        <div class="reply-edit-buttons">
+								            <button type="submit" class="btn-reply-edit-save">등록</button>
+								        </div>
+								    </form>
+								</c:if>
+			
+			                </li>
+			            </c:forEach>
+			        </c:when>
+			        
+			        <c:otherwise>
+			            <div class="no-reply">작성된 댓글이 없습니다.</div>
+			        </c:otherwise>
+			    </c:choose>
+			</ul>
 			</div>
 
 		</div>
@@ -542,6 +625,21 @@ body {
 
 		// 히스토리 더미 상태 추가 (popstate 이벤트를 발생시키기 위함)
 		history.pushState(null, null, location.href);
+		
+		//답글
+		function showReplyForm(cid) {
+		    const form = document.getElementById("reply-form-" + cid);
+		    if (!form) return;
+
+		    // computedStyle을 확인하여 display 상태 검사
+		    const currentDisplay = window.getComputedStyle(form).display;
+
+		    if (currentDisplay === "none") {
+		        form.style.display = "flex";
+		    } else {
+		        form.style.display = "none";
+		    }
+		}
 	</script>
 
 </body>

@@ -29,7 +29,7 @@ public class CommentController {
         // 현재 로그인 기능이 없으므로 임시 사용자 ID
         Long uId = TEMP_USER_ID;
 
-        commentService.insertComment(pId, uId, commentContent);
+        commentService.insertComment(pId, uId, commentContent, null);
 
         // 댓글 작성 후 기존 게시글 상세 페이지로 이동
         return "redirect:/board/" + gameAlias + "/" + pId;
@@ -57,5 +57,22 @@ public class CommentController {
         commentService.deleteComment(cId, TEMP_USER_ID);
         return "redirect:/board/" + gameAlias + "/" + pId;
     }
+    
+    // 대댓글 작성
+    @PostMapping("/{gameAlias}/{pId}/comment/{parentCId}/reply")
+    public String writeReply(
+            @PathVariable("gameAlias") String gameAlias,
+            @PathVariable("pId") Long pId,
+            @PathVariable("parentCId") Long parentCId,
+            @RequestParam("commentContent") String commentContent) {
+
+        Long uId = TEMP_USER_ID;
+
+        // 대댓글 → parentCId에 부모 댓글의 cId 저장
+        commentService.insertComment(pId, uId, commentContent, parentCId);
+
+        return "redirect:/board/" + gameAlias + "/" + pId;
+    }
+    
 
 }

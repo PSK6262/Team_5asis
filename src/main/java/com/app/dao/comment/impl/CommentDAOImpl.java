@@ -20,13 +20,14 @@ public class CommentDAOImpl implements CommentDAO {
 	private final String NAMESPACE = "CommentMapper.";
 
 	@Override
-	public void insertComment(Long pId, Long uId, String content) {
+	public void insertComment(Long pId, Long uId, String content, Long parentCId) {
 		
 		Map<String, Object> paramMap = new HashMap<>();
 
         paramMap.put("pId", pId);
         paramMap.put("uId", uId);
         paramMap.put("content", content);
+        paramMap.put("parentCId", parentCId);
 
         sql.insert(NAMESPACE + "insertComment", paramMap);
 		
@@ -45,7 +46,7 @@ public class CommentDAOImpl implements CommentDAO {
         paramMap.put("cId", cId);
         paramMap.put("uId", uId);
 
-        sql.insert(NAMESPACE + "deleteComment", paramMap);
+        sql.update(NAMESPACE + "deleteComment", paramMap);
 		
 	}
 
@@ -60,7 +61,31 @@ public class CommentDAOImpl implements CommentDAO {
         sql.insert(NAMESPACE + "updateComment", paramMap);
 		
 	}
-	
 
+	@Override
+	public void insertReply(Long pId, Long uId, Long parentCId, String content) {
+		Map<String, Object> paramMap = new HashMap<>();
+
+	    paramMap.put("pId", pId);
+	    paramMap.put("uId", uId);
+	    paramMap.put("parentCId", parentCId);
+	    paramMap.put("content", content);
+
+	    sql.insert(NAMESPACE + "insertReply", paramMap);
+		
+	}
+	
+	@Override
+	public int countReplies(Long cId) {
+	    return sql.selectOne(NAMESPACE + "countReplies", cId);
+	}
+
+	@Override
+	public void markAsDeleted(Long cId, Long uId) {
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("cId", cId);
+	    paramMap.put("uId", uId);
+	    sql.update(NAMESPACE + "markAsDeleted", paramMap);
+	}
 
 }
