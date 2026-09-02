@@ -63,3 +63,9 @@ function showReplyForm(cid) {
         form.style.display = "none";
     }
 }
+
+// 댓글 추천 클릭 함수 (이후 백엔드 API 연동 시 구현)
+function likeComment(cId) {
+    console.log("댓글 추천 클릭 - 댓글 ID:", cId);
+    // 추후 AJAX 연동 예정
+}
