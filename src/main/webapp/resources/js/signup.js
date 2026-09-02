@@ -9,7 +9,7 @@
 				return;
 			}
 			
-			fetch("${pageContext.request.contextPath}/user/checkEmail", {
+			fetch(contextPath + "/user/checkEmail", {	//수정
 				method: "POST",
 				headers: { "Content-Type": "application/x-www-form-urlencoded"},
 				body: "email=" + email
