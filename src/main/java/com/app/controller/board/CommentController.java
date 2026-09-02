@@ -1,6 +1,9 @@
 package com.app.controller.board;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.app.dto.user.UserInfo;
 import com.app.service.comment.CommentService;
 
 @Controller
@@ -19,20 +23,21 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
     
-    // 현재 임시 로그인 사용자
-    private final Long TEMP_USER_ID = 1L;
-    
     // 댓글 작성
     @PostMapping("/{gameAlias}/{pId}/comment")
     public String writeComment(
             @PathVariable("gameAlias") String gameAlias,
             @PathVariable("pId") Long pId,
-            @RequestParam("commentContent") String commentContent) {
+            @RequestParam("commentContent") String commentContent,
+            HttpSession session) {
 
-        // 현재 로그인 기능이 없으므로 임시 사용자 ID
-        Long uId = TEMP_USER_ID;
+    	// 로그인 처리 시 세션에 저장해둔 Key 가져오기
+        UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+        if (loginUser == null) {
+            return "redirect:/user/login"; // 비로그인 시 로그인 페이지로 리다이렉트
+        }
 
-        commentService.insertComment(pId, uId, commentContent, null);
+        commentService.insertComment(pId, loginUser.getUid(), commentContent, null);
 
         // 댓글 작성 후 기존 게시글 상세 페이지로 이동
         return "redirect:/board/" + gameAlias + "/" + pId;
@@ -44,9 +49,16 @@ public class CommentController {
             @PathVariable("gameAlias") String gameAlias,
             @PathVariable("pId") Long pId,
             @PathVariable("cId") Long cId,
-            @RequestParam("commentContent") String commentContent) {
+            @RequestParam("commentContent") String commentContent,
+            HttpSession session) {
+    	
+    	UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
 
-        commentService.updateComment(cId, TEMP_USER_ID, commentContent);
+        commentService.updateComment(cId, loginUser.getUid(), commentContent);
+
         return "redirect:/board/" + gameAlias + "/" + pId;
     }
 
@@ -55,9 +67,16 @@ public class CommentController {
     public String deleteComment(
             @PathVariable("gameAlias") String gameAlias,
             @PathVariable("pId") Long pId,
-            @PathVariable("cId") Long cId) {
+            @PathVariable("cId") Long cId,
+            HttpSession session) {
+    	
+    	UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
 
-        commentService.deleteComment(cId, TEMP_USER_ID);
+        commentService.deleteComment(cId, loginUser.getUid());
+
         return "redirect:/board/" + gameAlias + "/" + pId;
     }
     
@@ -67,12 +86,15 @@ public class CommentController {
             @PathVariable("gameAlias") String gameAlias,
             @PathVariable("pId") Long pId,
             @PathVariable("parentCId") Long parentCId,
-            @RequestParam("commentContent") String commentContent) {
+            @RequestParam("commentContent") String commentContent,
+            HttpSession session) {
 
-        Long uId = TEMP_USER_ID;
+    	UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
 
-        // 대댓글 → parentCId에 부모 댓글의 cId 저장
-        commentService.insertComment(pId, uId, commentContent, parentCId);
+        commentService.insertComment(pId, loginUser.getUid(), commentContent, parentCId);
 
         return "redirect:/board/" + gameAlias + "/" + pId;
     }
@@ -82,13 +104,18 @@ public class CommentController {
     public Map<String, Object> toggleCommentLike(
             @PathVariable("gameAlias") String gameAlias,
             @PathVariable("pId") Long pId,
-            @PathVariable("cId") Long cId) {
+            @PathVariable("cId") Long cId,
+            HttpSession session) {
 
-        // 임시 사용자 계정 사용 (추후 세션 로그인 유저 ID로 변경 예정)
-        Long uId = TEMP_USER_ID; 
+    	Map<String, Object> response = new HashMap<>();
+        UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
 
-        // 추천 또는 추천 취소 처리 실행 후 결과 반환
-        return commentService.toggleCommentLike(uId, cId);
+        if (loginUser == null) {
+            response.put("status", "require_login");
+            return response;
+        }
+
+        return commentService.toggleCommentLike(loginUser.getUid(), cId);
     }
     
 
