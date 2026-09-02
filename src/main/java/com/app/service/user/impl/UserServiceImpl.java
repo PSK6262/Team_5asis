@@ -58,5 +58,22 @@ public class UserServiceImpl implements UserService {
 	    // 팀원이 컨트롤러에서 호출해서 임시로 껍데기만 만들어둠
 	    // 나중에 DAO 쿼리 연결 예정
 	}
+
+	//로그인 검증 처리
+	@Override
+	public UserInfo login(UserInfo userInfo) {
+		//1) 클라이언트가 입력한 이메일로 DB에서 회원정보 조회
+		UserInfo dbUser = userDAO.findUserByEmail(userInfo.getEmail());
+		
+		//2) 조회된 회원정보가 존재하고, 비밀번호가 일치하는지 검증
+		if (dbUser != null && dbUser.getPassword().equals(userInfo.getPassword())) {
+			return dbUser;
+		}
+		
+		//3) 아이디가 없거나 비밀번호가 틀린 경우
+		return null;
+	}
+	
+	
 	
 }

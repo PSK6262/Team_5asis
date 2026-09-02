@@ -33,4 +33,15 @@
 		WHERE email = #{email}		
 	</select>
 	
+	<!-- 로그인: 이메일로 회원정보 조회 (비밀번호 검증용) -->
+	<select id="findUserByEmail" parameterType="string" resultType="UserInfo">
+		SELECT
+			u_id AS "uId",
+			email,
+			password,
+			nickname
+		FROM user_info
+		WHERE email = #{email}
+	</select>
+	
 </mapper>

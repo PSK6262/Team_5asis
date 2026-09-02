@@ -163,6 +163,8 @@ body {
 				<label class="form-label" for="passwordConfirm">비밀번호 확인</label> 
 				<input class="form-input" type="password" id="passwordConfirm" name="passwordConfirm"
 						placeholder="비밀번호 재입력" required>
+				<!-- 가입시 비밀번호 일치 여부 -->
+				<div id="pwMsg" style="font-size:13px; margin-top: 5px;"></div>				
 			</div>
 			
 			<div class="form-group">
@@ -194,6 +196,9 @@ body {
 	
 	<!-- 백엔드통신 스크립트 -->
 	<script>
+		//이메일 중복체크 통과된 것만 가입 가능하도록 (아래 세트코드 있음)
+		var isEmailChecked = false;
+		
 		function checkDuplicate(){
 			var email = document.getElementById("email").value;
 			
@@ -214,14 +219,61 @@ body {
 				if (result == "1"){
 					msg.innerText = "이미 사용 중인 이메일입니다.";
 					msg.style.color = "red"
+					isEmailChecked = false;
 				} else {
 					msg.innerText = "사용 가능한 이메일입니다.";
 					msg.style.color = "green";
+					isEmailChecked = true;
 				}
 			
 			});
 			
 		}
+		
+		//이메일 중복체크 통과 후에 수정 시 초기화
+		document.getElementById("email").addEventListener("input", function(){
+			isEmailChecked = false;
+			document.getElementById("msgBox").innerText = "";
+		});
+		
+		document.getElementById("signupForm").addEventListener("submit", function(e){
+			if(!isEmailChecked){
+				e.preventDefault();
+				alert("이메일 중복체크를 먼저 완료해 주세요.");
+				document.getElementById("email").focus();
+				return false;
+			}
+		});
+		
+		
+		// 비밀번호 검증
+		var pwInput = document.getElementById("password");
+		var pwConfirmInput = document.getElementById("passwordConfirm");
+		var pwMsg = document.getElementById("pwMsg");
+		
+		//== 1.실시간 일치 검사 ==
+		function checkPwMatch() {
+			var pw = pwInput.value;
+			var pwConfirm = pwConfirmInput.value;
+			
+			//둘 다 비어있거나 확인 칸이 비어있으면 메세지 숨김
+			if (pwConfirm === "") {
+					pwMsg.innerText = "";
+					return;
+			}
+			
+			if (pw === pwConfirm){
+					pwMsg.innerText = "비밀번호가 일치합니다.";
+					pwMsg.style.color = "green";
+			} else {
+				pwMsg.innerText = "비밀번호가 맞지 않습니다.";
+				pwMsg.style.color = "red";
+			}	
+		}
+		
+		pwInput.addEventListener("input", checkPwMatch);
+		pwConfirmInput.addEventListener("input", checkPwMatch);
+		
 	</script>
 	
 </body>
