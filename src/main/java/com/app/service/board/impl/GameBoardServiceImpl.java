@@ -83,4 +83,11 @@ public class GameBoardServiceImpl implements GameBoardService {
 		searchResult.setSearchedByBoardName(searchedByBoardName);
 		return searchResult;
 	}
+
+	@Override
+	public List<GameNameTransferForm> findAllGames() {
+		
+		return gameBoardDAO.findAllGames();
+		
+	}
 }

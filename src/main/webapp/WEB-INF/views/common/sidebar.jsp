@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -6,8 +7,13 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- 부트스트랩 css CDN 연결 부분 -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/sidebar.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/sidebar.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+	crossorigin="anonymous">
 </head>
 <body>
 	<div class="sideBar_container">
@@ -16,7 +22,9 @@
 			<label id="label_profile">프로필</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_profile">
-				<img class="sideBar_profileImg" src="${empty profileImg ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10' : profileImg}" alt="프로필 이미지">
+				<img class="sideBar_profileImg"
+					src="${empty profileImg ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10' : profileImg}"
+					alt="프로필 이미지">
 				<div class="sideBar_profileInfo">
 					<div class="name">${empty nickname ? '게스트' : nickname}</div>
 					<div class="mypage">
@@ -41,12 +49,14 @@
 
 		<!-- 게임 인기 Top6 -->
 		<div class="sideBar_game">
-			<label id="label_game">게임 인기 Top6</label>
+			<label id="label_game">전체 게임 목록</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_links">
-				<c:forEach var="game" items="${popularSixGames}">
+				<c:forEach var="game" items="${games}">
 					<p>
-						<label id="label_popularGame" onclick="popularGamesOnclickEvent('${game.gameAlias}')"> ${game.gameName} </label>
+						<label id="label_Games"
+							onclick="popularGamesOnclickEvent('${game.gameAlias}')">
+							${game.gameName} </label>
 					</p>
 				</c:forEach>
 			</div>
@@ -54,5 +64,6 @@
 	</div>
 	<!-- 스크립트 -->
 	<!-- 인기 게임 게시판 이동 함수 -->
-	<script src="${pageContext.request.contextPath}/resources/js/sidebar.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/sidebar.js"></script>
 </body>
