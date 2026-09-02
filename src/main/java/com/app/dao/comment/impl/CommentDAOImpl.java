@@ -87,5 +87,15 @@ public class CommentDAOImpl implements CommentDAO {
 	    paramMap.put("uId", uId);
 	    sql.update(NAMESPACE + "markAsDeleted", paramMap);
 	}
+	
+	@Override
+	public Comments selectCommentById(Long cId) {
+	    return sql.selectOne(NAMESPACE + "selectCommentById", cId);
+	}
+
+	@Override
+	public void deleteCommentById(Long cId) {
+	    sql.delete(NAMESPACE + "deleteCommentById", cId);
+	}
 
 }
