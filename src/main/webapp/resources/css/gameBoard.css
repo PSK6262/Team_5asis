@@ -1,87 +1,448 @@
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
-	
-	.pagebody {
-		display: flex;
-		width: 100vw;
-		min-height: 100vh;
-	}
-	
-	.pagebody-rightside {
-		width: 80%;
-		height: auto;
-		border: 1px solid black;
-		margin-left: 0.2%;
-		padding: 1%;
-	}
-	
-	.chzzk-streamer-profile-img {
-		width: 36px; /* 아이콘보다 살짝 큰 최적의 크기 */
-		height: 36px;
-		object-shrink: 0;
-		object-fit: cover;
-		border-radius: 50%;
-		border: 1px solid #e9ecef;
-	}
-	
-	.streaming-card {
-		width: 99%;
-		height: 25vh;
-		border: 1px solid black;
-		margin: 1%;
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
-	}
-	
-	.streaming-image-wrapper {
-		width: 150px;
-		aspect-ratio: 16/9;
-		overflow: hidden;
-		border-radius: 6px;
-		flex-shrink: 0;
-		background-color: #f8f9fa;
-	}
-	
-	.streaming-thumbnail {
-		width: 100%;
-		height: 100%;
-		object-fit: cover; /* 비율 유지하며 꽉 차게 잘라냄 */
-	}
-	
-	.streaming-info {
-		min-width: 0; /* 부모 d-flex 안에서 text-truncate(말줄임)가 작동 */
-	}
-	
-	#streaming-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-		border-color: #00ffaa !important; /* 치지직 시그니처 네온그린 포인트 색상 */
-	}
-	
-	.gameboard-post-view:hover {
-		background-color: gray;
-		cursor: pointer;
-	}
-	.pagination-div {
-		width: 100%;
-	}
-	#centerSearchBar{
-		width:30%;
-	}
-	#leftside-login-btn {
-		width: 100%;
-	}
-	.pagebody-leftside {
-		width: 20%;
-		height: auto;
-		border: 1px solid black;
-		margin-left: 0.2%;
-		margin-right: 0.2%;
-		padding: 1%;
-	}
-	.pagination-div{
-		display:flex;
-		justify-content: center;
-	}
+/* UI는 대체적으로 AI사용. => UI 재능이 없어서 (AI사용하지 않은 버전은 github로 돌려보면 있습니다) */
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 기본 페이지 배경 지정 (필요 시 주석 해제하여 사용) */
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.pagebody {
+    display: flex;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+/* 메인 콘텐츠 영역: 투박한 검은 테두리 제거 및 부드러운 배경 분리 */
+.pagebody-rightside {
+    width: 80%;
+    height: auto;
+    border: none; /* 기존 1px solid black 제거 */
+    background-color: #ffffff;
+    box-shadow: -1px 0 10px rgba(0, 0, 0, 0.03); /* 사이드바와의 은은한 경계감 */
+    margin-left: 0.2%;
+    padding: 2%; /* 여백을 살짝 넓혀 가독성 확보 */
+}
+
+/* 왼쪽 사이드바 영역: 투박한 테두리 제거 및 배경 정돈 */
+.pagebody-leftside {
+    width: 20%;
+    height: auto;
+    border: none; /* 기존 1px solid black 제거 */
+    background-color: #ffffff;
+    margin-left: 0.2%;
+    margin-right: 0.2%;
+    padding: 1.5%;
+}
+
+/* 치지직 스트리머 프로필 이미지 */
+.chzzk-streamer-profile-img {
+    width: 36px;
+    height: 36px;
+    object-shrink: 0;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #e9ecef; /* 테두리를 조금 더 도톰하고 깔끔하게 */
+}
+
+/* 방송 중 카드: 투박한 테두리를 지우고 라운딩과 그림자 적용 */
+.streaming-card {
+    width: 99%;
+    height: 25vh;
+    border: 1px solid #e9ecef !important; /* 부드러운 그레이 테두리 */
+    border-radius: 12px !important; /* 모서리 라운딩 적용 */
+    margin: 1%;
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+}
+
+.streaming-image-wrapper {
+    width: 150px;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background-color: #f1f3f5;
+}
+
+.streaming-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.streaming-info {
+    min-width: 0;
+}
+
+/* 방송 카드 호버 상태: 치지직 네온그린 포인트 테두리 활성화 */
+#streaming-card:hover .streaming-card {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 255, 170, 0.15); /* 네온그린 빛이 도는 은은한 그림자 */
+    border-color: #00ffaa !important;
+}
+
+/* 게시판 테이블 행 호버: 칙칙한 회색 대신 부드러운 호버 컬러 및 트랜지션 */
+.gameboard-post-view {
+    transition: background-color 0.15s ease;
+}
+
+/* 인기 게시글 텍스트 리스트 가독성 개선 */
+.gamebody-rightside div p label.gameboard-post-view {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #0d6efd; /* 왼쪽에 파란색 포인트 바 생성 */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.gamebody-rightside div p label.gameboard-post-view:hover {
+    background-color: #e9ecef !important;
+    color: #0d6efd;
+}
+
+/* 카테고리 태그 버튼 스타일 정돈 */
+button[name="categories"] {
+    background-color: #f1f3f5;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    padding: 6px 14px;
+    border-radius: 30px; /* 둥근 캡슐 모양 버튼 */
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button[name="categories"]:hover {
+    background-color: #0d6efd;
+    color: #ffffff;
+    border-color: #0d6efd;
+}
+
+/* Bootstrap 테이블 기본 스타일 보완 */
+.table {
+    margin-top: 10px;
+    vertical-align: middle;
+}
+
+.table th {
+    font-weight: 600;
+    color: #495057;
+    background-color: #f8f9fa;
+}
+
+.table-body tr td {
+    color: #343a40;
+}
+
+/* 페이지네이션 및 기타 고정 요소 */
+.pagination-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+#leftside-login-btn {
+    width: 100%;
+}
+
+/* 인기 게시글 컨테이너 박스 */
+.trend-post-container {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+}
+
+/* 상단 타이틀 스타일 */
+.trend-post-title {
+    font-size: 1.1rem;
+    color: #212529;
+    letter-spacing: -0.5px;
+}
+
+/* 리스트 아이템 개별 행 (기존 크기 안에서 한 줄씩 배치) */
+.trend-post-item {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background-color: #f8f9fa;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+/* 호버 시 부드러운 배경색 전환 및 테두리 강조 */
+.trend-post-item:hover {
+    background-color: #eef2ff !important; /* 은은한 블루톤 호버 */
+    border-color: #bae6fd;
+    cursor: pointer;
+}
+
+/* 순위 배지 스타일 (1, 2, 3등 강조) */
+.trend-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* 1, 2, 3등은 게이밍 커뮤니티 감성으로 포인트 컬러 부여 */
+.trend-rank.rank-1 { background-color: #ffe082; color: #b78103; }
+.trend-rank.rank-2 { background-color: #e2e8f0; color: #475569; }
+.trend-rank.rank-3 { background-color: #ffedd5; color: #ea580c; }
+
+/* 게시글 제목 글자 크기 조정 */
+.trend-item-title {
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.trend-post-item:hover .trend-item-title {
+    color: #0284c7; /* 호버 시 제목 링크 컬러 변경 느낌 연출 */
+}
+
+/* 메타 정보 내 닉네임과 수치 정돈 */
+.trend-nickname {
+    max-width: 100px;
+    text-truncate: true;
+}
+
+.trend-stat {
+    font-size: 0.85rem;
+}
+
+/* 데이터가 없을 때의 투명한 처리 */
+.trend-post-empty {
+    border: 1px dashed #dee2e6;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+/* 1. 기본 행(Row) 높이 및 부드러운 분리선 정돈 */
+#board-table-body tr.gameboard-post-row {
+    transition: background-color 0.15s ease;
+    border-bottom: 1px solid #f1f3f5 !important; /* 투박한 검은선 대신 은은한 회색선 */
+    cursor: pointer;
+}
+
+/* 2. 기존 칙칙한 gray 호버 대신 세련된 라이트 그레이/인디고 호버로 대체 */
+#board-table-body tr.gameboard-post-row:hover {
+    background-color: #f8fafc !important; 
+}
+
+/* 3. 텍스트 세로 정렬 및 안쪽 여백(Padding)을 주어 숨통 트기 */
+#board-table-body td {
+    padding: 12px 8px !important;
+    vertical-align: middle;
+    color: #334155;
+}
+
+/* 4. 주요 텍스트와 서브 텍스트의 시각적 무게 차이 주기 */
+.post-id-cell, .post-date-cell, .post-count-cell {
+    font-size: 0.85rem;
+    color: #64748b; /* 부가 정보는 차분한 회색으로 */
+    text-align: center;
+}
+
+.post-title-text {
+    font-weight: 500;
+    color: #1e293b; /* 제목은 선명하고 진하게 */
+    font-size: 0.92rem;
+}
+
+/* 행 전체 호버 시 제목 글자만 센스있게 블루 포인트 컬러로 변경 */
+#board-table-body tr.gameboard-post-row:hover .post-title-text {
+    color: #0d6efd;
+}
+
+.post-author-text {
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.post-like-cell {
+    font-weight: 600;
+    color: #dc3545; /* 추천수는 약간 붉은 톤으로 강조 */
+    text-align: center;
+}
+
+.post-tag-cell {
+    text-align: center;
+}
+
+/* 5. 태그(카테고리) 글씨를 예쁜 미니 배지 형태로 변경 */
+.custom-tag-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #f1f3f5;
+    color: #475569;
+    display: inline-block;
+}
+
+/* 팁: 특정 최애 태그(ex: 공략)가 들어왔을 때 강조 컬러 커스텀 가능 */
+.custom-tag-badge.tag-공략 {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+.custom-tag-badge.tag-자유 {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+/* 페이지네이션 화살표 텍스트 위치 정중앙 정렬 보정 */
+/* 페이지네이션 화살표 및 숫자 위치 정중앙 정렬 + 색상 변경 완벽 보정 */
+.custom-pagination .page-item .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 !important;
+    font-weight: 600;
+    line-height: 1;
+    
+    /* 🔵 Bootstrap 기본 파란색 지우고 무채색 톤앤매너 적용 */
+    color: #475569 !important;       /* 기본 글씨/화살표: 차분한 다크 그레이 */
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important; /* 연한 회색 테두리 */
+    box-shadow: none !important;      /* 클릭 시 생기는 푸른 잔상(포커스 링) 제거 */
+}
+
+/* 🖱️ 일반 번호/화살표 버튼에 마우스 올렸을 때 (Hover) */
+.custom-pagination .page-item .page-link:hover {
+    background-color: #f1f3f5 !important;
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;        /* 호버 시 텍스트가 더 선명해짐 */
+}
+
+/* 📌 현재 유저가 머물고 있는 페이지 번호 (Active) */
+.custom-pagination .page-item.active .page-link {
+    background-color: #1e293b !important; /* 현재 페이지 배경: 진한 딥 그레이 */
+    border-color: #1e293b !important;
+    color: #ffffff !important;            /* 현재 페이지 글씨: 완전 흰색 */
+    font-weight: 700;
+}
+/* 1. 보기 설정 영역 전체 컨테이너 정돈 */
+.post-size-selector-wrapper {
+    border-top: 1px dashed #f1f3f5; /* 상단 테이블과의 은은한 경계선 */
+    padding-top: 18px;
+    margin-top: 10px;
+}
+
+/* 2. 전체 버튼들을 감싸는 베이스 바 (바탕을 연한 회색 둥근 캡슐로 변경) */
+.custom-size-btn-group {
+    background-color: #f1f3f5 !important; /* 연한 그레이 배경 */
+    padding: 4px !important;              /* 안쪽 여백을 주어 내부 버튼이 공중에 뜬 느낌 연출 */
+    border-radius: 30px !important;       /* 완전한 라운딩 캡슐 모양 */
+    border: none !important;
+}
+
+/* 3. 개별 버튼 기본 상태 (글자만 투명하게 떠 있는 상태) */
+.custom-size-btn-group .btn-size-select {
+    border: none !important;
+    background: transparent !important;
+    color: #64748b !important;            /* 차분한 슬레이트 그레이 */
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    padding: 6px 14px !important;
+    border-radius: 30px !important;       /* 개별 버튼도 둥글게 처리 */
+    box-shadow: none !important;          /* 부트스트랩 기본 푸른 잔상 제거 */
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important; /* 부드러운 전환 효과 */
+}
+
+.custom-size-btn-group .btn-size-select:hover {
+    color: #1e293b !important;
+}
+
+.custom-size-btn-group .btn-size-select.active {
+    background-color: #ffffff !important; /* 배경을 하얗게 채움 */
+    color: #1e293b !important;            /* 글자색은 선명하게 선별 */
+    font-weight: 700 !important;
+    /* 은은하고 고급스러운 그림자를 주어 버튼이 위로 살짝 튀어나온 듯한 입체감 부여 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important; 
+}
+
+/* ==========================================================================
+   [BOARD FILTERS & WRITE] - 카테고리 필터 버튼 & 우측 글쓰기 버튼
+   ========================================================================== */
+
+/* 1. 카테고리 버튼 기본 상태 (은은한 그레이 톤으로 리스트 테두리와 조화) */
+.btn-category-item {
+    background-color: #f8f9fa !important;
+    color: #64748b !important;            /* 차분한 슬레이트 그레이 */
+    border: 1px solid #e2e8f0 !important; /* 은은한 테이블 경계선 컬러와 통일 */
+    padding: 7px 16px !important;         /* 우측 글쓰기 버튼과 높이 맞춤 */
+    border-radius: 30px !important;       /* 둥근 캡슐 모양 유지 */
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    margin-right: 6px !important;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 🖱️ 카테고리 버튼 마우스 올렸을 때 (Hover) */
+.btn-category-item:hover {
+    background-color: #f1f3f5 !important;
+    color: #1e293b !important;            /* 글자색이 진해지며 세련되게 피드백 */
+    border-color: #cbd5e1 !important;
+}
+
+/* 📌 [참고] 현재 선택된 카테고리 활성화 상태 스타일 (필요 시 스크립트로 .active 추가 시 작동) */
+.btn-category-item.active {
+    background-color: #e2e8f0 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+
+/* 2. ✍️ 우측 글쓰기 버튼 (전체 페이지의 확실한 액션 포인트로 묵직하게 밸런스 매칭) */
+.btn-board-write {
+    background-color: #1e293b !important; /* 사이트 시그니처 메인 다크 딥 그레이 */
+    color: #ffffff !important;            /* 묵직한 배경 대비 완전 선명한 흰색 텍스트 */
+    border: 1px solid #1e293b !important;
+    padding: 7px 18px !important;         /* 왼쪽 카테고리와 vertical-align 수평선 일치 */
+    border-radius: 8px !important;         /* 테이블 리스트 모서리 둥글기와 통일 */
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.3px !important;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(30, 41, 59, 0.12) !important; /* 부드러운 하단 입체 그림자 */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 🖱️ 글쓰기 버튼 마우스 올렸을 때 (Hover) */
+.btn-board-write:hover {
+    background-color: #0f172a !important;  /* 한 층 더 짙은 미드나잇 블랙으로 반전 */
+    border-color: #0f172a !important;
+    transform: translateY(-1px) !important; /* 게이밍 대시보드 특유의 쫀득한 텐션 효과 */
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.22) !important; /* 그림자가 넓어지며 클릭 유도 */
+}
+
+/* 🖱️ 글쓰기 버튼 클릭했을 때 (Active) */
+.btn-board-write:active {
+    transform: translateY(0) !important;    /* 다시 부드럽게 원위치 안착 */
+    box-shadow: 0 2px 4px rgba(30, 41, 59, 0.12) !important;
+}

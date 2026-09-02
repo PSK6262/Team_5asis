@@ -24,40 +24,52 @@
 		fetch first 6 rows only
 	</select>
 	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
-		select distinct category
-		from post
-		where game_id in (select game_id
-					      from game_list
-					      where game_alias = upper(#{value}))
+	    select distinct category
+	    from post
+	    <if test="value != null and value != 'all' and value != 'ALL'">
+	        where game_id in (select game_id
+	                          from game_list
+	                          where game_alias = upper(#{value}))
+	    </if>
+	    order by case when category = '자유' then 0 else 1 end
 	</select>
 	<select id="findTrendPostListByGameAlias" resultType="Post" parameterType="string">
-		select row_number() over (order by (p.view_count + (10*p.like_count)) desc ) as "rownum"
-			 , p.*
-			 , u.nickname
-		from post p 
-		    inner join game_list g
-		        on p.created_at >= sysdate - 7 
-		            and p.game_id = g.game_id 
-		            and g.game_alias = upper(#{value})
-		    inner join user_info u
-                on p.u_id = u.u_id
-		order by (p.view_count + (10*p.like_count)) desc
-		fetch first 3 rows only
+	    select row_number() over (order by (p.view_count + (10*p.like_count)) desc ) as "rownum"
+	         , p.*
+	         , u.nickname
+	    from post p 
+	        inner join user_info u
+	            on p.u_id = u.u_id
+	        <if test="value != null and value != 'all' and value != 'ALL'">
+	            inner join game_list g
+	                on p.game_id = g.game_id 
+	                and g.game_alias = upper(#{value})
+	        </if>
+	    where p.created_at >= sysdate - 7 
+	    order by (p.view_count + (10*p.like_count)) desc
+	    fetch first 3 rows only
 	</select>
 	<select id="findPostListByPagingPosts" resultType="Post" parameterType="PagingPosts">
-		select p.* , u.nickname
-		from post p 
-			inner join user_info u
-				on p.u_id = u.u_id
-		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
-		<if test="!category.equals('전체') and category != null and category != '' ">
-			and category = #{category}
-		</if>
-		order by p_id desc
-		offset #{offset} rows fetch next #{size} rows only
+	    select p.* , u.nickname
+	    from post p 
+	        inner join user_info u
+	            on p.u_id = u.u_id
+	    <where>
+	        <choose>
+	            <when test="gameAlias != null and gameAlias.toLowerCase().equals('all')">
+	            </when>
+	            <otherwise>
+	                p.game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+	            </otherwise>
+	        </choose>
+	        <if test="category != null and category != '' and !category.equals('전체')">
+	            and p.category = #{category}
+	        </if>
+	    </where>
+	    order by p.p_id desc
+	    offset #{offset} rows fetch next #{size} rows only
 	</select>
-	<select id="findTitleByKeyword" resultType="post"
-		parameterType="string">
+	<select id="findTitleByKeyword" resultType="post" parameterType="string">
 		select p.* , u.nickname , g.game_name , g.game_alias
 		from post p
 			inner join user_info u
@@ -66,8 +78,7 @@
 				on p.game_id = g.game_id
 		where REPLACE(LOWER(title), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
 	</select>
-	<select id="findContentByKeyword" resultType="post"
-		parameterType="string">
+	<select id="findContentByKeyword" resultType="post" parameterType="string">
 		select p.*, u.nickname , g.game_name , g.game_alias
 		from post p
 			inner join user_info u
@@ -76,19 +87,33 @@
 				on p.game_id = g.game_id
 		where REPLACE(LOWER(content), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
 	</select>
-	<select id="findNicknameByKeyword" resultType="UserInfo"
-		parameterType="string">
+	<select id="findGameNameByKeyword" resultType="GameNameTransferForm" parameterType="string">
+		select game_name , game_alias
+		from game_list
+		where REPLACE(LOWER(game_alias_kor), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+		or REPLACE(LOWER(game_alias), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+		or REPLACE(LOWER(game_name), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
+	</select>
+	<select id="findNicknameByKeyword" resultType="UserInfo" parameterType="string">
 		select *
 		from user_info
 		where REPLACE(LOWER(nickname), ' ', '') like '%' || REPLACE(LOWER(#{keyword}), ' ', '') || '%'
 	</select>
 	<select id="findPostSizeByGameAliasAndCategory" resultType="int" parameterType="map">
-		select count(*)
-		from post
-		where game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
-		<if test="!category.equals('전체') and category != null and category != '' ">
-			and category = #{category}
-		</if>
+	    select count(*)
+	    from post p
+	    <where>
+	        <choose>
+	            <when test="gameAlias != null and gameAlias.toLowerCase().equals('all')">
+	            </when>
+	            <otherwise>
+	                p.game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+	            </otherwise>
+	        </choose>
+	        <if test="category != null and category != '' and !category.equals('전체')">
+	            and p.category = #{category}
+	        </if>
+	    </where>
 	</select>
 	<select id="findChzzkCategoryNameByGameAlias" resultType="string" parameterType="string">
 		select chzzk_game_name

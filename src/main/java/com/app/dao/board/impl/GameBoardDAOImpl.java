@@ -74,15 +74,26 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	}
 
 	@Override
-	public SearchResult findSearchResultByKeyword(String keyword) {
-		SearchResult searchResult = new SearchResult();
+	public List<Post> findTitleByKeyword(String keyword){
 		List<Post> searchedByTitle = sqlSessionTemplate.selectList("board_mapper.findTitleByKeyword",keyword);
-		searchResult.setSearchedByTitle(searchedByTitle);
+		return searchedByTitle;
+	}
+	
+	@Override
+	public List<Post> findContentByKeyword(String keyword){
 		List<Post> searchedByContent = sqlSessionTemplate.selectList("board_mapper.findContentByKeyword",keyword);
-		searchResult.setSearchedByContent(searchedByContent);
+		return searchedByContent;
+	}
+	
+	@Override
+	public List<UserInfo> findNicknameByKeyword(String keyword){
 		List<UserInfo> searchedByNickname = sqlSessionTemplate.selectList("board_mapper.findNicknameByKeyword",keyword);
-		searchResult.setSearchedByNickname(searchedByNickname);
-		
-		return searchResult;
+		return searchedByNickname;
+	}
+	
+	@Override
+	public List<GameNameTransferForm> findGameNameByKeyword(String keyword){
+		List<GameNameTransferForm> searchedByBoardName = sqlSessionTemplate.selectList("board_mapper.findGameNameByKeyword",keyword);
+		return searchedByBoardName;
 	}
 }

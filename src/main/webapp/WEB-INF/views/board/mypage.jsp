@@ -166,8 +166,6 @@ input[type="password"] {
 .updateBtn {
 	width: 150px;
 }
-
-
 </style>
 <body>
 	<!-- 상단 프로필 배너 -->
@@ -264,6 +262,7 @@ input[type="password"] {
 
 
 					<h3>📝 내 작성글 목록</h3>
+					
 					<table class="table1">
 						<thead>
 							<tr>
@@ -305,85 +304,84 @@ input[type="password"] {
 				</div>
 				<div id="tab-comments" class="content-item">
 					<h3>💬 내 댓글 목록</h3>
-					 
+
 					<table class="comment-table">
-        <thead>
-            <tr>
-                <th>게임</th>
-                <th>댓글 내용</th>
-                <th>조회수</th>
-                <th>작성일</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:choose>
-                <%-- 댓글 리스트가 비어있거나 없는 경우 --%>
-                <c:when test="${empty commentList}">
-                    <tr>
-                        <td colspan="4" class="no-data">작성한 댓글이 없습니다.</td>
-                    </tr>
-                </c:when>
-                
-                <%-- 댓글 리스트가 있는 경우 반복문 출력 --%>
-                <c:otherwise>
-                    <c:forEach var="comment" items="${commentList}">
-                        <tr>
-                           
-                            <td class="game-alias">
-                                <span class="badge">${comment.gameAlias != null ? comment.gameAlias : '일반'}</span>
-                            </td>
-                            
-                            
-                            <td class="comment-content">
-                                <a style="cursor: pointer;" onclick="location.href='/board/${comment.gameAlias}/${comment.pid} '">
-                                    ${comment.content}
-                                   
-                                </a>
-                            </td>
-                            
-                            <!-- 조회 수 -->
-                            <td class="view-count">
-                                 ${comment.viewCount}
-                            </td>
-                            
-                            <!-- 작성일  -->
-                            <td class="created-at">
-                                <c:out value="${comment.createdAt}" />
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-        </tbody>
-    </table>
-					
+						<thead>
+							<tr>
+								<th>게임</th>
+								<th>댓글 내용</th>
+								<th>조회수</th>
+								<th>작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+								<%-- 댓글 리스트가 비어있거나 없는 경우 --%>
+								<c:when test="${empty commentList}">
+									<tr>
+										<td colspan="4" class="no-data">작성한 댓글이 없습니다.</td>
+									</tr>
+								</c:when>
+
+								<%-- 댓글 리스트가 있는 경우 반복문 출력 --%>
+								<c:otherwise>
+									<c:forEach var="comment" items="${commentList}">
+										<tr>
+
+											<td class="game-alias"><span class="badge">${comment.gameAlias != null ? comment.gameAlias : '일반'}</span>
+											</td>
+
+
+											<td class="comment-content"><a style="cursor: pointer;"
+												onclick="location.href='/board/${comment.gameAlias}/${comment.pid} '">
+													${comment.content} </a></td>
+
+											<!-- 조회 수 -->
+											<td class="view-count">${comment.viewCount}</td>
+
+											<!-- 작성일  -->
+											<td class="created-at"><c:out
+													value="${comment.createdAt}" /></td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
+
 
 				</div>
 				<div id="tab-likes" class="content-item">
-					<h3>❤️ 좋아요한 글</h3>
-					<table class="comment-table">
-    <c:forEach var="post" items="${postList}">
-        <tr>
-            <td class="game-alias">
-                <span class="badge">${post.gameAlias != null ? post.gameAlias : '일반'}</span>
-            </td>
-            
-            <td class="comment-content">
-                <a style="cursor: pointer;" onclick="location.href='/board/${post.gameAlias}/${post.pid}'">
-                    ${post.title}
-                </a>
-            </td>
-            
-            <td class="view-count">
-                ${post.viewCount}
-            </td>
-            
-            <td class="created-at">
-                <c:out value="${post.createdAt}" />
-            </td>
-        </tr>
-    </c:forEach>
-</table>
+					<h3>❤️ 추천한 글</h3>
+					<table class="post-table">
+						<thead>
+							<tr>
+								<th>카테고리</th>
+								<th>제목</th>
+								<th>조회수</th>
+								<th>작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+								<c:when test="${empty postList}">
+									<tr>
+										<td colspan="4">추천한 게시글이 없습니다.</td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="post" items="${postList}">
+										<tr>
+											<td><span class="badge">${post.gameAlias}</span></td>
+											<td><a href="/board/${post.gameAlias}/${post.pid}">${post.title}</a></td>
+											<td>${post.viewCount}</td>
+											<td>${post.createdAt}</td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>

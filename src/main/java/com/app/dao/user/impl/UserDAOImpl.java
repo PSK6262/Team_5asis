@@ -40,6 +40,12 @@ public class UserDAOImpl implements UserDAO {
 	public int checkEmailDuplicate(String email) {
 		return sqlSessionTemplate.selectOne("user_mapper.checkEmailDuplicate", email);
 	}
+
+	//로그인 시 이메일로 DB에서 회원 단일정보 조회
+	@Override
+	public UserInfo findUserByEmail(String email) {
+		return sqlSessionTemplate.selectOne("user_mapper.findUserByEmail", email);
+	}
 	
 	
 }

@@ -6,29 +6,29 @@
 
 	<insert id="insertPost" parameterType="Post">
 		INSERT INTO post (
-			title,
-			content,
-			u_id,
-			like_count,
-			category,
-			game_id,
-			view_count,
-			created_at,
-			updated_at
+		title,
+		content,
+		u_id,
+		like_count,
+		category,
+		game_id,
+		view_count,
+		created_at,
+		updated_at
 		) VALUES (
-			#{title},
-			#{content},
-			#{uId},
-			0,
-			#{category},
-			(
-				SELECT game_id
-				FROM game_list
-				WHERE UPPER(game_alias) = UPPER(#{gameAlias})
-			),
-			0,
-			CURRENT_TIMESTAMP,
-			NULL
+		#{title},
+		#{content},
+		#{uId},
+		0,
+		#{category},
+		(
+		SELECT game_id
+		FROM game_list
+		WHERE UPPER(game_alias) = UPPER(#{gameAlias})
+		),
+		0,
+		CURRENT_TIMESTAMP,
+		NULL
 		)
 	</insert>
 
@@ -91,98 +91,102 @@
 		ORDER BY
 		COALESCE(c.parent_c_id, c.c_id) ASC, c.c_id ASC
 	</select>
-	
-	<select id="selectPostByUid" parameterType="long" resultType="Post">
-		SELECT 
-        p_id AS pId, 
-        category, 
-        title, 
-        created_at AS createdAt, 
-        view_count AS viewCount, 
-        like_count AS likeCount,   
-    	g.game_alias AS gameAlias  
-FROM post p
-JOIN game_List g ON p.game_id = g.game_id
-    WHERE u_id = #{loginUserId}     
-    ORDER BY p_id DESC
+
+	<select id="selectPostByUid" parameterType="long"
+		resultType="Post">
+		SELECT
+		p_id AS pId,
+		category,
+		title,
+		created_at AS createdAt,
+		view_count AS viewCount,
+		like_count AS likeCount,
+		g.game_alias AS gameAlias
+		FROM post p
+		JOIN game_List g ON p.game_id = g.game_id
+		WHERE u_id = #{loginUserId}
+		ORDER BY p_id DESC
 	</select>
-	
+	<select id="selectPostByLikeCount" parameterType="long"
+		resultType="Post">
+		SELECT
+		p.p_id AS pid,
+		<!-- p.u_id AS uid, -->
+		p.title,
+		p.created_at AS createdAt,
+		p.view_count AS viewCount,
+		p.like_count AS likeCount,
+		g.game_alias AS gameAlias
+		FROM post p
+		JOIN game_list g ON p.game_id = g.game_id
+		JOIN
+		like_history l ON l.p_id = p.p_id
+		WHERE l.u_id = #{loginUserId}
+		ORDER BY p.like_count DESC
+	</select>
+
 	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="map">
 
-	    UPDATE post
-	    SET
-	        title = #{title},
-	        content = #{content},
-	        category = #{category},
-	        updated_at = CURRENT_TIMESTAMP
-	    WHERE p_id = #{pId}
-	      AND u_id = #{uId}
-	
+		UPDATE post
+		SET
+		title = #{title},
+		content = #{content},
+		category = #{category},
+		updated_at = CURRENT_TIMESTAMP
+		WHERE p_id = #{pId}
+		AND u_id = #{uId}
+
 	</update>
-	
+
 	<!-- 게시글 삭제 -->
 	<delete id="deletePost" parameterType="map">
 
-	    DELETE FROM post
-	    WHERE p_id = #{pId}
-	      AND u_id = #{uId}
-	
+		DELETE FROM post
+		WHERE p_id = #{pId}
+		AND u_id = #{uId}
+
 	</delete>
-	
-	
+
+
 	<!-- 1. 중복 추천 여부 확인 -->
-	<select id="checkLikeHistory" parameterType="map" resultType="int">
-	    SELECT COUNT(*) 
-	    FROM like_history 
-	    WHERE p_id = #{pId} AND u_id = #{uId}
-	</select>
-	
-	<!-- 2. 추천 이력 추가 -->
-	<insert id="insertLikeHistory" parameterType="map">
-	    INSERT INTO like_history (u_id, p_id, c_id)
-	    VALUES (#{uId}, #{pId}, NULL)
-	</insert>
-	
-	<!-- 3. 게시글 추천 수 1 증가 -->
-	<update id="updateLikeCount" parameterType="long">
-	    UPDATE post 
-	    SET like_count = like_count + 1 
-	    WHERE p_id = #{pId}
-	</update>
-	
-	<!-- 4. 최신 추천 수 조회 -->
-	<select id="getLikeCount" parameterType="long" resultType="int">
-	    SELECT like_count 
-	    FROM post 
-	    WHERE p_id = #{pId}
-	</select>
-	
-	<!-- 5. 추천 이력 삭제 -->
-	<delete id="deleteLikeHistory" parameterType="map">
-	    DELETE FROM like_history 
-	    WHERE p_id = #{pId} AND u_id = #{uId}
-	</delete>
-	
-	<!-- 6. 게시글 추천 수 1 감소 -->
-	<update id="decreaseLikeCount" parameterType="long">
-	    UPDATE post 
-	    SET like_count = like_count - 1 
-	    WHERE p_id = #{pId}
-	</update>
-	<select id="selectPostByLikeCount" parameterType="long" resultType="Post">
-		SELECT 
-        p.p_id AS pId, 
-        p.u_id AS uId, 
-        p.title, 
-        p.created_at AS createdAt, 
-        p.view_count AS viewCount,         
-    	g.game_alias AS gameAlias
-		FROM post p
-		JOIN game_List g ON p.game_id = g.game_id
-		JOIN like_history l on l.p_id = p.p_id
-		WHERE l.u_id = #{loginUserId}
-        ORDER BY like_count DESC
+	<select id="checkLikeHistory" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM like_history
+		WHERE p_id = #{pId} AND u_id = #{uId}
 	</select>
 
+	<!-- 2. 추천 이력 추가 -->
+	<insert id="insertLikeHistory" parameterType="map">
+		INSERT INTO like_history (u_id, p_id, c_id)
+		VALUES (#{uId}, #{pId}, NULL)
+	</insert>
+
+	<!-- 3. 게시글 추천 수 1 증가 -->
+	<update id="updateLikeCount" parameterType="long">
+		UPDATE post
+		SET like_count = like_count + 1
+		WHERE p_id = #{pId}
+	</update>
+
+	<!-- 4. 최신 추천 수 조회 -->
+	<select id="getLikeCount" parameterType="long" resultType="int">
+		SELECT like_count
+		FROM post
+		WHERE p_id = #{pId}
+	</select>
+
+	<!-- 5. 추천 이력 삭제 -->
+	<delete id="deleteLikeHistory" parameterType="map">
+		DELETE FROM like_history
+		WHERE p_id = #{pId} AND u_id = #{uId}
+	</delete>
+
+	<!-- 6. 게시글 추천 수 1 감소 -->
+	<update id="decreaseLikeCount" parameterType="long">
+		UPDATE post
+		SET like_count = like_count - 1
+		WHERE p_id = #{pId}
+	</update>
 </mapper>

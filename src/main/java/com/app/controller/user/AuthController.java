@@ -1,7 +1,10 @@
 package com.app.controller.user;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +40,6 @@ public class AuthController {
 		    return "redirect:/user/login";	
 		}
 	
-	
-	// http://192.168.0.66:8080/user/login (localhost:8080/user/login)
     @GetMapping("/login")
     public String loginform() {
         return "user/login";
@@ -46,16 +47,30 @@ public class AuthController {
 
     // 폼 전송 시 처리
     @PostMapping("/login")
-    public String login(UserInfo userInfo) {
+    public String login(UserInfo userInfo, HttpSession session, Model model) {
         
         System.out.println("====== 로그인 요청 수신 ======");
         System.out.println("아이디: " + userInfo.getEmail());
         System.out.println("비밀번호: " + userInfo.getPassword());
         System.out.println("=============================");
 
-        return "main";
+       //1) 서비스에 로그인 검증 요청
+        UserInfo loginUser = userService.login(userInfo);
+        
+        //2) 일치하는 회원이 없을 시
+        if (loginUser == null) {
+        	model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
+        	return "user/login";	//다시 로그인 화면으로
+        }
+        
+        //3) 로그인 성공 시 세션에 유저 정보 등록
+        session.setAttribute("LOGIN_USER_ID", loginUser.getUid());
+        session.setAttribute("LOGIN_USER", loginUser);
+        
+        return "redirect:/5asis";	//메인경로
     }
     
+    //이메일 중복체크
     @ResponseBody
     @PostMapping("/checkEmail")
     public int checkEmail(@RequestParam("email") String email) {
@@ -63,5 +78,10 @@ public class AuthController {
     	return result;
     }
     
-    
+    // 로그아웃 처리
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+    	session.invalidate(); //세션 초기화
+    	return "redirect:/user/login";
+    }
 }

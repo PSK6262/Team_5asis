@@ -43,6 +43,9 @@ public class GameBoardController {
 		if(pSize == null || pSize <= 0) {
 			pSize = CommonCode.PAGING_SIZE_SMALL;
 		}
+		if("all".equals(gameAlias)) {
+			pSize = pSize * 4;
+		}
 		
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
 		
@@ -50,13 +53,18 @@ public class GameBoardController {
 		// 전체 List 불러오기
 		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
 		
-		// Paging 된 List 불러오기
-		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category,pSize);
-		
-		if(gameName == null || gameName.isEmpty()) { 
+		if((gameName == null || gameName.isEmpty()) && "all".equalsIgnoreCase(gameAlias)) { 
 			System.out.println("gamename empty");
 			return "redirect:/main"; 
 		}
+		
+	    if ("all".equalsIgnoreCase(gameAlias)) {
+	        gameName = "전체";
+	    }
+		// Paging 된 List 불러오기
+		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category,pSize);
+
+		
 		if(page < 0 || page > pagingPosts.getPostSize()) { 
 			System.out.println("page empty");
 			return "redirect:/board/" + gameAlias  + "?page=1"; 
