@@ -27,7 +27,7 @@
 
 		<!-- 로그인 -->
 		<div>
-			<button type="button" id="btn_goLogin">${empty nickname ? '로그인' : 로그아웃}</button>
+			<button type="button" id="btn_goLogin" onclick="location.href='${pageContext.request.contextPath}/user/login' ">${empty nickname ? '로그인' : 로그아웃}</button>
 		</div>
 	</div>
 	<script type="text/javascript" src="js/navbar.js"></script>
