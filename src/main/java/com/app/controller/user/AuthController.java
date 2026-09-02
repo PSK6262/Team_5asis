@@ -84,4 +84,14 @@ public class AuthController {
     	session.invalidate(); //세션 초기화
     	return "redirect:/user/login";
     }
+    
+    
+    //비밀번호 찾기 비동기 요청 처리
+    @ResponseBody
+    @PostMapping("/findPassword")
+    public String findPassword(@RequestParam("email") String email) {
+    	String password = userService.findPwByEmail(email);
+    	return (password != null) ? password : "NOT_FOUND";
+    }
+    
 }
