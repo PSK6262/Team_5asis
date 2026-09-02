@@ -2,6 +2,8 @@ package com.app.controller.board;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
 import com.app.dto.board.SearchKeywordForm;
 import com.app.dto.board.SearchResult;
+import com.app.dto.user.UserInfo;
 import com.app.service.api.ChzzkApiService;
 import com.app.service.board.GameBoardService;
 import com.app.service.user.UserService;
@@ -24,98 +27,101 @@ import com.app.service.user.UserService;
 @Controller
 @RequestMapping("/board")
 public class GameBoardController {
-	
+
 	@Autowired
 	GameBoardService gameBoardService;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ChzzkApiService chzzkApiService;
-	
-	@GetMapping("/{gameAlias}")
-	public String gameBoard(@PathVariable String gameAlias, Model model , 
-										 @RequestParam(defaultValue = "1" , required=false) int page ,
-										 @RequestParam(defaultValue ="전체", required=false) String category ,
-										 @RequestParam(required=false) Integer pSize) {
 
-		if(pSize == null || pSize <= 0) {
+	@GetMapping("/{gameAlias}")
+	public String gameBoard(@PathVariable String gameAlias, Model model,
+			@RequestParam(defaultValue = "1", required = false) int page,
+			@RequestParam(defaultValue = "전체", required = false) String category,
+			@RequestParam(required = false) Integer pSize, HttpSession session) {
+
+		if (pSize == null || pSize <= 0) {
 			pSize = CommonCode.PAGING_SIZE_SMALL;
-			if("all".equals(gameAlias)) {
+			if ("all".equals(gameAlias)) {
 				pSize = pSize * 2;
 			}
 		}
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
-		
-		System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category + " pSize : " + pSize);
+		UserInfo loginUser = (UserInfo)session.getAttribute("LOGIN_USER");
+		System.out.println("alias : " + gameAlias + " page : " + page + " ctg : " + category + " pSize : " + pSize);
 		// 전체 List 불러오기
-		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
-		
-	    if ("all".equalsIgnoreCase(gameAlias)) {
-	        gameName = "전체";
-	    }
-		
-		if((gameName == null || gameName.isEmpty())) { 
-			System.out.println("gamename empty");
-			return "redirect:/main"; 
-		}
-		
-		// Paging 된 List 불러오기
-		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category,pSize);
+		// List<Post> selectedPost =
+		// gameBoardService.findPostListByGameAlias(gameAlias);
 
-		
-		if(page < 0 || page > pagingPosts.getPostSize()) { 
+		if ("all".equalsIgnoreCase(gameAlias)) {
+			gameName = "전체";
+		}
+
+		if ((gameName == null || gameName.isEmpty())) {
+			System.out.println("gamename empty");
+			return "redirect:/main";
+		}
+
+		// Paging 된 List 불러오기
+		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias, page, category, pSize);
+
+		if (page < 0 || page > pagingPosts.getPostSize()) {
 			System.out.println("page empty");
-			return "redirect:/board/" + gameAlias  + "?page=1"; 
+			return "redirect:/board/" + gameAlias + "?page=1";
 		}
 		List<Post> selectedTrendPost = gameBoardService.findTrendPostListByGameAlias(gameAlias);
-		//pagingPosts.setPosts(gameBoardService.addNicknameToPostList(pagingPosts.getPosts()));
-		
+		// pagingPosts.setPosts(gameBoardService.addNicknameToPostList(pagingPosts.getPosts()));
+
 		List<String> categories = gameBoardService.findCategoriesByGameAlias(gameAlias);
 		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
-		
+
 		// api로 방송 썸네일 가져오기
 		List<ChzzkApiResponse> chzzkApiResponse = chzzkApiService.getChzzkApiResponseByGameAlias(gameAlias);
-		if(chzzkApiResponse != null) {
-			model.addAttribute("chzzkApiResponse",chzzkApiResponse);
+		if (chzzkApiResponse != null) {
+			model.addAttribute("chzzkApiResponse", chzzkApiResponse);
 		}
-		model.addAttribute("categories",categories);
-		model.addAttribute("gameAlias",gameAlias);
-		model.addAttribute("pagingPosts",pagingPosts);
-		model.addAttribute("gameName",gameName);
-		model.addAttribute("popularSixGames",popularSixGames);
-		model.addAttribute("selectedTrendPost",selectedTrendPost);
-		
+		if (loginUser != null) {
+			model.addAttribute("loginUser", loginUser);
+			System.out.println("user : " + loginUser + " login");
+		}
+
+		model.addAttribute("categories", categories);
+		model.addAttribute("gameAlias", gameAlias);
+		model.addAttribute("pagingPosts", pagingPosts);
+		model.addAttribute("gameName", gameName);
+		model.addAttribute("popularSixGames", popularSixGames);
+		model.addAttribute("selectedTrendPost", selectedTrendPost);
+
 		return "board/gameBoard";
 	}
-	
+
 	@GetMapping("/search")
-	public String search(@RequestParam(value = "keyword" , required = false) String keyword ,
-								  @RequestParam(value = "type" , defaultValue="all" , required = false) String type ,
-								  Model model) {
-	
+	public String search(@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "type", defaultValue = "all", required = false) String type, Model model) {
+
 		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
-		model.addAttribute("popularSixGames",popularSixGames);
-		model.addAttribute("keyword",keyword);
+		model.addAttribute("popularSixGames", popularSixGames);
+		model.addAttribute("keyword", keyword);
 		SearchKeywordForm searchKeywordForm = new SearchKeywordForm();
 		searchKeywordForm.setKeyword(keyword);
 		searchKeywordForm.setType(type);
-		
+
 		SearchResult searchResult = gameBoardService.findSearchResultByKeyword(keyword);
-		model.addAttribute("searchResult",searchResult);
-		model.addAttribute("searchKeywordForm",searchKeywordForm);
-		
+		model.addAttribute("searchResult", searchResult);
+		model.addAttribute("searchKeywordForm", searchKeywordForm);
+
 		return "board/search";
 	}
-	
+
 	@GetMapping("/all/{pid}")
 	public String gameBoardAll(@PathVariable String pid) {
-		if(pid == null || pid.trim().isBlank() || pid.trim().isEmpty()) {
+		if (pid == null || pid.trim().isBlank() || pid.trim().isEmpty()) {
 			return "redirect:main";
 		}
-		
-		
+
 		return null;
 	}
 }
