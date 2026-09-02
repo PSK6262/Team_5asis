@@ -31,7 +31,11 @@
 			<label id="label_board">게시판</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_links">
-				<a href="/board/party">파티모집게시판</a> <a href="/board/free">자유게시판</a> <a href="/board/info">정보/공략</a> <a href="/board/question">질문게시판</a> <a href="/board/suggestion">건의게시판</a>
+				<a href="${pageContext.request.contextPath}/board/all?category=구인">통합 게시판</a> 
+				<a href="${pageContext.request.contextPath}/board/all?category=자유">자유 게시판</a> 
+				<a href="${pageContext.request.contextPath}/board/all?category=구인">모집 게시판</a> 
+				<a href="${pageContext.request.contextPath}/board/all?category=정보">정보 게시판</a> 
+				<a href="${pageContext.request.contextPath}/board/all?category=질문">질문 게시판</a>
 			</div>
 		</div>
 
