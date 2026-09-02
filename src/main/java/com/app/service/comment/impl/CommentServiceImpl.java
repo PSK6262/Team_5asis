@@ -87,6 +87,36 @@ public class CommentServiceImpl implements CommentService {
 	        }
 	    }
 	}
+
+	@Override
+	public Map<String, Object> toggleCommentLike(Long uId, Long cId) {
+		Map<String, Object> result = new HashMap<>();
+
+        // 1. 이미 추천했는지 여부 체크
+        int count = commentDAO.checkCommentLike(uId, cId);
+        boolean isLiked;
+
+        if (count > 0) {
+            // 이미 추천한 상태 -> 취소 처리 (-1)
+            commentDAO.deleteCommentLike(uId, cId);
+            commentDAO.updateCommentLikeCount(cId, -1);
+            isLiked = false;
+        } else {
+            // 추천 안 한 상태 -> 추천 처리 (+1)
+            commentDAO.insertCommentLike(uId, cId);
+            commentDAO.updateCommentLikeCount(cId, 1);
+            isLiked = true;
+        }
+
+        // 2. 변경된 최신 추천수 조회
+        int updatedLikeCount = commentDAO.getCommentLikeCount(cId);
+
+        result.put("status", "success");
+        result.put("isLiked", isLiked);
+        result.put("updatedLikeCount", updatedLikeCount);
+
+        return result;
+	}
     
 
 }

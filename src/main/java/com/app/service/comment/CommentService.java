@@ -1,9 +1,9 @@
 package com.app.service.comment;
 
 import java.util.List;
+import java.util.Map;
 
 import com.app.dto.board.Comments;
-import com.app.dto.board.Post;
 
 public interface CommentService {
     
@@ -20,5 +20,8 @@ public interface CommentService {
     
     // 대댓글 등록
     void insertReply(Long pId, Long uId, Long parentCId, String content);
+    
+    // 추천 기능
+    Map<String, Object> toggleCommentLike(Long uId, Long cId);
 
 }

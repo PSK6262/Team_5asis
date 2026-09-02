@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.board.GameBoardDAO;
+import com.app.dao.comment.CommentDAO;
 import com.app.dao.user.UserDAO;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
@@ -23,6 +24,9 @@ public class GameBoardServiceImpl implements GameBoardService {
 	@Autowired
 	UserDAO userDAO;
 
+	@Autowired
+	CommentDAO commentDAO;
+	
 	@Override
 	public List<Post> findPostDetailListByGameAlias(String gameAlias) {
 		List<Post> postList = gameBoardDAO.findPostDetailListByGameAlias(gameAlias);
@@ -66,6 +70,12 @@ public class GameBoardServiceImpl implements GameBoardService {
 		
 		int postSize = gameBoardDAO.findPostSizeByGameAliasAndCategory(gameAlias,category);
 		pagingPosts.setPostSize(postSize);
+		
+		for(int i=0;i<selectedPagingPost.size();i++) {
+			Long pid = selectedPagingPost.get(i).getPid();
+			Long commentSize = commentDAO.countCommentsByPostId(pid);
+			selectedPagingPost.get(i).setCommentCount(commentSize);
+		}
 		
 		return pagingPosts;
 	}

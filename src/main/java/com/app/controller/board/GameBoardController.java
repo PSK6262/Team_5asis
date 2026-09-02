@@ -47,8 +47,8 @@ public class GameBoardController {
 			}
 		}
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
-		
-		System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category + " pSize : " + pSize);
+
+		//System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category + " pSize : " + pSize);
 		// 전체 List 불러오기
 		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
 		
