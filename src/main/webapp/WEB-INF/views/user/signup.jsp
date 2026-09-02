@@ -156,7 +156,7 @@ body {
 			<div class="form-group">
 				<label class="form-label" for="password">비밀번호</label>
 				<input class="form-input" type="password" id="password" name="password" placeholder="비밀번호 입력" required>
-				<br><small>문자, 숫자, 특수문자 포함 8~20자</small>
+				<div id="pwFormatMsg" style="font-size: 11px; color: #888; margin-top: 4px;">문자, 숫자, 특수문자 포함 8~20자</div>
 			</div>
 			
 			<div class="form-group">
@@ -196,14 +196,14 @@ body {
 	
 	<!-- 백엔드통신 스크립트 -->
 	<script>
-		//이메일 중복체크 통과된 것만 가입 가능하도록 (아래 세트코드 있음)
-		var isEmailChecked = false;
+		//=====이메일 중복체크=====
+		var isEmailChecked = false; //이메일 중복체크 통과된 것만 가입 가능하도록
 		
 		function checkDuplicate(){
 			var email = document.getElementById("email").value;
 			
 			if (email == ""){
-				alert("이메일을 먼저 입력해주세요!");
+				alert("이메일을 먼저 입력해주세요.");
 				return;
 			}
 			
@@ -225,33 +225,45 @@ body {
 					msg.style.color = "green";
 					isEmailChecked = true;
 				}
-			
 			});
-			
 		}
 		
-		//이메일 중복체크 통과 후에 수정 시 초기화
+		//이메일 수정 시 중복체크 상태 초기화
 		document.getElementById("email").addEventListener("input", function(){
 			isEmailChecked = false;
 			document.getElementById("msgBox").innerText = "";
 		});
 		
-		document.getElementById("signupForm").addEventListener("submit", function(e){
-			if(!isEmailChecked){
-				e.preventDefault();
-				alert("이메일 중복체크를 먼저 완료해 주세요.");
-				document.getElementById("email").focus();
-				return false;
+		
+		//=====비밀번호 형식 검사=====
+		var pwInput = document.getElementById("password");		
+		var pwFormatMsg = document.getElementById("pwFormatMsg");
+		var pwRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]).{8,20}$/;
+		
+		function checkPwFormat() {
+			var pw = pwInput.value;
+			
+			if (pw === "") {
+					pwFormatMsg.innerText = "영문, 숫자, 특수문자 포함 8~20자";
+					pwFormatMsg.style.color = "#888";
+					return false;
 			}
-		});
+			
+			if (pwRegex.test(pw)) {
+					pwFormatMsg.innerText = "";
+					return true;
+			} else {
+					pwFormatMsg.innerText = "영문, 숫자, 특수문자를 포함하여 8~20자로 입력해 주세요.";
+					pwFormatMsg.style.color = "red"; //조건에 맞지 않을때만 표시
+					return false;
+			}
+		}
 		
 		
-		// 비밀번호 검증
-		var pwInput = document.getElementById("password");
+		//=====비밀번호 실시간 일치 검사=====
 		var pwConfirmInput = document.getElementById("passwordConfirm");
 		var pwMsg = document.getElementById("pwMsg");
 		
-		//== 1.실시간 일치 검사 ==
 		function checkPwMatch() {
 			var pw = pwInput.value;
 			var pwConfirm = pwConfirmInput.value;
@@ -259,21 +271,54 @@ body {
 			//둘 다 비어있거나 확인 칸이 비어있으면 메세지 숨김
 			if (pwConfirm === "") {
 					pwMsg.innerText = "";
-					return;
+					return false;
 			}
 			
 			if (pw === pwConfirm){
 					pwMsg.innerText = "비밀번호가 일치합니다.";
 					pwMsg.style.color = "green";
+					return true;
 			} else {
-				pwMsg.innerText = "비밀번호가 맞지 않습니다.";
-				pwMsg.style.color = "red";
+					pwMsg.innerText = "비밀번호가 맞지 않습니다.";
+					pwMsg.style.color = "red";
+					return false;
 			}	
 		}
 		
-		pwInput.addEventListener("input", checkPwMatch);
+		//실시간 이벤트 리스너 연결
+		pwInput.addEventListener("input", function() {
+			checkPwFormat();
+			if (pwConfirmInput.value !== "") checkPwMatch();
+		});
 		pwConfirmInput.addEventListener("input", checkPwMatch);
 		
+		
+		
+		//===== 최종 검사 =====
+		document.getElementById("signupForm").addEventListener("submit", function(e){
+			//이메일 중복체크 안했을 시 팝업
+			if(!isEmailChecked){
+				e.preventDefault();
+				alert("이메일 중복체크를 먼저 완료해 주세요.");
+				document.getElementById("email").focus();
+				return false;
+			}
+			
+			//비밀번호 형식 확인
+			if(!checkPwFormat()){
+				e.preventDefault();
+				pwInput.focus();
+				return false;
+			}
+			
+			//비밀번호 일치 확인
+			if(!checkPwMatch()){
+				e.preventDefault();
+				pwConfirmInput.focus();
+				return false;
+			}
+		});
+				
 	</script>
 	
 </body>
