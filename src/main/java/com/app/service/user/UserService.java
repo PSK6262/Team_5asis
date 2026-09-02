@@ -16,4 +16,7 @@ public interface UserService {
 	int checkEmailDuplicate(String email);
 	//로그인: 이메일/비밀번호 검증 및 로그인 성공유저 정보 반환
 	UserInfo login(UserInfo userInfo);
+	
+	//이메일로 비밀번호 찾기
+	String findPwByEmail(String email);
 }

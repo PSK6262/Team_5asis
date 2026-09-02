@@ -67,7 +67,7 @@ public class AuthController {
         session.setAttribute("LOGIN_USER_ID", loginUser.getUid());
         session.setAttribute("LOGIN_USER", loginUser);
         
-        return "redirect:/5asis";	//메인경로
+        return "redirect:/main";	//메인경로
     }
     
     //이메일 중복체크
@@ -84,4 +84,14 @@ public class AuthController {
     	session.invalidate(); //세션 초기화
     	return "redirect:/user/login";
     }
+    
+    
+    //비밀번호 찾기 비동기 요청 처리
+    @ResponseBody
+    @PostMapping("/findPassword")
+    public String findPassword(@RequestParam("email") String email) {
+    	String password = userService.findPwByEmail(email);
+    	return (password != null) ? password : "NOT_FOUND";
+    }
+    
 }

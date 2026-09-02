@@ -54,6 +54,7 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	@Override
 	public List<Post> findPostListByPagingPosts(PagingPosts pagingPosts) {
 		List<Post> selectedPagingPost = sqlSessionTemplate.selectList("board_mapper.findPostListByPagingPosts",pagingPosts);
+		System.out.println(selectedPagingPost+": dao pp ");
 		return selectedPagingPost;
 	}
 

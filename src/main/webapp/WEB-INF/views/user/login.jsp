@@ -4,116 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
-
-<style>
-
-body {
-		background-color: #f5f5f5;
-		color: #333;
-		min-height: 100vh;
-		
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-}
-
-.login-container {
-		width: 260px;
-		padding: 30px;
-		
-		background-color: white;
-		border-radius: 8px;
-		border: 2px solid transparent;
-	    background:
-	        linear-gradient(white, white) padding-box,
-	        linear-gradient(
-	            135deg,
-	            #E0B85A 0%,
-	            #C5A052 35%,
-	            #4E8580 70%,
-	            #2F7778 100%
-	        ) border-box;
-	
-	    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);	    
-}
-
-.page-title {
-		font-size: 28px;
-		font-weight: bold;
-		margin-top: 0;
-}
-
-/* 로그인 버튼 */
-.btn {
-		height: 26px;
-		border: none;
-		border-radius: 5px;
-		font-size: 13px;
-		cursor: pointer;
-}
-
-.btn-submit {
-		width: 75px;
-		background-color: #333;
-		color: white;
-}
-
-.btn-submit:hover {
-		background: linear-gradient(135deg, #E0B85A, #2F7778);
-		transform: translateY(2px);
-}
-
-.login-btn {
-		text-align: center;
-		margin-top: 15px;
-}
-
-/* 입력폼*/
-.form-group {
-		margin-bottom: 20px;
-}
-
-.form-label {
-		display: block;
-		margin-bottom: 4px;
-		font-size: 16px;
-}
-
-.form-input {
-		width: 97%;
-		height: 22px;
-}
-
-/* 찾기 */
-.find-area {
-		text-align: center;
-		margin-top: 12px;
-}
-
-/* 체크박스, 폰트 높낮이 조정 */
-input[type="checkbox"] {
-    	vertical-align: middle;
-    	margin: 0 3px 0 0;
-}
-
-.check-label {
-		font-size: 11px;
-		vertical-align: middle;
-}
-
-/* 회원가입 경로 위 여백 */
-.signup-area {
-   		margin-top: 10px;
-}
-
-.click-label {
-		font-size: 11px;		
-}
-
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
 </head>
-
 
 <body>
 
@@ -144,11 +36,32 @@ input[type="checkbox"] {
 	            <button type="submit" class="btn btn-submit">로그인</button>
 	        </div>
 	        
-<!-- 	        경로 추가해야 함 -->
 	        <div class="find-area">
-	        	<a class="click-label" href="#none">아이디/비밀번호 찾기</a>
+	        	<a class="click-label" href="javascript:void(0);" onclick="openFindPwModal()">비밀번호 찾기</a>
 	        </div>
 	    </form>
+	</div>
+	
+	
+	<!-- 비밀번호 찾기 모달 팝업 레이어 -->
+	<div id="findPwModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+	background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 999;">
+		<div style="background: white; width: 280px; padding: 25px; border-radius: 10px; display: flex; flex-direction: column; 
+		box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+			<h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: bold;">비밀번호 찾기</h3>
+			<p style="font-size: 12px; color: #666; margin: 0 0 10px 0;">가입하신 이메일 주소를 입력해 주세요.</p>
+			
+			<div style="display: flex; gap: 6px; margin-bottom: 12px; align-items:center;">
+				<input type="text" id="findPwEmail" placeholder="이메일 입력" style="flex: 1; height: 32px; box-sizing: border-box; 0 10px; 
+				font-size: 13px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
+				<button type="button" class="btn btn-submit" style="width: 65px; height: 32px; border-radius: 5px;" onclick="searchPassword()">찾기</button>
+			</div>
+			
+			<!-- 결과 출력영역 -->
+			<div id="findPwResult" style="font-size: 13px; margin: 5px 0 15px 0; min-height: 20px; line-height: 1.4;"></div>
+			<button type="button" class="btn" style="width: 100%; height: 32px; background-color: #f0f0f0; color: #555; 
+			border: 1px solid #ddd; border-radius: 5px;" onclick="closeFindPwModal()">닫기</button>
+		</div>
 	</div>
 	
 	<div class="signup-area">
@@ -156,5 +69,8 @@ input[type="checkbox"] {
 		<a class="click-label" href="${pageContext.request.contextPath}/user/signup">회원가입</a>	
 	</div>
 	
-</body>
+	<script>const contextPath = "${pageContext.request.contextPath}";</script>
+	<script src="${pageContext.request.contextPath}/resources/js/login.js"></script>
+		
+	</body>
 </html>

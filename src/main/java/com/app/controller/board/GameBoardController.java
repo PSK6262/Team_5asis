@@ -42,25 +42,25 @@ public class GameBoardController {
 
 		if(pSize == null || pSize <= 0) {
 			pSize = CommonCode.PAGING_SIZE_SMALL;
+			if("all".equals(gameAlias)) {
+				pSize = pSize * 2;
+			}
 		}
-		if("all".equals(gameAlias)) {
-			pSize = pSize * 4;
-		}
-		
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
 		
 		System.out.println("alias : " + gameAlias + " page : " +page + " ctg : " + category + " pSize : " + pSize);
 		// 전체 List 불러오기
 		//List<Post> selectedPost = gameBoardService.findPostListByGameAlias(gameAlias);
 		
-		if((gameName == null || gameName.isEmpty()) && "all".equalsIgnoreCase(gameAlias)) { 
+	    if ("all".equalsIgnoreCase(gameAlias)) {
+	        gameName = "전체";
+	    }
+		
+		if((gameName == null || gameName.isEmpty())) { 
 			System.out.println("gamename empty");
 			return "redirect:/main"; 
 		}
 		
-	    if ("all".equalsIgnoreCase(gameAlias)) {
-	        gameName = "전체";
-	    }
 		// Paging 된 List 불러오기
 		PagingPosts pagingPosts = gameBoardService.findPostListByPagingPosts(gameAlias,page,category,pSize);
 
@@ -107,5 +107,15 @@ public class GameBoardController {
 		model.addAttribute("searchKeywordForm",searchKeywordForm);
 		
 		return "board/search";
+	}
+	
+	@GetMapping("/all/{pid}")
+	public String gameBoardAll(@PathVariable String pid) {
+		if(pid == null || pid.trim().isBlank() || pid.trim().isEmpty()) {
+			return "redirect:main";
+		}
+		
+		
+		return null;
 	}
 }
