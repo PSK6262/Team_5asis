@@ -28,7 +28,7 @@ public class MainController {
 		return "main";
 	}
 
-	@GetMapping("/user/logout")
+	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 전체 무효화
 		return "redirect:/main"; // 메인으로 리다이렉트
