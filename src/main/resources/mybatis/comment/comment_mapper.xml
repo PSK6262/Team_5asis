@@ -94,5 +94,62 @@
 	    DELETE FROM comments
 	    WHERE c_id = #{cId}
 	</delete>
+	
+	<!-- 특정 게시글의 댓글 목록 조회 -->
+    <select id="getCommentsByPostId" parameterType="long" resultType="Comments">
+        SELECT 
+            c.c_id AS cid,
+            c.content,
+            c.like_count AS likeCount,
+            c.p_id AS pid,
+            c.u_id AS uid,
+            c.parent_c_id AS parentCId,
+            c.created_at AS createdAt,
+            c.updated_at AS updatedAt,
+            u.nickname AS nickname
+        FROM comments c
+        JOIN user_info u ON c.u_id = u.u_id
+        WHERE c.p_id = #{pId}
+        ORDER BY COALESCE(c.parent_c_id, c.c_id) ASC, c.created_at ASC
+    </select>
+	
+	<select id="countCommentsByPostId" parameterType="long" resultType="long">
+		select count(*)
+		from comments
+		where p_id = #{pId}
+	</select>
+    
+    <!-- 1. 로그인 유저의 댓글 추천 내역 확인 -->
+    <select id="checkCommentLike" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM like_history
+        WHERE u_id = #{uId} AND c_id = #{cId}
+    </select>
+
+    <!-- 2. 추천 내역 추가 -->
+    <insert id="insertCommentLike" parameterType="map">
+	    INSERT INTO like_history (u_id, p_id, c_id)
+    	VALUES (#{uId}, NULL, #{cId})
+	</insert>
+
+    <!-- 3. 추천 내역 삭제 (취소) -->
+    <delete id="deleteCommentLike" parameterType="map">
+        DELETE FROM like_history
+        WHERE u_id = #{uId} AND c_id = #{cId}
+    </delete>
+
+    <!-- 4. 댓글 테이블의 like_count 수 변경 (+1 또는 -1) -->
+    <update id="updateCommentLikeCount" parameterType="map">
+        UPDATE comments
+        SET like_count = like_count + #{amount}
+        WHERE c_id = #{cId}
+    </update>
+
+    <!-- 5. 최신 like_count 조회 -->
+    <select id="getCommentLikeCount" parameterType="long" resultType="int">
+        SELECT like_count
+        FROM comments
+        WHERE c_id = #{cId}
+    </select>
 
 </mapper>

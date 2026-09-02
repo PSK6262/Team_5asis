@@ -131,5 +131,10 @@ public class PostServiceImpl implements PostService {
 		return postDAO.selectPostByLikeCount(loginUserId);
 	}
 
-	
+	@Override
+	public String findGameAliasByPostId(Long pId) {
+		String gameAlias = postDAO.findGameAliasByPostId(pId);
+		return gameAlias;
+	}
+
 }

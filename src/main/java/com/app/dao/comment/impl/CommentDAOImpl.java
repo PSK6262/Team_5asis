@@ -97,5 +97,48 @@ public class CommentDAOImpl implements CommentDAO {
 	public void deleteCommentById(Long cId) {
 	    sql.delete(NAMESPACE + "deleteCommentById", cId);
 	}
+	
+	@Override
+    public int checkCommentLike(Long uId, Long cId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("uId", uId);
+        params.put("cId", cId);
+        return sql.selectOne(NAMESPACE + "checkCommentLike", params);
+    }
+
+    @Override
+    public void insertCommentLike(Long uId, Long cId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("uId", uId);
+        params.put("cId", cId);
+        sql.insert(NAMESPACE + "insertCommentLike", params);
+    }
+
+    @Override
+    public void deleteCommentLike(Long uId, Long cId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("uId", uId);
+        params.put("cId", cId);
+        sql.delete(NAMESPACE + "deleteCommentLike", params);
+    }
+
+    @Override
+    public void updateCommentLikeCount(Long cId, int amount) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cId", cId);
+        params.put("amount", amount);
+        sql.update(NAMESPACE + "updateCommentLikeCount", params);
+    }
+
+    @Override
+    public int getCommentLikeCount(Long cId) {
+        return sql.selectOne(NAMESPACE + "getCommentLikeCount", cId);
+    }
+
+	@Override
+	public Long countCommentsByPostId(Long pid) {
+		Long commentCount = sql.selectOne(NAMESPACE + "countCommentsByPostId",pid);
+		return commentCount;
+	}
 
 }

@@ -189,4 +189,13 @@
 		SET like_count = like_count - 1
 		WHERE p_id = #{pId}
 	</update>
+	
+	
+	<select id="findGameAliasByPostId" parameterType="long" resultType="string">
+		select game_alias
+		from game_list
+		where game_id in (select game_id
+		                  from post
+		                  where p_id = ${pId})
+	</select>
 </mapper>

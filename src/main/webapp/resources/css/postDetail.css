@@ -403,3 +403,31 @@ body {
     font-weight: bold;
     margin-right: 5px;
 }
+
+/* 댓글 추천 버튼 스타일 */
+.btn-reply-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #fff;
+    border: 1px solid #2F7778;
+    color: #2F7778;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-reply-like:hover {
+    background: linear-gradient(135deg, #2F7778, #E0B85A);
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btn-reply-like.active {
+    background: linear-gradient(135deg, #2F7778, #E0B85A);
+    color: #ffffff;
+    border-color: transparent;
+}

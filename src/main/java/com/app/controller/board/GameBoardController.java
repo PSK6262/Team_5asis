@@ -115,13 +115,4 @@ public class GameBoardController {
 
 		return "board/search";
 	}
-
-	@GetMapping("/all/{pid}")
-	public String gameBoardAll(@PathVariable String pid) {
-		if (pid == null || pid.trim().isBlank() || pid.trim().isEmpty()) {
-			return "redirect:main";
-		}
-
-		return null;
-	}
 }

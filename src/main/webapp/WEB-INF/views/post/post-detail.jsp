@@ -110,16 +110,24 @@
 			                            </c:choose>
 			                        </div>
 			                        
-			                        <c:if test="${comment.uid == 1}">
+			                        <!-- 삭제되지 않은 댓글만 추천 수 및 수정/삭제 표시 -->
+			                        <c:if test="${comment.content != '삭제된 댓글입니다.'}">
 			                            <div class="reply-actions">
-			                                <button type="button" class="btn-reply-sm" onclick="showEditForm(${comment.cid})">수정</button>
-			                                
-			                                <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete" 
-			                                      method="post" 
-			                                      style="display:inline;" 
-			                                      onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-			                                    <button type="submit" class="btn-reply-sm btn-reply-delete">삭제</button>
-			                                </form>
+			                                <!-- DB에 저장된 댓글 추천수(likeCount) 표시 -->
+			                                <button type="button" class="btn-reply-like" id="comment-like-btn-${comment.cid}" onclick="likeComment(${comment.cid})">
+			                                    👍 <span id="comment-like-count-${comment.cid}">${comment.likeCount}</span>
+			                                </button>
+
+			                                <c:if test="${comment.uid == 1}">
+			                                    <button type="button" class="btn-reply-sm" onclick="showEditForm(${comment.cid})">수정</button>
+			                                    
+			                                    <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete" 
+			                                          method="post" 
+			                                          style="display:inline;" 
+			                                          onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+			                                        <button type="submit" class="btn-reply-sm btn-reply-delete">삭제</button>
+			                                    </form>
+			                                </c:if>
 			                            </div>
 			                        </c:if>
 			                    </div>
@@ -175,7 +183,8 @@
 	<script>
 	    window.PAGE_CONFIG = {
 	        contextPath: "${pageContext.request.contextPath}",
-	        gameAlias: "${gameAlias}"
+	        gameAlias: "${gameAlias}",
+	        pId: "${post.pid}"
 	    };
 	</script>
 	<script src="${pageContext.request.contextPath}/resources/js/postDetail.js"></script>

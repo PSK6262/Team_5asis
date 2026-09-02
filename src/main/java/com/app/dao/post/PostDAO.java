@@ -31,5 +31,5 @@ public interface PostDAO {
 	int updatePost(Long pId, Long uId, String title, String content, String category);
 	int deletePost(Long pId, Long uId);
 
-	
+	String findGameAliasByPostId(Long pId);
 }

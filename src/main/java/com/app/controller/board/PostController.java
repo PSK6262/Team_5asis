@@ -60,6 +60,11 @@ public class PostController {
     public String postDetail(@PathVariable("gameAlias") String gameAlias, 
     		@PathVariable("pId") Long pId, Model model) {
 
+    	if("all".equals(gameAlias)) {
+    		gameAlias = postService.findGameAliasByPostId(pId);
+    		return "redirect:/board/"+gameAlias+"/"+pId;
+    	}
+    	
     	//게시글 상세 데이터 조회
     	PostDetail postDetail = postService.getPostDetail(pId, gameAlias);
     	
