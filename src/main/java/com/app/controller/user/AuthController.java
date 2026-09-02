@@ -106,9 +106,19 @@ public class AuthController {
     
     // 로그아웃 처리
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
-    	session.invalidate(); //세션 초기화
-    	return "redirect:/user/login";
+    public String logout(HttpServletRequest request, HttpSession session) {
+    	//1) 로그아웃 직전 페이지 경로 가져오기
+    	String referer = request.getHeader("Referer");
+    		
+    	//2) 세션 무효화 (로그아웃 처리)
+    	session.invalidate();
+    	
+    	//3) 직전 페이지 존재 & 마이페이지(로그인전용 화면)가 아닌 경우 원래 페이지로 복귀
+    	if (referer != null && !referer.contains("/mypage")) {
+    		return "redirect:" + referer;
+    	}
+    	
+    	return "redirect:/main";
     }
     
     
