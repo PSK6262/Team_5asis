@@ -156,7 +156,7 @@
 				            
 				            <!-- 제목 -->
 				            <td class="post-title-cell text-truncate">
-				                <span class="post-title-text">${post.title}</span>
+				                <span class="post-title-text">${post.title} [${post.commentCount}] </span>
 				            </td>
 				            
 				            <!-- 작성자 -->

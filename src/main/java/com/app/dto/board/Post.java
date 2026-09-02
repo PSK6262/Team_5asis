@@ -34,6 +34,7 @@ public class Post {
     private String gameName;
     private String gameAlias;
     private String chzzkGameName;
+    private Long commentCount;
     // join이나 , select시 , 5개를 가져왔다면 5개가 1,2,3,4,5와 같이 순서로 나타나게
     private Long rownum; 
 }

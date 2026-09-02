@@ -22,6 +22,8 @@ public interface CommentDAO {
 	
 	Comments selectCommentById(Long cId);
 	void deleteCommentById(Long cId);
+
+	Long countCommentsByPostId(Long pid);
 	
 	
 }

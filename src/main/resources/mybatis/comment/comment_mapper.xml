@@ -112,5 +112,10 @@
         WHERE c.p_id = #{pId}
         ORDER BY COALESCE(c.parent_c_id, c.c_id) ASC, c.created_at ASC
     </select>
-
+	
+	<select id="countCommentsByPostId" parameterType="long" resultType="long">
+		select count(*)
+		from comments
+		where p_id = #{pId}
+	</select>
 </mapper>

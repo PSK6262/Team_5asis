@@ -98,4 +98,10 @@ public class CommentDAOImpl implements CommentDAO {
 	    sql.delete(NAMESPACE + "deleteCommentById", cId);
 	}
 
+	@Override
+	public Long countCommentsByPostId(Long pid) {
+		Long commentCount = sql.selectOne(NAMESPACE + "countCommentsByPostId",pid);
+		return commentCount;
+	}
+
 }
