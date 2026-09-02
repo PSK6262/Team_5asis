@@ -22,7 +22,10 @@ public class AuthController {
 	    private UserService userService;
 
 		@GetMapping("/signup")
-	    public String signupForm() {
+	    public String signupForm(HttpSession session) { //이미 로그인한 상태면 메인으로
+			if (session.getAttribute("LOGIN_USER_ID") != null) {
+				return "redirect:/main";
+			}
 	    	return "user/signup";
 	    }
 	    
@@ -41,7 +44,10 @@ public class AuthController {
 		}
 	
     @GetMapping("/login")
-    public String loginform() {
+    public String loginform(HttpSession session) {	//이미 로그인한 상태면 메인으로
+    	if (session.getAttribute("LOGIN_USER_ID") != null) {
+			return "redirect:/main";
+		}
         return "user/login";
     }
 
@@ -62,6 +68,9 @@ public class AuthController {
         	model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
         	return "user/login";	//다시 로그인 화면으로
         }
+        
+        //추가(보안) 세션 저장 전 비밀번호 제거
+        loginUser.setPassword(null);
         
         //3) 로그인 성공 시 세션에 유저 정보 등록
         session.setAttribute("LOGIN_USER_ID", loginUser.getUid());
