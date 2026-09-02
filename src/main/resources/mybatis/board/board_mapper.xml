@@ -50,13 +50,16 @@
 	    fetch first 3 rows only
 	</select>
 	<select id="findPostListByPagingPosts" resultType="Post" parameterType="PagingPosts">
-	    select p.* , u.nickname
+	    select p.* , u.nickname , g.game_name
 	    from post p 
+	    	inner join game_list g
+	    		on p.game_id = g.game_id
 	        inner join user_info u
 	            on p.u_id = u.u_id
 	    <where>
 	        <choose>
 	            <when test="gameAlias != null and gameAlias.toLowerCase().equals('all')">
+	            
 	            </when>
 	            <otherwise>
 	                p.game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))

@@ -31,7 +31,7 @@
 			<label id="label_board">게시판</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_links">
-				<a href="${pageContext.request.contextPath}/board/all?category=구인">통합 게시판</a> 
+				<a href="${pageContext.request.contextPath}/board/all?category=전체">통합 게시판</a> 
 				<a href="${pageContext.request.contextPath}/board/all?category=자유">자유 게시판</a> 
 				<a href="${pageContext.request.contextPath}/board/all?category=구인">모집 게시판</a> 
 				<a href="${pageContext.request.contextPath}/board/all?category=정보">정보 게시판</a> 
