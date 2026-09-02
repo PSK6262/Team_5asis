@@ -73,6 +73,16 @@ public class UserServiceImpl implements UserService {
 		//3) 아이디가 없거나 비밀번호가 틀린 경우
 		return null;
 	}
+
+	//이메일로 비밀번호 찾기
+	@Override
+	public String findPwByEmail(String email) {
+		UserInfo user = userDAO.findUserByEmail(email);
+		if (user != null) {
+			return user.getPassword();
+		}
+		return null;
+	}
 	
 	
 	

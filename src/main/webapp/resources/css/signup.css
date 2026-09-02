@@ -1,0 +1,122 @@
+body {
+		background-color: #f5f5f5;
+		color: #333;
+		min-height: 100vh;
+		
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+}
+
+.signup-container {
+		width: 260px;
+		padding: 30px;
+		
+		background-color: white;
+		border-radius: 8px;
+		border: 2px solid transparent;
+	    background:
+	        linear-gradient(white, white) padding-box,
+	        linear-gradient(
+	            135deg,
+	            #2F7778 0%,
+	            #4E8580 35%,
+	            #C5A052 70%,
+	            #E0B85A 100%
+	        ) border-box;
+	
+	    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);	    
+}
+
+.page-title {
+		font-size: 28px;
+		font-weight: bold;
+		margin-top: 0;
+}
+
+/* 버튼 */
+.btn {
+		height: 26px;
+		border: none;
+		border-radius: 5px;
+		font-size: 13px;
+		cursor: pointer;
+}
+
+.btn-check, .btn-submit {
+		width: 75px;
+		background-color: #333;
+		color: white;
+}
+
+.btn-check:hover {
+		background: darkgray;
+}
+
+.btn-submit:hover {
+		background: linear-gradient(135deg, #2F7778, #E0B85A);
+		transform: translateY(2px);
+}
+
+
+/* 중복체크 버튼 정렬 */
+.id-check {
+	    display: flex;
+    	gap: 5px;
+}
+
+.id-check .form-input {
+   		flex: 1;
+   	 	width: auto;
+}
+
+.signup-btn {
+		text-align: center;
+		margin-top: 15px;
+}
+
+/* 입력폼 */
+.form-group {
+		margin-bottom: 20px;
+}
+
+.form-label {
+		display: block;
+		margin-bottom: 4px;
+		font-size: 16px;		
+}
+
+.form-input {
+		width: 97%;
+		height: 22px;
+}
+
+/* 체크박스, 폰트 높낮이 조정 */
+.agree-item {
+		display: flex;
+		align-items: center;
+		margin-bottom: 3px;
+}
+
+.agree-item input[type="checkbox"] {
+    	margin: 0 3px 0 0;
+}
+
+.check-label {
+    font-size: 11px;
+}
+
+.click-label {
+    font-size: 11px;
+}
+
+.agree-item .check-label {
+    margin-right: 3px;
+}
+
+
+/* 컨테이너 사이 여백 */
+.login-area {
+    	margin-top: 10px;
+}
