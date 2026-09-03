@@ -4,32 +4,32 @@
 
 <mapper namespace="PostMapper">
 
-	<insert id="insertPost" parameterType="Post">
-		INSERT INTO post (
-		title,
-		content,
-		u_id,
-		like_count,
-		category,
-		game_id,
-		view_count,
-		created_at,
-		updated_at
-		) VALUES (
-		#{title},
-		#{content},
-		#{uId},
-		0,
-		#{category},
-		(
-		SELECT game_id
-		FROM game_list
-		WHERE UPPER(game_alias) = UPPER(#{gameAlias})
-		),
-		0,
-		CURRENT_TIMESTAMP,
-		NULL
-		)
+	<insert id="insertPost" parameterType="Post" useGeneratedKeys="true" keyProperty="pid" keyColumn="p_id">
+	    INSERT INTO post (
+	        title,
+	        content,
+	        u_id,
+	        like_count,
+	        category,
+	        game_id,
+	        view_count,
+	        created_at,
+	        updated_at
+	    ) VALUES (
+	        #{title},
+	        #{content},
+	        #{uid},
+	        0,
+	        #{category},
+	        (
+	            SELECT game_id
+	            FROM game_list
+	            WHERE UPPER(game_alias) = UPPER(#{gameAlias})
+	        ),
+	        0,
+	        CURRENT_TIMESTAMP,
+	        NULL
+	    )
 	</insert>
 
 	<update id="updateViewCount" parameterType="long">

@@ -67,6 +67,28 @@
 
 					<!-- 게시글 본문 -->
 					<div class="post-content">${post.content}</div>
+					
+					<!-- 첨부파일 목록 부분 -->
+					<c:if test="${not empty fileList}">
+					    <div class="attached-files-container" style="margin: 20px 0; padding: 15px; border: 1px solid #e0e0e0; background-color: #f8f9fa; border-radius: 8px;">
+					        <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 15px; color: #333;">📎 첨부파일</h4>
+					        <ul style="list-style: none; padding-left: 0; margin: 0;">
+					            <c:forEach var="file" items="${fileList}">
+					                <li style="margin-bottom: 6px;">
+					                    💾 
+					                    <!-- 파일명 추출 (UUID 제거) -->
+					                    <c:set var="rawFileName" value="${file.mediaUrl.substring(file.mediaUrl.indexOf('_') + 1)}" />
+					                    
+					                    <a href="${pageContext.request.contextPath}${file.mediaUrl}" 
+					                       download="${rawFileName}" 
+					                       style="color: #0d6efd; text-decoration: none; font-weight: 500;">
+					                        ${rawFileName}
+					                    </a>
+					                </li>
+					            </c:forEach>
+					        </ul>
+					    </div>
+					</c:if>
 
 					<!-- 버튼 영역 전체 감싸기 -->
 					<div class="post-action-container">
