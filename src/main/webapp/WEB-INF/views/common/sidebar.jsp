@@ -16,7 +16,7 @@
 			<label id="label_profile">프로필</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_profile">
-				<img class="sideBar_profileImg" src="${empty profileImg ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10' : profileImg}" alt="프로필 이미지">
+				<img class="sideBar_profileImg" src="${profileImage.URL_FILE_PATH}">
 				<div class="sideBar_profileInfo">
 					<div class="name">${empty nickname ? '게스트' : nickname}</div>
 					<div class="mypage">

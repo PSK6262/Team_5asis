@@ -1,5 +1,7 @@
 package com.app.dao.user.impl;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,6 +13,8 @@ import com.app.dto.user.UserInfo;
 public class UserDAOImpl implements UserDAO {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
+	
+	
 	
 	@Override
 	public String findNickNameByUid(Long uid) {
@@ -45,6 +49,24 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public UserInfo findUserByEmail(String email) {
 		return sqlSessionTemplate.selectOne("user_mapper.findUserByEmail", email);
+	}
+
+	@Override
+	public Map<String, Object> getUserProfile(Long userId) {
+		
+		return sqlSessionTemplate.selectOne("user_mapper.getUserProfile", userId);
+	}
+
+	@Override
+	public int insertProfileInfo(Map<String, Object> fileParam) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.insert("user_mapper.insertProfileInfo", fileParam);
+	}
+	
+	@Override
+	public int updateUserProfileImageId(Map<String, Object> userParam) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.update("user_mapper.updateUserProfileImageId", userParam);
 	}
 	
 	
