@@ -10,20 +10,29 @@ body {
 	color: #333;
 }
 
+.pagebody-rightside {
+    min-width: 0;
+}
+
 /* 전체 영역 */
 .page-container {
-	width: 100%;
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 25px;
 }
 
 /* 가운데 본문 영역 */
 .detail-container {
-	width: 900px;
-	min-height: 700px;
-	margin: 50px 0;
-	padding: 40px 50px;
+    width: 100%;
+    max-width: 900px;
+    min-width: 700px;
+
+    min-height: 700px;
+    margin: 25px 0;
+    padding: 30px 30px 40px;
+    
 	background-color: white;
 	border-radius: 8px;
 	/* 고급스러운 그라데이션 테두리 */
