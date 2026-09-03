@@ -24,7 +24,7 @@
 			        </ol>
 			    </nav>
 			</div>
-			<c:if test="${gameName != '전체'}">
+			<c:if test="${gameName != boardTypeAll}">
 				<div class="section-title-wrapper d-flex align-items-center mb-3">
 				    <h5 class="section-main-title fw-bold mb-0">라이브 방송</h5>
 				    <span class="badge bg-success ms-2 d-inline-flex align-items-center live-pulse-badge">
@@ -98,10 +98,10 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="${gameName != '전체'}">
+			<c:if test="${gameName != boardTypeAll}">
 				<div class="d-flex justify-content-between align-items-center mb-3 mt-4">
 				    <div class="category-btn-wrapper">
-				        <button type="button" class="btn-category-item" onclick="categoryBtnClick('${gameAlias}','전체')"> 전체 </button>
+				        <button type="button" class="btn-category-item" onclick="categoryBtnClick('${gameAlias}','${boardTypeAll}')"> 전체 </button>
 				        <c:forEach var="category" items="${categories}">
 				            <button type="button" class="btn-category-item" onclick="categoryBtnClick('${gameAlias}' ,'${category}')"> ${category} </button>
 				        </c:forEach>
@@ -117,7 +117,7 @@
 			</c:if>
 			<table class="table small">
 			  <thead>
-			  <c:if test="${gameName != '전체'}">
+			  <c:if test="${gameName != boardTypeAll}">
 			    <tr>
 			      <th scope="col">번호</th>
 			      <th scope="col">태그</th>
@@ -128,7 +128,7 @@
 			      <th scope="col">추천</th>
 			    </tr>
 			  </c:if>
-			  <c:if test="${gameName == '전체'}">
+			  <c:if test="${gameName == boardTypeAll}">
 			    <tr>
 				    <th scope="col" class="col-1 text-center">번호</th>
 				    <th scope="col" class="col-1 text-center">게임</th>
@@ -148,7 +148,7 @@
 				            <td class="post-id-cell">${post.pid}</td>
 
 				            <!-- 게임명 (전체일때만) -->
-				            <c:if test="${gameName == '전체' }">
+				            <c:if test="${gameName == boardTypeAll }">
 				            	<td class="post-id-cell small lh-1">${post.gameName}</td>
 				        	</c:if>
 				            <!-- 태그 -->
@@ -232,12 +232,12 @@
 			<div class="d-flex justify-content-end align-items-center mb-4 post-size-selector-wrapper">
 			    <span class="text-muted small me-2"><i class="bi bi-list-stars"></i> 보기 설정:</span>
 			    <div class="btn-group custom-size-btn-group" role="group" aria-label="Page size selector">
-			        <c:if test="${gameName != '전체'}">
+			        <c:if test="${gameName != boardTypeAll}">
 				        <button type="button" class="btn btn-size-select ${pSize == 5 ? 'active' : ''}" onclick="changePageSize(5)">5개</button>
 				        <button type="button" class="btn btn-size-select ${pSize == 10 ? 'active' : ''}" onclick="changePageSize(10)">10개</button>
 				        <button type="button" class="btn btn-size-select ${pSize == 20 ? 'active' : ''}" onclick="changePageSize(20)">20개</button>
 			    	</c:if>
-			    	<c:if test="${gameName == '전체'}">
+			    	<c:if test="${gameName == boardTypeAll}">
 			    	    <button type="button" class="btn btn-size-select ${pSize == 10 ? 'active' : ''}" onclick="changePageSize(10)">10개</button>
 				        <button type="button" class="btn btn-size-select ${pSize == 20 ? 'active' : ''}" onclick="changePageSize(20)">20개</button>
 				        <button type="button" class="btn btn-size-select ${pSize == 40 ? 'active' : ''}" onclick="changePageSize(40)">40개</button>

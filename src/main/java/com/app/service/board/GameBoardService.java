@@ -8,11 +8,10 @@ import com.app.dto.board.Post;
 import com.app.dto.board.SearchResult;
 
 public interface GameBoardService {
-	List<Post> findPostDetailListByGameAlias(String gameAlias);
 	String findGameNameByGameAlias(String gameAlias);	
 	List<String> findCategoriesByGameAlias(String gameAlias);
 	List<GameNameTransferForm> findPopularSixGames();
 	List<Post> findTrendPostListByGameAlias(String gameAlias);
-	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , int pSize);
+	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , Integer pSize);
 	SearchResult findSearchResultByKeyword(String keyword);
 }
