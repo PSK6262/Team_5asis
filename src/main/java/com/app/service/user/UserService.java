@@ -29,4 +29,5 @@ public interface UserService {
 	Map<String, Object> getUserProfile(Long userId);
 	void updateProfileImage(Long loginUserId, MultipartFile uploadFile, HttpServletRequest request);
 	
+	public UserInfo findUserByEmail(String email);
 }
