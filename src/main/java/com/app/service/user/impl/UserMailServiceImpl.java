@@ -56,7 +56,7 @@ public class UserMailServiceImpl implements UserMailService {
             System.out.println("발송 성공 -> 토큰값: " + token);
             long uid = userDAO.findUidByUserEmail(userEmail);
             userMailDAO.insertPasswordToken(uid, token);
-            
+           
         } else {
             System.out.println("발송 실패");
         }
