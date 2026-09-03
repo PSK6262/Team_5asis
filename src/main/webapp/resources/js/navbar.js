@@ -5,3 +5,7 @@ document.getElementById('btn_goLogin').addEventListener('click', () => {
         location.href = "/user/logout";
     }
 })
+
+document.getElementById('img_logo').addEventListener('click', () => {
+    location.href = "/main";
+})

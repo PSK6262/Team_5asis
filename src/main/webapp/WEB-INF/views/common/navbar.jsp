@@ -13,9 +13,9 @@
 	<div class="headerBar_container">
 		<!-- 로고 + 팀명 -->
 		<div class="logo_section">
-			<img
-				src="${pageContext.request.contextPath}/resources/image/logo.png"
-				alt="Logo" width=50px height=30px> <span>5ASIS</span>
+			<img id="img_logo"
+				src="${pageContext.request.contextPath}/resources/image/teamLogo.png"
+				alt="Logo" width=50px height=30px>
 		</div>
 
 		<form action="/board/search" method="get" class="search_section">
