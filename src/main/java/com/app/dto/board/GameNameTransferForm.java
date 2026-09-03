@@ -6,4 +6,5 @@ import lombok.Data;
 public class GameNameTransferForm {
 	String gameName;
 	String gameAlias;
+	String gameImage;
 }
