@@ -47,20 +47,20 @@ public class GameBoardController {
 		List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
 		model.addAttribute("games", allGames);
 		// 로그인 사용자 닉네임, 프로필 이미지도 세션에서 꺼내서 전달
-				UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
-				if (loginUser != null) {
-					String nickname = loginUser.getNickname();
-					String profileImg = loginUser.getProfileImageUrl();
-					model.addAttribute("loginUser", loginUser);
-					model.addAttribute("nickname", nickname);
-					model.addAttribute("profileImg", profileImg);
-					System.out.println("닉네임: " + nickname);
-				} else {
-					// 로그인 안 된 상태 처리
-					model.addAttribute("nickname", "Guest");
-					model.addAttribute("profileImg",
-							"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
-				}
+		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+		if (loginUser != null) {
+			String nickname = loginUser.getNickname();
+			String profileImg = loginUser.getProfileImageUrl();
+			model.addAttribute("loginUser", loginUser);
+			model.addAttribute("nickname", nickname);
+			model.addAttribute("profileImg", profileImg);
+			System.out.println("닉네임: " + nickname);
+		} else {
+			// 로그인 안 된 상태 처리
+			model.addAttribute("nickname", "Guest");
+			model.addAttribute("profileImg",
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
+		}
 
 		if (pSize == null || pSize <= 0) {
 			pSize = CommonCode.PAGING_SIZE_SMALL;
@@ -71,14 +71,13 @@ public class GameBoardController {
 		// 들어온 gameAlias parameter를 통해서 게임 이름을 확인
 		// 해당되는게 없으면 null이 나올 것
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
-<<<<<<< HEAD
-=======
+
 		/* UserInfo loginUser = (UserInfo)session.getAttribute("LOGIN_USER"); */
 		System.out.println("alias : " + gameAlias + " page : " + page + " ctg : " + category + " pSize : " + pSize);
 		// 전체 List 불러오기
 		// List<Post> selectedPost =
 		// gameBoardService.findPostListByGameAlias(gameAlias);
->>>>>>> 49378eb184492dda07232ef6e8ce6c99e12dcf93
+
 
 		// 통합 게시판 클릭한 경우(gameAlias가 all인 경우 , gameName = null이다 ) , 
 		// 특정 게임의 이름이 아니라 "전체"라고 보낸다 -> 라이브 방송 등 출력X
@@ -114,9 +113,6 @@ public class GameBoardController {
 		
 		// 치지직 API 정상 작동 ( 에러처리는 서비스에서 해서 온다 , 문제가 있을 시 EMPTY ARRAY )
 		model.addAttribute("chzzkApiResponse", chzzkApiResponse);
-
-		// 로그인한 유저가 있는지 찾는다
-		UserInfo loginUser = (UserInfo)session.getAttribute("LOGIN_USER");
 		
 		// 로그인한 유저가 있는 경우
 		if (loginUser != null) {
