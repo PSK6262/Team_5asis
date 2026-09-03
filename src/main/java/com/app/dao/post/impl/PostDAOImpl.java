@@ -44,8 +44,8 @@ public class PostDAOImpl implements PostDAO {
 	}
 
 	@Override
-	public int insertPost(Map<String, Object> paramMap) {
-		return sql.insert(NAMESPACE + "insertPost", paramMap);
+	public int insertPost(Post post) {
+	    return sql.insert(NAMESPACE + "insertPost", post);
 	}
 
 	@Override

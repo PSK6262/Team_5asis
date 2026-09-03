@@ -68,16 +68,12 @@ public class GameBoardController {
 				pSize = pSize * 2;
 			}
 		}
-		// 들어온 gameAlias parameter를 통해서 게임 이름을 확인
-		// 해당되는게 없으면 null이 나올 것
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
-
 		/* UserInfo loginUser = (UserInfo)session.getAttribute("LOGIN_USER"); */
 		System.out.println("alias : " + gameAlias + " page : " + page + " ctg : " + category + " pSize : " + pSize);
 		// 전체 List 불러오기
 		// List<Post> selectedPost =
 		// gameBoardService.findPostListByGameAlias(gameAlias);
-
 
 		// 통합 게시판 클릭한 경우(gameAlias가 all인 경우 , gameName = null이다 ) , 
 		// 특정 게임의 이름이 아니라 "전체"라고 보낸다 -> 라이브 방송 등 출력X
@@ -113,6 +109,9 @@ public class GameBoardController {
 		
 		// 치지직 API 정상 작동 ( 에러처리는 서비스에서 해서 온다 , 문제가 있을 시 EMPTY ARRAY )
 		model.addAttribute("chzzkApiResponse", chzzkApiResponse);
+
+		// 로그인한 유저가 있는지 찾는다
+		//UserInfo loginUser1 = (UserInfo)session.getAttribute("LOGIN_USER");
 		
 		// 로그인한 유저가 있는 경우
 		if (loginUser != null) {
