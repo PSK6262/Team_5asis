@@ -1,17 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/navbar.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/navbar.css">
 </head>
 <body>
 	<div class="headerBar_container">
 		<!-- 로고 + 팀명 -->
 		<div class="logo_section">
-			<img src="https://anpanman.choirock.com/common/img/main/character1.png" alt="Logo" width="30" height="24"> <span>5ASIS</span>
+			<img id="img_logo"
+				src="${pageContext.request.contextPath}/resources/image/teamLogo.png"
+				alt="Logo" width=50px height=30px>
 		</div>
 
 		<form action="/board/search" method="get" class="search_section">
@@ -27,9 +31,21 @@
 
 		<!-- 로그인 -->
 		<div>
-			<button type="button" id="btn_goLogin" onclick="location.href='${pageContext.request.contextPath}/user/login' ">${empty nickname ? '로그인' : 로그아웃}</button>
+			<button type="button" id="btn_goLogin">
+				<c:choose>
+					<c:when test="${not empty loginUser}">
+						<!-- 로그인 상태 -->
+						로그아웃
+					</c:when>
+					<c:otherwise>
+						<!-- 비로그인 상태 -->
+						로그인
+					</c:otherwise>
+				</c:choose>
+			</button>
 		</div>
 	</div>
-	<script type="text/javascript" src="js/navbar.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/navbar.js"></script>
 </body>
 </html>
