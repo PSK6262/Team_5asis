@@ -159,7 +159,7 @@ public class AuthController {
     	String password = userService.findPwByEmail(email);
     	
     	userMailService.sendPasswordReset(email);
-    	
+    
     	return (password != null) ? "메일을 확인하세요" : "NOT_FOUND";
     }
     
@@ -169,14 +169,16 @@ public class AuthController {
     
     	if(session.getAttribute("LOGIN_USER") != null) {
     		// 이 경우 이미 로그인한 사람이라는것임
-    		return "redirect:/board/main";
+    		session.invalidate();
     	}
     	
     	// email이 존재하고, 토큰이 존재하면? (expired 기간 안이면?)
     	
     	// 여기가 검증 로직 (되었다고 가정)
     	UserInfo loginUser = userService.findUserByEmail(email);
+    	loginUser.setPassword(null);
     	session.setAttribute("LOGIN_USER",loginUser);
+    	session.setAttribute("PASSWORD_RESET_MODE", true);
     	
     	return "redirect:/board/mypage";
     }

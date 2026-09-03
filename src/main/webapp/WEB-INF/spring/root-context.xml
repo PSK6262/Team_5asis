@@ -9,17 +9,18 @@
                       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- 1. 데이터베이스 연결 설정 (localhost 대신 192.168.0.66을 넣었음으로 IP가 바뀌면 수정할 것) -->
-	<context:property-placeholder location="classpath:config/db.properties" />
-	<context:property-placeholder location="classpath:config/smtp.properties" />
-	<bean class="org.apache.commons.dbcp2.BasicDataSource" id="data_source">
+	<!-- 1. 프로퍼티 설정 통합 (콤마를 사용하여 여러 설정을 단 하나의 태그로 안전하게 로드합니다) -->
+	<context:property-placeholder location="classpath:config/db.properties, classpath:config/smtp.properties" />
+
+	<!-- 데이터베이스 연결 설정 -->
+	<bean class="org.apache.commons.dbcp2.BasicDataSource" id="data_source" destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}"/>
 		<property name="url" value="${jdbc.url}"/>
 		<property name="username" value="${jdbc.username}"/>
 		<property name="password" value="${jdbc.password}"/>
 	</bean>
 
-	<context:property-placeholder location="classpath:config/smtp.properties" />
+	<!-- JavaMailSenderImpl 등록 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 	    <property name="host" value="${mail.host}" />
 	    <property name="port" value="${mail.port}" />
@@ -34,7 +35,12 @@
 	        </props>
 	    </property>
 	</bean>
+	
+	<!-- 메일 전송 유틸리티 빈 수동 정의 -->
 	<bean id="sendMail" class="com.app.util.SendMail" />
+	
+	<!-- 의존성 격리 버그 방지를 위해 UserMailService 구현체를 root 영역에 수동 등록 -->
+	<bean id="userMailService" class="com.app.service.user.impl.UserMailServiceImpl" />
 	
 	<!-- 2. MyBatis 설정 -->
 	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
@@ -48,7 +54,7 @@
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 
-	<!-- 4. 어노테이션(@Service, @Repository) 자동 스캔 설정 -->
+	<!-- 4. 어노테이션 자동 스캔 설정 -->
 	<context:component-scan base-package="com.app.service"/>
 	<context:component-scan base-package="com.app.dao"/>
 	<context:component-scan base-package="com.app.util"/>
