@@ -42,6 +42,10 @@ public class GameBoardController {
 			@RequestParam(defaultValue = "1", required = false) int page,
 			@RequestParam(defaultValue = "전체", required = false) String category,
 			@RequestParam(required = false) Integer pSize, HttpSession session) {
+		
+		// 사이드바 전체 게임리스트
+		List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
+		model.addAttribute("games", allGames);
 
 		if (pSize == null || pSize <= 0) {
 			pSize = CommonCode.PAGING_SIZE_SMALL;
