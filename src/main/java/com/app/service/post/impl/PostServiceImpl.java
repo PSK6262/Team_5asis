@@ -48,18 +48,14 @@ public class PostServiceImpl implements PostService {
         return postDetail;
     }
 
-	@Override
-	public int insertPost(Post post, String gameAlias) {
-		Map<String, Object> paramMap = new HashMap<>();
+    @Override
+    public int insertPost(Post post, String gameAlias) {
+        // Post DTO의 gameAlias 필드에 설정
+        post.setGameAlias(gameAlias);
 
-		paramMap.put("title", post.getTitle());
-	    paramMap.put("content", post.getContent());
-	    paramMap.put("uId", post.getUid());
-	    paramMap.put("category", post.getCategory());
-	    paramMap.put("gameAlias", gameAlias);
-
-	    return postDAO.insertPost(paramMap);
-	}
+        // Map 대신 post 객체를 직접 전달해야 insert 후 post.getPid()에 ID가 들어옴
+        return postDAO.insertPost(post);
+    }
 
 	@Override
 	public boolean isLiked(Long pId, Long uId) {

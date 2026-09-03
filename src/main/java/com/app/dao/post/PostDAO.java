@@ -14,7 +14,6 @@ public interface PostDAO {
     PostDetail selectPostDetail(Map<String, Object> paramMap);
     List<Media> selectMediaListByPId(Long pId);
     List<Comments> selectCommentListByPId(Long pId);
-    int insertPost(Map<String, Object> paramMap);
     
 	List<Post> selectPostByUid(Long loginUserId);
 	List<Post> selectPostByLikeCount(Long loginUserId);
@@ -32,4 +31,5 @@ public interface PostDAO {
 	int deletePost(Long pId, Long uId);
 
 	String findGameAliasByPostId(Long pId);
+	int insertPost(Post post);
 }

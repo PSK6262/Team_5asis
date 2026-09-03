@@ -111,7 +111,7 @@ public class GameBoardController {
 		model.addAttribute("chzzkApiResponse", chzzkApiResponse);
 
 		// 로그인한 유저가 있는지 찾는다
-		UserInfo loginUser = (UserInfo)session.getAttribute("LOGIN_USER");
+		//UserInfo loginUser1 = (UserInfo)session.getAttribute("LOGIN_USER");
 		
 		// 로그인한 유저가 있는 경우
 		if (loginUser != null) {

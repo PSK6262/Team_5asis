@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FileMapper">
+
+	<!-- 미디어/파일 정보 등록 -->
+    <insert id="insertFile" parameterType="FileInfo">
+        INSERT INTO media (
+            media_url,
+            media_order,
+            p_id,
+            media_type
+        ) VALUES (
+            #{mediaUrl},
+            #{mediaOrder},
+            #{pid},
+            #{mediaType}
+        )
+    </insert>
+
+    <!-- 게시글 ID별 첨부파일/미디어 목록 조회 -->
+    <select id="selectFilesByPid" parameterType="long" resultType="FileInfo">
+        SELECT 
+            m_id AS mId,
+            media_url AS mediaUrl,
+            media_order AS mediaOrder,
+            p_id AS pId,
+            media_type AS mediaType
+        FROM media
+        WHERE p_id = #{pId}
+        ORDER BY media_order ASC
+    </select>
+
+    <!-- 특정 파일 삭제 -->
+    <delete id="deleteFileByMid" parameterType="long">
+        DELETE FROM media
+        WHERE m_id = #{mId}
+    </delete>
+
+    <!-- 게시글 전체 파일 삭제 -->
+    <delete id="deleteFilesByPid" parameterType="long">
+        DELETE FROM media
+        WHERE p_id = #{pId}
+    </delete>
+
+</mapper>
