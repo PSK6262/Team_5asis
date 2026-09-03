@@ -80,4 +80,35 @@
     WHERE u_id = #{userId}
 </update>
 	
+	
+	
+	<insert id="insertPasswordToken" parameterType="map">
+        INSERT INTO USER_PASSWORD_TOKEN (
+            U_ID, 
+            TOKEN, 
+            EXPIRED_AT
+        ) VALUES (
+            #{uid}, 
+            #{token}, 
+            SYSDATE + (5 / (24 * 60))
+        )
+    </insert>
+    <select id="findUidByUserEmail" parameterType="string" resultType="int">
+    	select u_id
+    	from user_info
+    	where email = #{email}
+    </select>
+    <select id="checkValidToken" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM USER_PASSWORD_TOKEN t
+	    	inner join user_info u 
+	    		on t.U_ID = u.u_id
+	    WHERE u.email = #{email}
+	      AND t.TOKEN = #{token}
+	      AND SYSDATE &lt;= t.EXPIRED_AT
+	</select>
+    <delete id="deleteUsedToken" parameterType="int">
+	    DELETE FROM USER_PASSWORD_TOKEN 
+	    WHERE uid = #{uid}
+	</delete>
 </mapper>

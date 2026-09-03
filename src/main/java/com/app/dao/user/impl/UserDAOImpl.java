@@ -67,6 +67,12 @@ public class UserDAOImpl implements UserDAO {
 	public int updateUserProfileImageId(Map<String, Object> userParam) {
 		// TODO Auto-generated method stub
 		return sqlSessionTemplate.update("user_mapper.updateUserProfileImageId", userParam);
+	public long findUidByUserEmail(String email) {
+		Integer uid = sqlSessionTemplate.selectOne("user_mapper.findUidByUserEmail",email);
+		if (uid == null) {
+			return -1;
+		}
+		return uid;
 	}
 	
 	
