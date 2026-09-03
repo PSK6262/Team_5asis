@@ -16,7 +16,7 @@ public class UserMailDAOImpl implements UserMailDAO {
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Override
-    public void insertPasswordToken(int uid, String token) {
+    public void insertPasswordToken(long uid, String token) {
         Map<String, Object> params = new HashMap<>();
         params.put("uid", uid);
         params.put("token", token);
@@ -24,4 +24,15 @@ public class UserMailDAOImpl implements UserMailDAO {
         // com.app.mapper.UserMailMapper.insertPasswordToken 호출
         sqlSessionTemplate.insert("user_mapper.insertPasswordToken", params);
     }
+
+	@Override
+	public boolean checkValidToken(String email, String token) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("email", email);
+        params.put("token", token);
+        
+        int count = sqlSessionTemplate.selectOne("user_mapper.checkValidToken", params);
+        
+        return count == 1;
+	}
 }

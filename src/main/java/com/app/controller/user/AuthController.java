@@ -173,13 +173,15 @@ public class AuthController {
     	}
     	
     	// email이 존재하고, 토큰이 존재하면? (expired 기간 안이면?)
-    	
-    	// 여기가 검증 로직 (되었다고 가정)
-    	UserInfo loginUser = userService.findUserByEmail(email);
-    	loginUser.setPassword(null);
-    	session.setAttribute("LOGIN_USER",loginUser);
-    	session.setAttribute("PASSWORD_RESET_MODE", true);
-    	
-    	return "redirect:/board/mypage";
+    	if(userMailService.verifyResetToken(email, token)) {
+        	UserInfo loginUser = userService.findUserByEmail(email);
+        	loginUser.setPassword(null);
+        	session.setAttribute("LOGIN_USER",loginUser);
+        	session.setAttribute("PASSWORD_RESET_MODE", true);
+        	
+        	return "redirect:/board/mypage";
+    	}
+    	// 여기는 토큰이 없거나 , 만료
+    	return "redirect:/board/main";
     }
 }

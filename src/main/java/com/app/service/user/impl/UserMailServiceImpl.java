@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.app.dao.user.UserDAO;
+import com.app.dao.user.UserMailDAO;
 import com.app.service.user.UserMailService;
 import com.app.util.SendMail;
 
@@ -15,6 +16,9 @@ public class UserMailServiceImpl implements UserMailService {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private UserMailDAO userMailDAO;
 
 	@Override
     public void joinWelcome(String userEmail) {
@@ -50,11 +54,26 @@ public class UserMailServiceImpl implements UserMailService {
         
         if (isSuccess) {
             System.out.println("발송 성공 -> 토큰값: " + token);
-            
             long uid = userDAO.findUidByUserEmail(userEmail);
+            userMailDAO.insertPasswordToken(uid, token);
             
         } else {
             System.out.println("발송 실패");
         }
 	}
+    @Override
+    public boolean verifyResetToken(String email, String token) {
+        System.out.println("[Service] 토큰 유효성 검증 시작 -> 이메일: " + email + ", 토큰: " + token);
+        
+        // DAO에게 데이터 대조 처리를 위임합니다.
+        boolean isValid = userMailDAO.checkValidToken(email, token);
+       
+        if (isValid) {
+            System.out.println("[Service] 검증 통과: 유효한 토큰입니다.");
+            return true;
+        } else {
+            System.out.println("[Service] 검증 실패: 잘못된 접근이거나 5분 만료된 토큰입니다.");
+            return false;
+        }
+    }
 }
