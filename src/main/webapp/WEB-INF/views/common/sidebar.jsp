@@ -25,11 +25,11 @@
 				<c:choose>
 					<c:when test="${not empty loginUser}">
 						<!-- 로그인 상태 -->
-						<img class="sideBar_profileImg" src="${profileImg}" alt="프로필 이미지">
+						<img class="sideBar_profileImg" src="${profileImage.URL_FILE_PATH}" alt="프로필 이미지">
 					</c:when>
 					<c:otherwise>
 						<!-- 비로그인 상태 -->
-						<img class="sideBar_profileImg" src="${profileImage.URL_FILE_PATH}" alt="프로필 이미지">
+						<img class="sideBar_profileImg" src="${profileImage}" alt="프로필 이미지">
 					</c:otherwise>
 				</c:choose>
 				
