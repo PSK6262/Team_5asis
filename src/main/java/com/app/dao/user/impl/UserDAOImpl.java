@@ -46,6 +46,15 @@ public class UserDAOImpl implements UserDAO {
 	public UserInfo findUserByEmail(String email) {
 		return sqlSessionTemplate.selectOne("user_mapper.findUserByEmail", email);
 	}
+
+	@Override
+	public long findUidByUserEmail(String email) {
+		Integer uid = sqlSessionTemplate.selectOne("user_mapper.findUidByUserEmail",email);
+		if (uid == null) {
+			return -1;
+		}
+		return uid;
+	}
 	
 	
 }

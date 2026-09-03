@@ -1,5 +1,6 @@
 package com.app.controller.user;
 
+import com.app.service.user.impl.UserMailServiceImpl;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.dto.user.UserInfo;
+import com.app.service.user.UserMailService;
 import com.app.service.user.UserService;
 
 @Controller
 @RequestMapping("/user")
 public class AuthController {
-	
+
 		@Autowired
 	    private UserService userService;
+		
+		@Autowired
+		private UserMailService userMailService;
 
 		@GetMapping("/signup")
 	    public String signupForm(HttpSession session) { //이미 로그인한 상태면 메인으로
@@ -43,6 +48,8 @@ public class AuthController {
 		    System.out.println("==========================================");
 		        
 		    userService.signup(userInfo);
+		    
+		    userMailService.joinWelcome(userInfo.getEmail());
 		    
 		    return "redirect:/user/login";	
 		}
@@ -150,7 +157,27 @@ public class AuthController {
     @PostMapping("/findPassword")
     public String findPassword(@RequestParam("email") String email) {
     	String password = userService.findPwByEmail(email);
-    	return (password != null) ? password : "NOT_FOUND";
+    	
+    	userMailService.sendPasswordReset(email);
+    	
+    	return (password != null) ? "메일을 확인하세요" : "NOT_FOUND";
     }
     
+    @GetMapping("/reset")
+    public String resetPassword(@RequestParam("email") String email , 
+    										 @RequestParam("token") String token , HttpSession session) {
+    
+    	if(session.getAttribute("LOGIN_USER") != null) {
+    		// 이 경우 이미 로그인한 사람이라는것임
+    		return "redirect:/board/main";
+    	}
+    	
+    	// email이 존재하고, 토큰이 존재하면? (expired 기간 안이면?)
+    	
+    	// 여기가 검증 로직 (되었다고 가정)
+    	UserInfo loginUser = userService.findUserByEmail(email);
+    	session.setAttribute("LOGIN_USER",loginUser);
+    	
+    	return "redirect:/board/mypage";
+    }
 }

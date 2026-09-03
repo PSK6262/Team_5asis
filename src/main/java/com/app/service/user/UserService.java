@@ -19,4 +19,6 @@ public interface UserService {
 	
 	//이메일로 비밀번호 찾기
 	String findPwByEmail(String email);
+	
+	public UserInfo findUserByEmail(String email);
 }

@@ -13,4 +13,5 @@ public interface UserDAO {
 	// 이메일 중복체크
 	public int checkEmailDuplicate(String email);
 	UserInfo findUserByEmail(String email);	
+	long findUidByUserEmail(String email);
 }

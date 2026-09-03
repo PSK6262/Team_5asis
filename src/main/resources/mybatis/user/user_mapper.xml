@@ -44,4 +44,22 @@
 		WHERE email = #{email}
 	</select>
 	
+	
+	
+	<insert id="insertPasswordToken" parameterType="map">
+        INSERT INTO USER_PASSWORD_TOKEN (
+            UID_NUM, 
+            TOKEN, 
+            EXPIRED_AT
+        ) VALUES (
+            #{uid}, 
+            #{token}, 
+            SYSDATE + (5 / (24 * 60))
+        )
+    </insert>
+    <select id="findUidByUserEmail" parameterType="string" resultType="int">
+    	select u_id
+    	from user_info
+    	where email = #{email}
+    </select>
 </mapper>
