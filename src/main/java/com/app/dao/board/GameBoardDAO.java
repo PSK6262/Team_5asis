@@ -23,4 +23,9 @@ public interface GameBoardDAO {
 	List<Post> findContentByKeyword(String keyword);
 	List<UserInfo> findNicknameByKeyword(String keyword);
     List<GameNameTransferForm> findGameNameByKeyword(String keyword);
+    
+    // 게임 전체 리스트
+    
+    List<GameNameTransferForm> findAllGames();
+    
 }
