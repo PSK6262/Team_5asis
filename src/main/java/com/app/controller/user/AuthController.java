@@ -1,11 +1,14 @@
 package com.app.controller.user;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,10 +48,16 @@ public class AuthController {
 		}
 	
     @GetMapping("/login")
-    public String loginform(HttpServletRequest request, HttpSession session) {
+    public String loginform(HttpServletRequest request, HttpSession session, Model model,
+    				@CookieValue(value = "rememberEmail", required = false) String rememberEmail) {
     	if (session.getAttribute("LOGIN_USER_ID") != null) {
 			return "redirect:/main";
 		}
+    	
+    	//쿠키에 이메일이 저장되어 있으면 jsp 로 전달
+    	if (rememberEmail != null) {
+    		model.addAttribute("rememberEmail", rememberEmail);
+    	}
     	
     	//직전 페이지 URL 가져오기 (게시글 상세페이지 주소 등)
     	String referer = request.getHeader("Referer");
@@ -63,7 +72,9 @@ public class AuthController {
 
     // 폼 전송 시 처리
     @PostMapping("/login")
-    public String login(UserInfo userInfo, HttpSession session, Model model) {
+    public String login(UserInfo userInfo, HttpSession session, Model model,
+    					@RequestParam(value = "rememberId", required = false) String rememberId,
+    					HttpServletResponse response) {
         
         System.out.println("====== 로그인 요청 수신 ======");
         System.out.println("아이디: " + userInfo.getEmail());
@@ -85,6 +96,18 @@ public class AuthController {
         //3) 로그인 성공 시 세션에 유저 정보 등록
         session.setAttribute("LOGIN_USER_ID", loginUser.getUid());
         session.setAttribute("LOGIN_USER", loginUser);
+        
+        //추가(아이디기억) 쿠키 처리 (7일 보관)
+        Cookie cookie = new Cookie("rememberEmail", userInfo.getEmail());
+        cookie.setPath("/");	//모든 페이지에서 쿠키 사용가능
+        
+        if ("Y".equals(rememberId)) {
+        	cookie.setMaxAge(60 * 60 * 24 * 7);
+        } else {	//체크박스 해제 시 쿠키 즉시 삭제
+        	cookie.setMaxAge(0);
+        }
+        response.addCookie(cookie);	//브라우저에 쿠키 전달
+        
         
         //수정(이전페이지가 있으면 거기로, 없으면 메인으로 이동)
         String prevPage = (String) session.getAttribute("prevPage");

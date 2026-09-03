@@ -15,7 +15,8 @@
 	    
 	        <div class="form-group">
             	<label class="form-label" for="email">이메일</label>
-	            <input class="form-input" type="text" id="email" name="email" placeholder="이메일 입력" required>
+				<!-- 쿠키에 저장된 이메일이 있으면 자동으로 채워짐 -->
+	            <input class="form-input" type="text" id="email" name="email" value="${rememberEmail}" placeholder="이메일 입력" required>
 	        </div>
 	        
 	        <div class="form-group">
@@ -28,8 +29,9 @@
 	        </div>
 	        
 	        <div>
-	        <label class="check-label" for="rememberId">
-				<input type="checkbox" id="rememberId" name="rememberId" value="Y">아이디 기억</label>
+	        	<label class="check-label" for="rememberId">
+				<!-- 쿠키가 있으면 체크박스도 체크 상태로 유지 -->
+				<input type="checkbox" id="rememberId" name="rememberId" value="Y" ${not empty rememberEmail ? 'checked' : ''}>아이디 기억</label>
 	        </div>
 	        
 	        <div class="login-btn">
@@ -52,7 +54,7 @@
 			<p style="font-size: 12px; color: #666; margin: 0 0 10px 0;">가입하신 이메일 주소를 입력해 주세요.</p>
 			
 			<div style="display: flex; gap: 6px; margin-bottom: 12px; align-items:center;">
-				<input type="text" id="findPwEmail" placeholder="이메일 입력" style="flex: 1; height: 32px; box-sizing: border-box; 0 10px; 
+				<input type="text" id="findPwEmail" placeholder="이메일 입력" style="flex: 1; height: 32px; box-sizing: border-box; padding: 0 10px; 
 				font-size: 13px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
 				<button type="button" class="btn btn-submit" style="width: 65px; height: 32px; border-radius: 5px;" onclick="searchPassword()">찾기</button>
 			</div>
