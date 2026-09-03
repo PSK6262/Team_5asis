@@ -1,12 +1,12 @@
 /* 헤더 전체 컨테이너 */
 .headerBar_container {
 	display: grid;
-	grid-template-columns: auto 1fr auto; /* 로고/팀명 | 빈공간 | 검색창 */
-	align-items: center;
+	grid-template-columns: auto 1fr auto;
+	align-items: center; /* 요소 높이에 맞게 늘어나도록 */
 	background-color: gray;
-	height: 50px;
 	padding: 0 20px;
 	color: white;
+	min-height: 80px; /* 헤더 최소 높이 지정 */
 }
 
 /* 로고 + 팀명 */
@@ -16,6 +16,11 @@
 	align-items: center;
 	gap: 10px;
 	font-weight: bold;
+}
+
+.logo_section img {
+	max-height: 60px; /* 원하는 높이로 제한 */
+	width: auto; /* 비율 유지 */
 }
 
 /* 검색창 영역 */

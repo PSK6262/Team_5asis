@@ -69,7 +69,7 @@
 			</div>
 		</div>
 
-		<!-- 게임 인기 Top6 -->
+		<!-- 전체 게임 리스트 -->
 		<div class="sideBar_game">
 			<label id="label_game">전체 게임 목록</label>
 			<div class="sideBar_line"></div>

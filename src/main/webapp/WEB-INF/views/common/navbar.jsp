@@ -14,8 +14,8 @@
 		<!-- 로고 + 팀명 -->
 		<div class="logo_section">
 			<img
-				src="https://anpanman.choirock.com/common/img/main/character1.png"
-				alt="Logo" width="30" height="24"> <span>5ASIS</span>
+				src="${pageContext.request.contextPath}/resources/image/logo.png"
+				alt="Logo" width=50px height=30px> <span>5ASIS</span>
 		</div>
 
 		<form action="/board/search" method="get" class="search_section">
@@ -31,8 +31,7 @@
 
 		<!-- 로그인 -->
 		<div>
-			<button type="button" id="btn_goLogin"
-				onclick="location.href='${pageContext.request.contextPath}/user/login' ">
+			<button type="button" id="btn_goLogin">
 				<c:choose>
 					<c:when test="${not empty loginUser}">
 						<!-- 로그인 상태 -->
@@ -46,6 +45,7 @@
 			</button>
 		</div>
 	</div>
-	<script type="text/javascript" src="js/navbar.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/navbar.js"></script>
 </body>
 </html>
