@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.app.dao.user.UserDAO;
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserService;
+import com.app.util.SHA256Encryptor;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,7 +38,16 @@ public class UserServiceImpl implements UserService {
 		System.out.println("====== UserService 단 도착 ======");
 		System.out.println("가입 이메일: " + userInfo.getEmail());
 		
-		// 나중에 DAO에 회원가입 메서드가 만들어지면 아래 주석을 풀고 연결!
+		
+		//비밀번호를 암호화해서 세팅
+		try {
+			String encPw = SHA256Encryptor.encrypt(userInfo.getPassword());
+			userInfo.setPassword(encPw);	//64자리 암호문으로 대체
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		userDAO.insertUser(userInfo);
 	}
 
@@ -66,8 +76,18 @@ public class UserServiceImpl implements UserService {
 		UserInfo dbUser = userDAO.findUserByEmail(userInfo.getEmail());
 		
 		//2) 조회된 회원정보가 존재하고, 비밀번호가 일치하는지 검증
-		if (dbUser != null && dbUser.getPassword().equals(userInfo.getPassword())) {
-			return dbUser;
+		if (dbUser != null) {
+			try {
+				//로그인할 때 입력한 비번을 똑같이 암호화
+				String inputEncPw = SHA256Encryptor.encrypt(userInfo.getPassword());
+				
+				//DB의 암호문과 입력한 암호문 비교
+				if (dbUser.getPassword().equals(inputEncPw)) {
+					return dbUser;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		//3) 아이디가 없거나 비밀번호가 틀린 경우
