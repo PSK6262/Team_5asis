@@ -43,5 +43,41 @@
 		FROM user_info
 		WHERE email = #{email}
 	</select>
+	<select id="getUserProfile" parameterType="Long" resultType="map">
+		SELECT 
+			f.url_file_path,
+			f.file_name
+		FROM user_info u
+		LEFT JOIN profile_image_file_info f ON u.profile_image_id = f.profile_image_id
+		WHERE u.u_id = #{userId}
+	</select>
+	<insert id="insertProfileInfo" parameterType="map">
+    
+    <selectKey keyProperty="profileImageId" resultType="long" order="BEFORE">
+        SELECT seq_profile_image.NEXTVAL FROM DUAL
+    </selectKey>
+
+    INSERT INTO profile_image_file_info (
+        profile_image_id, 
+        file_name, 
+        ORIGINAL_FILE_NAME, 
+        file_path, 
+        url_file_path
+    ) VALUES (
+        #{profileImageId}, 
+        #{fileName}, 
+        #{originalFileName}, 
+        #{filePath}, 
+        #{urlFilePath}
+    )
+    
+     
+</insert>
+	
+	<update id="updateUserProfileImageId" parameterType="map">
+    UPDATE user_info
+    SET profile_image_id = #{profileImageId}
+    WHERE u_id = #{userId}
+</update>
 	
 </mapper>

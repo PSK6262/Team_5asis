@@ -1,5 +1,11 @@
 package com.app.service.user;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.app.dto.user.UserInfo;
 
 public interface UserService {
@@ -19,4 +25,8 @@ public interface UserService {
 	
 	//이메일로 비밀번호 찾기
 	String findPwByEmail(String email);
+	
+	Map<String, Object> getUserProfile(Long userId);
+	void updateProfileImage(Long loginUserId, MultipartFile uploadFile, HttpServletRequest request);
+	
 }

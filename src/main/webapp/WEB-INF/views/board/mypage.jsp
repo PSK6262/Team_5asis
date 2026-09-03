@@ -2,10 +2,14 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-
+<head>
 <meta charset="UTF-8">
-<title>마이페이지</title>
 <link rel="shortcut icon" href="#">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/navbar.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/sidebar.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>마이페이지</title> 
+
 <style>
 p {
 	margin: 0;
@@ -14,8 +18,8 @@ p {
 body {
 	min-height: 100vh;
 	margin: 0;
-	display: flex;
-	justify-content: center;
+	/* display: flex; */
+	/* justify-content: center; */
 	background-color: #ffffff;
 }
 
@@ -33,7 +37,8 @@ button {
 	border-radius: 8px;
 	gap: 20px;
 	background: linear-gradient(to top, #417370, #c2a065);
-	margin-top: 80px;
+	 margin-top: 40px;
+	 margin-left: 80px; 
 }
 
 .banner {
@@ -167,11 +172,43 @@ input[type="password"] {
 	width: 150px;
 }
 </style>
+
+</head>
+
 <body>
+<%@ include file="../common/navbar.jsp" %>
+	<div class="pagebody d-flex align-items-stretch" style="min-height: 100vh;">
+		<%@ include file="../common/sidebar.jsp" %>
+		<div class="pagebody-rightside flex-grow-1">
+			<div class="content-header-nav mb-3">
+			    <nav aria-label="breadcrumb">
+			        <ol class="breadcrumb mb-0">
+			            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main">홈</a></li>
+			            <li class="breadcrumb-item active" aria-current="page">${gameName}</li>
+			        </ol>
+			    </nav>
+			</div>
 	<!-- 상단 프로필 배너 -->
 	<div class="main">
 		<div class="banner">
-			<div id="profileDiv" class="profile"></div>
+			<div id="profileDiv" class="profile">
+        <c:choose>
+            <%-- 1. 등록된 프로필 사진이 없을 때 기본 이미지 출력 --%>
+            <c:when test="${empty profileImage.URL_FILE_PATH}">
+                <img src="${pageContext.request.contextPath}/resources/img/default_profile.png" width="100" height="100" style="border-radius: 20%; object-fit: cover;">
+            </c:when>
+            <%-- 2. 등록된 프로필 사진이 있을 때 해당 경로 이미지 출력 --%>
+            <c:otherwise>
+                <img src="${profileImage.URL_FILE_PATH}" width="100" height="100" style="border-radius: 20%; object-fit: cover;">
+            </c:otherwise>
+        </c:choose>
+    </div>
+    <form action="${pageContext.request.contextPath}/board/mypage/update-profile-img" method="post" enctype="multipart/form-data" style="margin-top: 15px; text-align: center;">
+    <input type="file" name="uploadFile" accept="img/*" required>
+    <button type="submit" style="margin-left: 5px;">프로필 사진 적용하기</button>
+</form>
+    
+   
 			<div class="nickname">
 				<p>${user.nickname}</p>
 
@@ -386,6 +423,8 @@ input[type="password"] {
 			</div>
 		</div>
 	</div>
+</div>
+</div>	
 
 	<script>
 		// 스크립트 실행 타이밍 문제를 완전히 방지하기 위해 window.onload 사용

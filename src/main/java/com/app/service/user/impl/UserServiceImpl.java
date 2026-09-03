@@ -1,7 +1,16 @@
 package com.app.service.user.impl;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dao.user.UserDAO;
 import com.app.dto.user.UserInfo;
@@ -103,6 +112,90 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
+	
+	@Override
+    public Map<String, Object> getUserProfile(Long userId) {
+        return userDAO.getUserProfile(userId);
+    }
+	
+	@Transactional
+	@Override
+    public void updateProfileImage(Long userId, MultipartFile uploadFile, HttpServletRequest request) {
+        if (uploadFile == null || uploadFile.isEmpty()) {
+            return;
+        }
+
+        try {
+            // 1. 서버 폴더 경로 설정
+            String uploadPath = request.getSession().getServletContext().getRealPath("/resources/img/");
+            File folder = new File(uploadPath);
+            if (!folder.exists()) folder.mkdirs();
+
+            // 2. 고유 파일명 생성
+            String originalFileName = uploadFile.getOriginalFilename();
+            String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            if(extension.equalsIgnoreCase(".jfif")) {
+                extension = ".jpg";
+            }
+            String savedFileName = userId + "_" + System.currentTimeMillis() + "_" + originalFileName;
+
+            // 3. 파일 저장
+            File target = new File(uploadPath, savedFileName);
+            uploadFile.transferTo(target);
+
+            // 4. 파일 정보 파라미터 맵핑
+            Map<String, Object> fileParam = new HashMap<>();
+            fileParam.put("fileName", savedFileName);
+            fileParam.put("originalFileName", originalFileName);
+            fileParam.put("filePath", uploadPath);
+            fileParam.put("urlFilePath", request.getContextPath() + "/resources/img/" + savedFileName);
+
+            // 5. 파일 상세 정보 INSERT (useGeneratedKeys로 ID를 받아옴)
+            userDAO.insertProfileInfo(fileParam);
+         // 💡 타입 안전하게 ID 추출하기 (BigDecimal, Long 등 모두 대응)
+            Object rawImageId = fileParam.get("profileImageId");
+            Long generatedImageId = null;
+            
+            if (rawImageId instanceof BigDecimal) {
+                generatedImageId = ((BigDecimal) rawImageId).longValue();
+            } else if (rawImageId instanceof Long) {
+                generatedImageId = (Long) rawImageId;
+            } else if (rawImageId instanceof Integer) {
+                generatedImageId = ((Integer) rawImageId).longValue();
+            } else if (rawImageId != null) {
+                generatedImageId = Long.valueOf(rawImageId.toString());
+            }
+            
+            if (generatedImageId == null) {
+                throw new RuntimeException("프로필 이미지 파일 INSERT 후 시퀀스 ID를 받아오지 못했습니다. (fileParam 확인 필요)");
+            }
+            
+            
+            
+            // 6. user_info 테이블의 profile_image_id 업데이트
+            Map<String, Object> userParam = new HashMap<>();
+            userParam.put("userId", userId);
+            userParam.put("profileImageId", generatedImageId);
+            
+
+            userDAO.updateUserProfileImageId(userParam);
+            
+            UserInfo updatedUser = userDAO.findMyPageByUserId(userId); // 또는 회원 정보를 가져오는 조회 메서드
+            if (request != null && request.getSession() != null) {
+                // 프로젝트에서 로그인한 사용자를 저장할 때 쓰는 세션 키 이름("loginUser" 등)에 맞춰주세요!
+                request.getSession().setAttribute("user", updatedUser);
+                System.out.println("🔄 세션 정보가 최신 프로필 정보로 갱신되었습니다.");
+            }
+            
+           
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("프로필 사진 변경 실패");
+        }
+    }
+
+	
 	
 	
 	
