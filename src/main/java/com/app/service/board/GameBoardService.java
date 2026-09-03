@@ -11,12 +11,11 @@ import com.app.dto.board.SearchResult;
 
 @Service
 public interface GameBoardService {
-	List<Post> findPostDetailListByGameAlias(String gameAlias);
 	String findGameNameByGameAlias(String gameAlias);	
 	List<String> findCategoriesByGameAlias(String gameAlias);
 	List<GameNameTransferForm> findPopularSixGames();
 	List<Post> findTrendPostListByGameAlias(String gameAlias);
-	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , int pSize);
+	PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , Integer pSize);
 	SearchResult findSearchResultByKeyword(String keyword);
 	
 	// 게임 전체 리스트 가져오기

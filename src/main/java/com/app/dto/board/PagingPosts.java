@@ -3,10 +3,11 @@ package com.app.dto.board;
 import java.util.List;
 
 import com.app.common.CommonCode;
-
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PagingPosts {
 	
 	private List<Post> posts;
@@ -17,6 +18,14 @@ public class PagingPosts {
 	private boolean hasPrev;
 	private int postSize;
 	private String category;
+	
+	public PagingPosts(int currentPage , String gameAlias , int size , String category) {
+		this.currentPage = currentPage;
+		this.gameAlias = gameAlias;
+		this.size = size;
+		this.category = category;
+	}
+	
 	
 	// DB에서 직접 계산하면.. 성능이 떨어지니까 미리 계산한 값으로 전달함
 	public int getOffset() {

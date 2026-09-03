@@ -1,5 +1,7 @@
 package com.app.dao.user;
 
+import java.util.Map;
+
 import com.app.dto.user.UserInfo;
 
 public interface UserDAO {
@@ -13,4 +15,7 @@ public interface UserDAO {
 	// 이메일 중복체크
 	public int checkEmailDuplicate(String email);
 	UserInfo findUserByEmail(String email);	
+	Map<String, Object> getUserProfile(Long userId);
+	int insertProfileInfo(Map<String, Object> fileParam);
+	int updateUserProfileImageId(Map<String, Object> userParam);
 }

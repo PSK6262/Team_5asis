@@ -1,7 +1,9 @@
 package com.app.controller.board;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.board.Comments;
 import com.app.dto.board.Post;
@@ -46,9 +49,10 @@ public class MypageController {
 	public String getMyPage(@RequestParam(value = "category", required = false, defaultValue = "ALL") String category, 
 			HttpSession session, Model model) {
 		
-		if (session.getAttribute("LOGIN_USER_ID") == null) {
-	        session.setAttribute("LOGIN_USER_ID", 1L); // 1번 회원이 로그인했다고 가정
-	    }
+		
+		  if (session.getAttribute("LOGIN_USER_ID") == null) {
+		  session.setAttribute("LOGIN_USER_ID", 15L); // 1번 회원이 로그인했다고 가정 }
+		  } 
 		
         Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
 
@@ -73,12 +77,10 @@ public class MypageController {
 		 
 		 model.addAttribute("postList", postList);
 		 
-		
+		 Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
+	        model.addAttribute("profileImage", profileImage);
 		 
-		
-        
-        
-        return "board/mypage";
+	        return "/board/mypage";
     }
 	
 	@PostMapping("/mypage/update-password")
@@ -117,5 +119,21 @@ public class MypageController {
 		userService.updateNickname(userInfo);
 		
 		return "redirect:/board/mypage";
+	}
+	
+	@PostMapping("/mypage/update-profile-img")
+	public String updateProfileImg(@RequestParam("uploadFile") MultipartFile uploadFile,
+	                               HttpSession session,
+	                               HttpServletRequest request) {
+	    
+	    Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
+	    if (loginUserId == null) {
+	        return "redirect:/main";
+	    }
+
+	    // Service 계층의 프로필 업데이트 메서드 호출 (Long 타입 ID와 파일 전달)
+	    userService.updateProfileImage(loginUserId, uploadFile, request);
+	    
+	    return "redirect:/board/mypage";
 	}
 }

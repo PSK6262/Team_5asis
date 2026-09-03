@@ -79,7 +79,10 @@
 	    fetch first 3 rows only
 	</select>
 	<select id="findPostListByPagingPosts" resultType="Post" parameterType="PagingPosts">
-	    select p.* , u.nickname , g.game_name
+	    select p.* 
+	    	 , u.nickname 
+	    	 , g.game_name
+	    	 , (select count(*) from comments c where c.p_id = p.p_id) as commentCount
 	    from post p 
 	    	inner join game_list g
 	    		on p.game_id = g.game_id
@@ -87,11 +90,11 @@
 	            on p.u_id = u.u_id
 	    <where>
 	        <choose>
-	            <when test="gameAlias != null and gameAlias.toLowerCase().equals('all')">
+	            <when test="gameAlias != null and 'all'.equalsIgnoreCase(gameAlias)">
 	            
 	            </when>
 	            <otherwise>
-	                p.game_id in (select game_id from game_list where game_alias = upper(#{gameAlias}))
+	              	 p.game_id = g.game_id and g.game_alias = upper(#{gameAlias})
 	            </otherwise>
 	        </choose>
 	        <if test="category != null and category != '' and !category.equals('전체')">
