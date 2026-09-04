@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
+import com.app.service.user.UserService;
+
 
 @Controller
 
@@ -20,6 +23,10 @@ public class MainController {
 	@Autowired
 
 	GameBoardService gameBoardService;
+	
+	@Autowired
+	
+	UserService userService;
 
 	@GetMapping("/main")
 
@@ -36,18 +43,22 @@ public class MainController {
 		// 로그인 사용자 닉네임, 프로필 이미지도 세션에서 꺼내서 전달
 
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+		
+		Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
 
-		if (loginUser != null) {
+		if (loginUser != null && loginUserId != null) {
+			
+			Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
+			
 
 			String nickname = loginUser.getNickname();
-
-			String profileImg = loginUser.getProfileImageUrl();
 
 			model.addAttribute("loginUser", loginUser);
 
 			model.addAttribute("nickname", nickname);
 
-			model.addAttribute("profileImg", profileImg);
+			model.addAttribute("profileImage", profileImage);
+			
 
 			System.out.println("닉네임: " + nickname);
 
@@ -57,10 +68,20 @@ public class MainController {
 
 			model.addAttribute("nickname", "Guest");
 
-			model.addAttribute("profileImg",
+			model.addAttribute("profileImage",
 					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
 
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
 
 		return "main";
 
