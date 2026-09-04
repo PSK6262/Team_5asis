@@ -48,6 +48,7 @@ public class MypageController {
 	@GetMapping("/mypage")
 	public String getMyPage(@RequestParam(value = "category", required = false, defaultValue = "ALL") String category, 
 			HttpSession session, Model model) {
+<<<<<<< HEAD
 		
 		
 		  if (session.getAttribute("LOGIN_USER_ID") == null) {
@@ -55,6 +56,9 @@ public class MypageController {
 				 * session.setAttribute("LOGIN_USER_ID", 15L); // 1번 회원이 로그인했다고 가정 }
 				 */		  } 
 		
+=======
+
+>>>>>>> a6b5d4d7aa89bebf72f8938a18175b2d48b29166
         Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
 
         if (loginUserId == null) {

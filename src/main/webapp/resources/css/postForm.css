@@ -10,6 +10,9 @@ body {
 	color: #333;
 }
 
+/* =========================================================
+   [레이아웃 & 컨테이너]
+   ========================================================= */
 .page-container {
 	width: 100%;
 	min-height: 100%;
@@ -25,11 +28,11 @@ body {
 	min-height: 700px;
 	margin: 25px 0;
 	padding: 30px 30px 40px;
-	background-color: white;
+	background-color: #ffffff;
 	border-radius: 8px;
 	border: 2px solid transparent;
 	background:
-		linear-gradient(white, white) padding-box,
+		linear-gradient(#ffffff, #ffffff) padding-box,
 		linear-gradient(
 			135deg,
 			#2F7778 0%,
@@ -46,6 +49,9 @@ body {
 	font-weight: bold;
 }
 
+/* =========================================================
+   [폼 요소]
+   ========================================================= */
 .form-group {
 	margin-bottom: 25px;
 }
@@ -64,7 +70,7 @@ body {
 	border: 1px solid #ddd;
 	border-radius: 8px;
 	font-size: 14px;
-	background-color: white;
+	background-color: #ffffff;
 }
 
 .title-input {
@@ -77,23 +83,12 @@ body {
 	outline: none;
 }
 
-.title-input:focus, .content-textarea:focus, .category-select:focus {
+.title-input:focus, 
+.category-select:focus {
 	border-color: #999;
 }
 
-.content-textarea {
-	width: 100%;
-	height: 350px;
-	padding: 15px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	resize: none;
-	font-size: 15px;
-	line-height: 1.6;
-	outline: none;
-}
-
-/* 이미지/파일 업로드 라벨 */
+/* 파일 업로드 관련 */
 .upload-label {
 	display: inline-block;
 	padding: 8px 16px;
@@ -103,16 +98,27 @@ body {
 	font-size: 14px;
 	cursor: pointer;
 	margin-bottom: 10px;
-	transition: background-color 0.2s;
+	transition: background-color 0.2s ease;
 }
 
 .upload-label:hover {
 	background-color: #e2e2e2;
 }
 
-/* 파일 태그 숨김 (클릭 이벤트 정상 보장) */
 .file-input-hidden {
-	display: none !important;
+	display: none;
+}
+
+.file-list {
+	list-style: none;
+	margin-top: 8px;
+	padding-left: 5px;
+}
+
+.file-item {
+	font-size: 14px;
+	color: #555;
+	padding: 4px 0;
 }
 
 /* 에디터 스타일 */
@@ -126,7 +132,7 @@ body {
 	line-height: 1.6;
 	outline: none;
 	overflow-y: auto;
-	background-color: #fff;
+	background-color: #ffffff;
 }
 
 .content-editor:focus {
@@ -141,80 +147,65 @@ body {
 	border-radius: 4px;
 }
 
-/* 첨부 파일 목록 */
-.file-list {
-	list-style: none;
-	margin-top: 8px;
-	padding-left: 5px;
-}
-
-.file-item {
-	font-size: 14px;
-	color: #555;
-	padding: 4px 0;
-}
-
 /* =========================================================
-   [버튼 스타일 - Bootstrap 충돌 방지 및 테두리 강제 적용]
+   [하단 버튼 영역]
    ========================================================= */
-
 .write-container .button-area {
-	display: flex !important;
-	justify-content: flex-end !important;
-	gap: 10px !important;
-	margin-top: 35px !important;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	width: 100%;
+	gap: 10px;
+	margin-top: 35px;
 }
 
 .write-container .button-area button.btn {
-	width: 110px !important;
-	height: 45px !important;
-	border-radius: 5px !important;
-	font-size: 15px !important;
-	font-weight: bold !important;
-	cursor: pointer !important;
-	outline: none !important;
-	box-shadow: none !important;
+	width: 110px;
+	height: 45px;
+	border-radius: 6px;
+	font-size: 15px;
+	font-weight: bold;
+	cursor: pointer;
+	outline: none;
+	transition: all 0.2s ease;
+	margin: 0;
+	box-shadow: none;
 }
 
-/* 취소 버튼 (회색 배경 + 확실한 실선 테두리) */
+.write-container .button-area button.btn:hover {
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 취소 버튼 */
 .write-container .button-area button.btn-cancel {
-	background-color: #e9e9e9 !important;
-	background-image: none !important;
-	border: 1px solid #ccc !important;
-	color: #555 !important;
-	transition: all 0.4s ease !important;
+	background-color: #ffffff;
+	border: 1px solid #d1d5db;
+	color: #4b5563;
 }
 
 .write-container .button-area button.btn-cancel:hover {
-	background-color: #b1b3b1 !important;
-	border-color: #999 !important;
-	color: #333 !important;
-	transform: translateY(-2px) !important;
+	background-color: #f3f4f6;
+	border-color: #9ca3af;
+	color: #1f2937;
 }
 
 .write-container .button-area button.btn-cancel:active {
-	transform: translateY(2px) !important;
-	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+	transform: translateY(2px);
 }
 
-/* 등록 / 수정 버튼 (어두운 배경 + 호버 시 그라데이션) */
+/* 등록 / 수정 버튼 */
 .write-container .button-area button.btn-submit {
-	background-color: #333333 !important;
-	background-image: none !important;
-	border: 1px solid #333333 !important;
-	color: #ffffff !important;
-	transition: all 0.5s ease !important;
+	background-color: #ffffff;
+	border: 1px solid #2F7778;
+	color: #2F7778;
 }
 
 .write-container .button-area button.btn-submit:hover {
-	background-color: transparent !important;
-	background-image: linear-gradient(135deg, #2F7778, #E0B85A) !important;
-	border-color: transparent !important;
-	color: #ffffff !important;
-	transform: translateY(-2px) !important;
+	background-image: linear-gradient(135deg, #2F7778, #E0B85A);
+	border-color: transparent;
+	color: #ffffff;
 }
 
 .write-container .button-area button.btn-submit:active {
-	transform: translateY(2px) !important;
-	box-shadow: 0 3px 8px rgba(79, 70, 229, 0.4) !important;
+	transform: translateY(2px);
 }

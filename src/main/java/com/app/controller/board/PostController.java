@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.Post;
 import com.app.dto.file.FileInfo;
 import com.app.dto.post.PostDetail;
 import com.app.dto.user.UserInfo;
+import com.app.service.board.GameBoardService;
 import com.app.service.file.FileService;
 import com.app.service.post.PostService;
+import com.app.service.user.UserService;
 
 @Controller
 @RequestMapping("/board")
@@ -34,6 +38,40 @@ public class PostController {
 
 	@Autowired
 	private FileService fileService;
+
+	@Autowired
+	private GameBoardService gameBoardService;
+
+	@Autowired
+	private UserService userService;
+
+
+	///사이드바에 필요한 games, nickname, profileImage가 Model에 자동으로 추가
+
+	@ModelAttribute
+	public void addSidebarAttributes(Model model, HttpSession session) {
+	    // 1. 전체 게임 목록
+	    List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
+	    model.addAttribute("games", allGames);
+
+	    // 2. 로그인 사용자 프로필 정보
+	    UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+	    Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
+
+	    if (loginUser != null && loginUserId != null) {
+	        Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
+	        model.addAttribute("loginUser", loginUser);
+	        model.addAttribute("nickname", loginUser.getNickname());
+	        model.addAttribute("profileImage", profileImage);
+	    } else {
+	        // 비로그인 Guest 상태: Map 형태로 맞추어 JSP에서 URL_FILE_PATH 키로 접근 가능하게 설정
+	        Map<String, Object> guestProfile = new HashMap<>();
+	        guestProfile.put("URL_FILE_PATH", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
+
+	        model.addAttribute("nickname", "Guest");
+	        model.addAttribute("profileImage", guestProfile);
+	    }
+	}
 
 	// 게시글 작성 페이지 (/board/lol/write)
 	@GetMapping("/{gameAlias}/write")
@@ -84,7 +122,7 @@ public class PostController {
 			fileService.uploadFiles(attachedFiles, pId, "FILE", realPath);
 		}
 
-		return "redirect:/board/" + gameAlias;
+		return "redirect:/board/" + gameAlias + "/" + pId;
 	}
 
 	// 게시글 상세 조회 (/board/lol/5)
@@ -100,28 +138,26 @@ public class PostController {
 		// 1. 게시글 상세 데이터 조회
 		PostDetail postDetail = postService.getPostDetail(pId, gameAlias);
 
-		// ★ [추가] 2. 해당 게시글의 첨부파일 목록 DB 조회
+		if (postDetail == null) {
+			return "redirect:/main";
+		}
+
+		// 2. 해당 게시글의 첨부파일 목록 DB 조회
 		List<FileInfo> fileList = fileService.getFilesByPid(pId);
 
-		// 조회수 1 증가
+		// 3. 조회수 1 증가
 		postService.increaseViewCount(pId);
 
-		// 현재 로그인 사용자 추천 여부 확인
+		// 4. 현재 로그인 사용자 추천 여부 확인
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
 		boolean isLiked = false;
 		if (loginUser != null) {
 			isLiked = postService.isLiked(pId, loginUser.getUid());
 		}
 
-		if (postDetail == null) {
-			return "redirect:/main";
-		}
-
 		model.addAttribute("post", postDetail);
 		model.addAttribute("gameAlias", gameAlias);
 		model.addAttribute("isLiked", isLiked);
-
-		// ★ [추가] 3. 첨부파일 목록을 JSP로 전달
 		model.addAttribute("fileList", fileList);
 
 		return "post/post-detail";
@@ -147,7 +183,7 @@ public class PostController {
 			return "redirect:/board/" + gameAlias + "/" + pId;
 		}
 
-		// ★ [추가] 기존에 등록되어 있는 첨부파일 목록 조회 후 전달
+		// 기존에 등록되어 있는 첨부파일 목록 조회 후 전달
 		List<FileInfo> existingFiles = fileService.getFilesByPid(pId);
 		model.addAttribute("existingFiles", existingFiles);
 
@@ -161,38 +197,38 @@ public class PostController {
 	// 게시글 수정 POST
 	@PostMapping("/{gameAlias}/{pId}/edit")
 	public String editPost(@PathVariable("gameAlias") String gameAlias, @PathVariable("pId") Long pId,
-	        @RequestParam("title") String title, @RequestParam("content") String content,
-	        @RequestParam("category") String category,
-	        @RequestParam(value = "attachedFiles", required = false) List<MultipartFile> attachedFiles,
-	        @RequestParam(value = "deleteFileMids", required = false) List<Long> deleteFileMids,
-	        HttpServletRequest request, HttpSession session) {
+			@RequestParam("title") String title, @RequestParam("content") String content,
+			@RequestParam("category") String category,
+			@RequestParam(value = "attachedFiles", required = false) List<MultipartFile> attachedFiles,
+			@RequestParam(value = "deleteFileMids", required = false) List<Long> deleteFileMids,
+			HttpServletRequest request, HttpSession session) {
 
-	    UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
-	    if (loginUser == null) {
-	        return "redirect:/user/login";
-	    }
+		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+		if (loginUser == null) {
+			return "redirect:/user/login";
+		}
 
-	    // 1. 게시글 텍스트 수정
-	    postService.updatePost(pId, loginUser.getUid(), title, content, category);
+		// 1. 게시글 텍스트 수정
+		postService.updatePost(pId, loginUser.getUid(), title, content, category);
 
-	    String realPath = request.getServletContext().getRealPath("/resources/upload");
+		String realPath = request.getServletContext().getRealPath("/resources/upload");
 
-	    // 2. 삭제 체크한 기존 파일 DB 삭제 (독립 블록)
-	    if (deleteFileMids != null && !deleteFileMids.isEmpty()) {
-	        for (Long mId : deleteFileMids) {
-	            fileService.deleteFile(mId, realPath);
-	        }
-	    }
+		// 2. 삭제 체크한 기존 파일 DB 삭제
+		if (deleteFileMids != null && !deleteFileMids.isEmpty()) {
+			for (Long mId : deleteFileMids) {
+				fileService.deleteFile(mId, realPath);
+			}
+		}
 
-	    // 3. 수정 시 새로 첨부한 파일 업로드 처리 (독립 블록으로 밖으로 꺼냄!)
-	    if (attachedFiles != null && !attachedFiles.isEmpty()) {
-	        boolean hasValidFile = attachedFiles.stream().anyMatch(f -> !f.isEmpty());
-	        if (hasValidFile) {
-	            fileService.uploadFiles(attachedFiles, pId, "FILE", realPath);
-	        }
-	    }
+		// 3. 수정 시 새로 첨부한 파일 업로드 처리
+		if (attachedFiles != null && !attachedFiles.isEmpty()) {
+			boolean hasValidFile = attachedFiles.stream().anyMatch(f -> !f.isEmpty());
+			if (hasValidFile) {
+				fileService.uploadFiles(attachedFiles, pId, "FILE", realPath);
+			}
+		}
 
-	    return "redirect:/board/" + gameAlias + "/" + pId;
+		return "redirect:/board/" + gameAlias + "/" + pId;
 	}
 
 	// 게시글 삭제
