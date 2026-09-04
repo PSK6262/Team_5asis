@@ -15,7 +15,6 @@ import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
 import com.app.service.user.UserService;
 
-
 @Controller
 
 public class MainController {
@@ -23,9 +22,9 @@ public class MainController {
 	@Autowired
 
 	GameBoardService gameBoardService;
-	
+
 	@Autowired
-	
+
 	UserService userService;
 
 	@GetMapping("/main")
@@ -36,20 +35,20 @@ public class MainController {
 
 		model.addAttribute("popularSixGames", popularSixGames);
 
+		// 사이드바 전체 게임리스트 목록에 들어갈 정보들
 		List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
 
 		model.addAttribute("games", allGames);
 
-		// 로그인 사용자 닉네임, 프로필 이미지도 세션에서 꺼내서 전달
+		// 사이드바 프로필에 들어갈 정보들
 
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
-		
+
 		Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
 
 		if (loginUser != null && loginUserId != null) {
-			
+
 			Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
-			
 
 			String nickname = loginUser.getNickname();
 
@@ -58,7 +57,6 @@ public class MainController {
 			model.addAttribute("nickname", nickname);
 
 			model.addAttribute("profileImage", profileImage);
-			
 
 			System.out.println("닉네임: " + nickname);
 
@@ -72,16 +70,6 @@ public class MainController {
 					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
 
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 
 		return "main";
 
