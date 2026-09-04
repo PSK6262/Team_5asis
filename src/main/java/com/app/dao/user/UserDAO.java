@@ -9,7 +9,8 @@ public interface UserDAO {
 	public UserInfo findMyPageByUserId(Long userId);
 	
 	public int updatePassword(UserInfo userInfo);
-	
+	void updateNickname(UserInfo userInfo);
+	int deleteUser(UserInfo userInfo);
 	// 회원가입: 유저 정보 등록 추가
 	public void insertUser(UserInfo userInfo);
 	// 이메일 중복체크
