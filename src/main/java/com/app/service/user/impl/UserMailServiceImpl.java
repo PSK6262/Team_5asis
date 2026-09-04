@@ -9,6 +9,9 @@ import com.app.dao.user.UserMailDAO;
 import com.app.service.user.UserMailService;
 import com.app.util.SendMail;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class UserMailServiceImpl implements UserMailService {
 
 	@Autowired
@@ -93,9 +96,9 @@ public class UserMailServiceImpl implements UserMailService {
         boolean isSuccess = sendMail.send(userEmail, title, content);
         
         if (isSuccess) {
-            System.out.println("서비스 단: 메일 발송 로직 처리 완료");
+        	log.info("Mail Service OK");
         } else {
-            System.out.println("서비스 단: 메일 발송 중 예외 발생");
+            log.warn("Mail Service Error");
         }
     }
 	@Override
@@ -172,26 +175,25 @@ public class UserMailServiceImpl implements UserMailService {
         boolean isSuccess = sendMail.send(userEmail, title, content);
         
         if (isSuccess) {
-            System.out.println("발송 성공 -> 토큰값: " + token);
+        	log.info("비밀번호 변경 메일 발송 성공 , token = {}  ",token);
             long uid = userDAO.findUidByUserEmail(userEmail);
             userMailDAO.insertPasswordToken(uid, token);
            
         } else {
-            System.out.println("발송 실패");
+        	log.warn("비밀번호 변경 메일 발송 실패");
         }
 	}
     @Override
     public boolean verifyResetToken(String email, String token) {
-        System.out.println("[Service] 토큰 유효성 검증 시작 -> 이메일: " + email + ", 토큰: " + token);
-        
+        log.info("토큰 유효성 검증 시작 -> 이메일 : {} , 토큰 : {}",email,token);
         // DAO에게 데이터 대조 처리를 위임합니다.
         boolean isValid = userMailDAO.checkValidToken(email, token);
        
         if (isValid) {
-            System.out.println("[Service] 검증 통과: 유효한 토큰입니다.");
+            log.info("토큰 유효성 검증 성공");
             return true;
         } else {
-            System.out.println("[Service] 검증 실패: 잘못된 접근이거나 5분 만료된 토큰입니다.");
+            log.warn("토큰 유효성 검증 실패");
             return false;
         }
     }
