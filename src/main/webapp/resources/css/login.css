@@ -101,3 +101,11 @@ input[type="checkbox"] {
 .click-label {
 		font-size: 11px;		
 }
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
