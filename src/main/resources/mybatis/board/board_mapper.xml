@@ -14,15 +14,44 @@
 		                on p.u_id = u.u_id
 		where game_alias = upper(#{value})
 	</select>
+	
 	<select id="findPopularSixGames" resultType="GameNameTransferForm">
-		select g.game_name , g.game_alias
+		select g.game_name, g.game_alias, g.game_image, sum(p.view_count) as total_views
+		from post p
+		    inner join game_list g on p.game_id = g.game_id
+		group by g.game_name, g.game_alias, g.game_image
+		order by total_views desc
+		fetch first 6 rows only
+	</select>
+	<!-- <select id="findPopularSixGames" resultType="GameNameTransferForm">
+		select g.game_name , g.game_alias, g.game_image
 		from post p 
 		    inner join game_list g
 		        on p.game_id = g.game_id
-		group by g.game_name , g.game_alias
+		group by g.game_name , g.game_alias , g.game_image
 		order by sum(view_count) desc
 		fetch first 6 rows only
+	</select> -->
+	
+	<!-- 게임 10종류 가져오기 시작 -->
+	
+	<select id="findAllGames" resultType="com.app.dto.board.GameNameTransferForm">
+	
+	    SELECT
+	    
+	    	game_name AS gameName,
+	    	
+	    	game_alias AS gameAlias
+	    
+	    
+	    FROM
+	    	
+	    	game_list
+	    
 	</select>
+	
+	<!-- 게임 10종류 가져오기 끝 -->
+	
 	<select id="findCategoriesByGameAlias" resultType="string" parameterType="string">
 	    select distinct category
 	    from post

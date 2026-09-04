@@ -2,10 +2,11 @@
 	display: grid;
 	grid-template-rows: auto auto 1fr; /* 프로필, 게시판은 auto, 게임은 남는 공간 채움 */
 	gap: 20px;
-	background-color: #f5f5f5;
+	background-color: #F5EFE3;
 	padding: 15px;
 	width: 250px;
-	height: 100vh;
+	height: auto;
+	min-height: 100vh;
 	box-sizing: border-box;
 }
 /* 공통 라벨 */
@@ -77,14 +78,18 @@
 	font-weight: bold;
 }
 
-#label_popularGame {
+.sideBar_game {
+	height: 100%;
+}
+
+#label_Games {
 	text-decoration: none;
 	color: #333;
 	font-size: 13px;
 	padding: 4px 0;
 }
 
-#label_popularGame:hover {
+#label_Games:hover {
 	color: #3e726f;
 	font-weight: bold;
 	cursor: pointer;

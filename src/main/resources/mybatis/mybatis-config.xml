@@ -20,6 +20,7 @@
 		<typeAlias type="com.app.dto.user.UserInfo" alias="UserInfo"/>
 		<typeAlias type="com.app.dto.user.UserStatus" alias="UserStatus"/>
 		<typeAlias type="com.app.dto.post.PostDetail" alias="PostDetail"/>
+		<typeAlias type="com.app.dto.file.FileInfo" alias="FileInfo"/>
 	</typeAliases>
 	
 </configuration>

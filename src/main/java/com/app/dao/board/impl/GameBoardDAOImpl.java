@@ -97,4 +97,18 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 		List<GameNameTransferForm> searchedByBoardName = sqlSessionTemplate.selectList("board_mapper.findGameNameByKeyword",keyword);
 		return searchedByBoardName;
 	}
+
+	// 전체 게임 리스트 가져오기
+	
+	@Override
+	
+	public List<GameNameTransferForm> findAllGames() {
+		
+		List<GameNameTransferForm> findAllGames = sqlSessionTemplate.selectList("board_mapper.findAllGames");
+		
+		
+		return findAllGames;
+		
+	}
+	
 }

@@ -18,4 +18,5 @@ public interface UserDAO {
 	Map<String, Object> getUserProfile(Long userId);
 	int insertProfileInfo(Map<String, Object> fileParam);
 	int updateUserProfileImageId(Map<String, Object> userParam);
+	public long findUidByUserEmail(String email);
 }
