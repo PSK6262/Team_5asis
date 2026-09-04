@@ -1,6 +1,10 @@
 package com.app.controller.user;
 
 import com.app.service.user.impl.UserMailServiceImpl;
+import com.app.util.SHA256Encryptor;
+
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -179,9 +183,39 @@ public class AuthController {
         	session.setAttribute("LOGIN_USER",loginUser);
         	session.setAttribute("PASSWORD_RESET_MODE", true);
         	
-        	return "redirect:/board/mypage";
+        	return "redirect:/user/pwResetToken";
     	}
     	// 여기는 토큰이 없거나 , 만료
-    	return "redirect:/board/main";
+    	return "redirect:/main";
+    }
+    
+    @PostMapping("/reset")
+    public String resetPasswordAction(HttpServletRequest request , HttpSession session) {
+    	 
+    	boolean isPwResetMode = (boolean) session.getAttribute("PASSWORD_RESET_MODE");
+    	
+    	if(!isPwResetMode) {
+    		return "redirect:/board/main";
+    	}
+    	session.setAttribute("PASSWORD_RESET_MODE", false);
+    	
+    	String email = request.getParameter("email");
+    	String pass = request.getParameter("password");
+    	
+    	UserInfo user = userService.findUserByEmail(email);
+    	 
+    	try {
+			pass = SHA256Encryptor.encrypt(pass);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+    	
+    	user.setPassword(pass);
+    	 
+    	userService.updatePassword(user);
+    	
+    	
+    	
+    	return "redirect:/main";
     }
 }
