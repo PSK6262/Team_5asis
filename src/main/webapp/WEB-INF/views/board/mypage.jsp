@@ -194,7 +194,7 @@ input[type="password"] {
 			<div id="profileDiv" class="profile">
         <c:choose>
             <%-- 1. 등록된 프로필 사진이 없을 때 기본 이미지 출력 --%>
-            <c:when test="${empty profileImage.URL_FILE_PATH}">
+            <c:when test="${empty profileImage}">
                 <img src="${pageContext.request.contextPath}/resources/img/default_profile.png" width="100" height="100" style="border-radius: 20%; object-fit: cover;">
             </c:when>
             <%-- 2. 등록된 프로필 사진이 있을 때 해당 경로 이미지 출력 --%>

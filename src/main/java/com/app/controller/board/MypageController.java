@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.board.Comments;
+import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.Post;
 import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
@@ -32,7 +33,7 @@ public class MypageController {
 	UserService userService;
 	
 	@Autowired
-	GameBoardService GameBoardService;
+	GameBoardService gameBoardService;
 	
 	@Autowired
 	PostService postService;
@@ -78,8 +79,39 @@ public class MypageController {
 		 
 		 model.addAttribute("postList", postList);
 		 
-		 Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
-	        model.addAttribute("profileImage", profileImage);
+			/*
+			 * Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
+			 * model.addAttribute("profileImage", profileImage);
+			 */
+	       
+	        List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
+
+	        model.addAttribute("games", allGames);
+	        
+	        // 사이드바 프로필에 들어갈 정보들
+
+	        UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+
+	        
+
+	        if (loginUserId != null) {
+
+	            Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
+
+	            String nickname = loginUser.getNickname();
+
+	            model.addAttribute("loginUser", loginUser);
+
+	            model.addAttribute("nickname", nickname);
+
+	            model.addAttribute("profileImage", profileImage);
+
+	            System.out.println("닉네임: " + nickname);
+
+	        }
+
+	        
+	        
 		 
 	        return "/board/mypage";
     }
