@@ -43,7 +43,7 @@ public class CommentController {
         return "redirect:/board/" + gameAlias + "/" + pId;
     }
     
-    // 댓글 수정
+ // 댓글 수정
     @PostMapping("/{gameAlias}/{pId}/comment/{cId}/edit")
     public String updateComment(
             @PathVariable("gameAlias") String gameAlias,
@@ -51,13 +51,16 @@ public class CommentController {
             @PathVariable("cId") Long cId,
             @RequestParam("commentContent") String commentContent,
             HttpSession session) {
-    	
-    	UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+        
+        UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
         if (loginUser == null) {
             return "redirect:/user/login";
         }
 
-        commentService.updateComment(cId, loginUser.getUid(), commentContent);
+        // 관리자 여부 확인 (status가 4인 경우)
+        boolean isAdmin = (loginUser.getStatus() != null && loginUser.getStatus() == 4);
+
+        commentService.updateComment(cId, loginUser.getUid(), commentContent, isAdmin);
 
         return "redirect:/board/" + gameAlias + "/" + pId;
     }
@@ -69,13 +72,16 @@ public class CommentController {
             @PathVariable("pId") Long pId,
             @PathVariable("cId") Long cId,
             HttpSession session) {
-    	
-    	UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+        
+        UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
         if (loginUser == null) {
             return "redirect:/user/login";
         }
 
-        commentService.deleteComment(cId, loginUser.getUid());
+        // 관리자 여부 확인 (status가 4인 경우)
+        boolean isAdmin = (loginUser.getStatus() != null && loginUser.getStatus() == 4);
+
+        commentService.deleteComment(cId, loginUser.getUid(), isAdmin);
 
         return "redirect:/board/" + gameAlias + "/" + pId;
     }

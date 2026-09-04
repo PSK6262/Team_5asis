@@ -79,7 +79,7 @@ public class PostDAOImpl implements PostDAO {
     }
 
 	@Override
-	public int updatePost(Long pId, Long uId, String title, String content, String category) {
+	public int updatePost(Long pId, Long uId, String title, String content, String category, boolean isAdmin) {
 		Map<String, Object> paramMap = new HashMap<>();
 
 	    paramMap.put("pId", pId);
@@ -87,6 +87,7 @@ public class PostDAOImpl implements PostDAO {
 	    paramMap.put("title", title);
 	    paramMap.put("content", content);
 	    paramMap.put("category", category);
+	    paramMap.put("isAdmin", isAdmin);
 
 	    return sql.update(
 	            NAMESPACE + "updatePost",
@@ -95,11 +96,12 @@ public class PostDAOImpl implements PostDAO {
 	}
 
 	@Override
-	public int deletePost(Long pId, Long uId) {
+	public int deletePost(Long pId, Long uId, boolean isAdmin) {
 		Map<String, Object> paramMap = new HashMap<>();
 
 	    paramMap.put("pId", pId);
 	    paramMap.put("uId", uId);
+	    paramMap.put("isAdmin", isAdmin);
 
 	    return sql.delete(
 	            NAMESPACE + "deletePost",

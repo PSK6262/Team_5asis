@@ -127,25 +127,27 @@
 
 	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="map">
-
-		UPDATE post
-		SET
-		title = #{title},
-		content = #{content},
-		category = #{category},
-		updated_at = CURRENT_TIMESTAMP
-		WHERE p_id = #{pId}
-		AND u_id = #{uId}
-
+	    UPDATE post
+	    SET
+	        title = #{title},
+	        content = #{content},
+	        category = #{category},
+	        updated_at = CURRENT_TIMESTAMP
+	    WHERE p_id = #{pId}
+	
+	    <if test="!isAdmin">
+	        AND u_id = #{uId}
+	    </if>
 	</update>
 
 	<!-- 게시글 삭제 -->
 	<delete id="deletePost" parameterType="map">
-
-		DELETE FROM post
-		WHERE p_id = #{pId}
-		AND u_id = #{uId}
-
+	    DELETE FROM post
+	    WHERE p_id = #{pId}
+	
+	    <if test="!isAdmin">
+	        AND u_id = #{uId}
+	    </if>
 	</delete>
 
 
