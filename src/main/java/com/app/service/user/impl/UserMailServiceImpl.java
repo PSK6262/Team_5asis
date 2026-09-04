@@ -66,7 +66,7 @@ public class UserMailServiceImpl implements UserMailService {
 		               + "                            <table border='0' cellpadding='0' cellspacing='0' width='100%' style='margin: 40px 0;'>"
 		               + "                                <tr>"
 		               + "                                    <td align='center'>"
-		               + "                                        <a href='https://your-domain.com' target='_blank' style='background-color: #2F80ED; color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px rgba(47, 128, 237, 0.2);'>입장하기</a>"
+		               + "                                        <a href='192.168.0.66:8080/board/main' target='_blank' style='background-color: #2F80ED; color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px rgba(47, 128, 237, 0.2);'>입장하기</a>"
 		               + "                                    </td>"
 		               + "                                </tr>"
 		               + "                            </table>"
