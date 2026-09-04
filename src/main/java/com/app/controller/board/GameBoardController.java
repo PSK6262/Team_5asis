@@ -59,7 +59,6 @@ public class GameBoardController {
 			model.addAttribute("loginUser", loginUser);
 			model.addAttribute("nickname", nickname);
 			model.addAttribute("profileImage", profileImage);
-			System.out.println("닉네임: " + nickname);
 		    log.info("회원 접속 - Email: {}, Nickname: {}", loginUser.getEmail(), nickname);
 		} else {
 			// 로그인 안 된 상태
@@ -143,7 +142,6 @@ public class GameBoardController {
 			model.addAttribute("loginUser", loginUser);
 			model.addAttribute("nickname", nickname);
 			model.addAttribute("profileImage", profileImage);
-			System.out.println("닉네임: " + nickname);
 		    log.info("회원 접속 (검색) - Email: {}, Nickname: {}", loginUser.getEmail(), nickname);
 		} else {
 			// 로그인 안 된 상태
