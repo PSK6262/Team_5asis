@@ -26,20 +26,6 @@
 
 			<div class="page-container">
 				<div class="detail-container">
-				
-				<!-- 안전하게 수정된 디버깅용 상자 -->
-<div style="background-color: #fff3cd; color: #856404; padding: 15px; border: 2px solid #ffeeba; border-radius: 8px; margin-bottom: 20px;">
-    <h3>🔍 [로그인 유저 권한 검사 디버그]</h3>
-    <ul>
-        <li><b>1. 세션 LOGIN_USER 존재 여부:</b> [${not empty sessionScope.LOGIN_USER}]</li>
-        <li><b>2. 로그인 유저 UID:</b> [${sessionScope.LOGIN_USER.uid}]</li>
-        <li><b>3. 게시글 작성자 UID:</b> [${post.uid}]</li>
-        <li><b>4. 작성자 일치 여부:</b> [${post.uid eq sessionScope.LOGIN_USER.uid}]</li>
-        <li><b>5. status 변수 값:</b> [${sessionScope.LOGIN_USER.status}]</li>
-        <li><b>6. 판정 (status eq 4):</b> [${sessionScope.LOGIN_USER.status eq 4}]</li>
-    </ul>
-</div>
-
 					<a href="${pageContext.request.contextPath}/board/${gameAlias}"
 						class="btn-list-link"> ← 목록으로 </a>
 
