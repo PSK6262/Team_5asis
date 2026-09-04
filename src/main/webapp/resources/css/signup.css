@@ -120,3 +120,11 @@ body {
 .login-area {
     	margin-top: 10px;
 }
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}

@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/signup.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/signup.css?v=2">
 </head>
 
 <body>
