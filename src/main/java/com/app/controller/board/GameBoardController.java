@@ -25,6 +25,9 @@ import com.app.service.api.ChzzkApiService;
 import com.app.service.board.GameBoardService;
 import com.app.service.user.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/board")
 public class GameBoardController {
@@ -57,24 +60,17 @@ public class GameBoardController {
 			model.addAttribute("nickname", nickname);
 			model.addAttribute("profileImage", profileImage);
 			System.out.println("닉네임: " + nickname);
+		    log.info("회원 접속 - Email: {}, Nickname: {}", loginUser.getEmail(), nickname);
 		} else {
 			// 로그인 안 된 상태
 			model.addAttribute("nickname", "Guest");
 			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
+			
+			// 기존 설정 INFO이므로 지금은 보이지 않음
+			log.debug("비회원(Guest) 페이지 접속");
 		}
 
-		if (pSize == null || pSize <= 0) {
-			pSize = CommonCode.PAGING_SIZE_SMALL;
-			if ("all".equals(gameAlias)) {
-				pSize = pSize * 2;
-			}
-		}
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
-		/* UserInfo loginUser = (UserInfo)session.getAttribute("LOGIN_USER"); */
-		System.out.println("alias : " + gameAlias + " page : " + page + " ctg : " + category + " pSize : " + pSize);
-		// 전체 List 불러오기
-		// List<Post> selectedPost =
-		// gameBoardService.findPostListByGameAlias(gameAlias);
 
 		// 통합 게시판 클릭한 경우(gameAlias가 all인 경우 , gameName = null이다 ) , 
 		// 특정 게임의 이름이 아니라 "전체"라고 보낸다 -> 라이브 방송 등 출력X

@@ -19,6 +19,9 @@ import com.app.dto.api.ChzzkRawResponse.LiveData;
 import com.app.service.api.ChzzkApiService;
 import com.app.service.board.GameBoardService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ChzzkApiServiceImpl implements ChzzkApiService {
 
@@ -51,6 +54,8 @@ public class ChzzkApiServiceImpl implements ChzzkApiService {
 		        .build().encode().toUri();
 		System.out.println(targetUri);
 		
+		log.info("ChZZK API GET REQUEST TO : {}",targetUri);
+		
 		// HTTP 클라이언트 객체 생성
 		//RestTemplate restTemplate = new RestTemplate();
 
@@ -58,7 +63,9 @@ public class ChzzkApiServiceImpl implements ChzzkApiService {
 		ChzzkRawResponse rawData = null;
 		try {
 			rawData = restTemplate.getForObject(targetUri, ChzzkRawResponse.class);
+			log.info("CHZZK API REQUEST DONE , {}" , rawData.getCode());
 		} catch (RestClientException e) {
+			log.debug("CHZZK API REQUEST FAILED , {}",targetUri);
 			return response;
 		}
 		

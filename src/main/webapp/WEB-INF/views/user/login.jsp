@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css?v=2">
 </head>
 
 <body>
@@ -73,7 +73,8 @@
 	</div>
 	
 	<script>const contextPath = "${pageContext.request.contextPath}";</script>
-	<script src="${pageContext.request.contextPath}/resources/js/login.js"></script>
+	<!-- 모든 컴퓨터에서 캐시가 자동 갱신됨 -->
+	<script src="${pageContext.request.contextPath}/resources/js/login.js?v=1.1"></script>
 		
 	</body>
 </html>

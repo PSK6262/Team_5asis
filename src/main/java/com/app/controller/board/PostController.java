@@ -45,18 +45,17 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 
-
-	///사이드바에 필요한 games, nickname, profileImage가 Model에 자동으로 추가
+	/// 사이드바에 필요한 games, nickname, profileImage가 Model에 자동으로 추가
 
 	@ModelAttribute
 	public void addSidebarAttributes(Model model, HttpSession session) {
-	    // 1. 전체 게임 목록
-	    List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
-	    model.addAttribute("games", allGames);
+		// 1. 전체 게임 목록
+		List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
+		model.addAttribute("games", allGames);
 
-	    // 2. 로그인 사용자 프로필 정보
-	    UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
-	    Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
+		// 2. 로그인 사용자 프로필 정보
+		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+		Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
 
 	    if (loginUser != null && loginUserId != null) {
 			Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
@@ -179,7 +178,9 @@ public class PostController {
 			return "redirect:/main";
 		}
 
-		if (!loginUser.getUid().equals(post.getUid())) {
+		boolean isAdmin = loginUser.getStatus() != null && loginUser.getStatus() == 4;
+
+		if (!isAdmin && !loginUser.getUid().equals(post.getUid())) {
 			return "redirect:/board/" + gameAlias + "/" + pId;
 		}
 
@@ -208,8 +209,10 @@ public class PostController {
 			return "redirect:/user/login";
 		}
 
+		boolean isAdmin = loginUser.getStatus() != null && loginUser.getStatus() == 4;
+
 		// 1. 게시글 텍스트 수정
-		postService.updatePost(pId, loginUser.getUid(), title, content, category);
+		postService.updatePost(pId, loginUser.getUid(), title, content, category, isAdmin);
 
 		String realPath = request.getServletContext().getRealPath("/resources/upload");
 
@@ -241,7 +244,10 @@ public class PostController {
 			return "redirect:/user/login";
 		}
 
-		postService.deletePost(pId, loginUser.getUid());
+		boolean isAdmin = loginUser.getStatus() != null && loginUser.getStatus() == 4;
+
+		// 관리자인 경우 isAdmin 플래그 true 전달
+		postService.deletePost(pId, loginUser.getUid(), isAdmin);
 
 		return "redirect:/board/" + gameAlias;
 	}

@@ -48,7 +48,6 @@ public class MypageController {
 	@GetMapping("/mypage")
 	public String getMyPage(@RequestParam(value = "category", required = false, defaultValue = "ALL") String category, 
 			HttpSession session, Model model) {
-
 		
 		
 		  if (session.getAttribute("LOGIN_USER_ID") == null) {
