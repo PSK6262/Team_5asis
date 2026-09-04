@@ -35,7 +35,7 @@
 					  </tbody>
 					</table>
 				</c:if>
-				<c:if test="${searchResult.searchedByTitle != null && not empty searchResult.searchedByTitle && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'title') } ">
+				<c:if test="${searchResult.searchedByTitle != null && not empty searchResult.searchedByTitle && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'title')}">
 					<h5 class="search-section-title fw-semibold mt-4 mb-2">📝 제목에 <span class="keyword-highlight">"${keyword}"</span>을(를) 포함하는 글</h5>
 					<table class="table table-hover align-middle custom-search-table">
 					  <thead>
@@ -62,7 +62,7 @@
 					  </tbody>
 					</table>
 				</c:if>
-				<c:if test="${searchResult.searchedByContent != null && not empty searchResult.searchedByContent && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'content') }">
+				<c:if test="${searchResult.searchedByContent != null && not empty searchResult.searchedByContent && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'content')}">
 					<h5 class="search-section-title fw-semibold mt-4 mb-2">📄 내용에 <span class="keyword-highlight">"${keyword}"</span> 을(를) 포함하는 글</h5>
 					<table class="table table-hover align-middle custom-search-table">
 					  <thead>
@@ -89,7 +89,7 @@
 					  </tbody>
 					</table>
 				</c:if>
-				<c:if test="${searchResult.searchedByNickname != null && not empty searchResult.searchedByNickname && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'nickname') }">
+				<c:if test="${searchResult.searchedByNickname != null && not empty searchResult.searchedByNickname && (searchKeywordForm.type eq 'all' || searchKeywordForm.type eq 'user')}">
 					<h5 class="search-section-title fw-semibold mt-4 mb-2">👥 닉네임에 <span class="keyword-highlight">"${keyword}"</span> 을(를) 포함하는 유저</h5>
 					<table class="table table-hover align-middle custom-search-table">
 					  <thead>
