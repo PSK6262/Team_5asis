@@ -11,165 +11,293 @@
 <title>마이페이지</title> 
 
 <style>
+/* 1. 기본 설정 및 초기화 */
 p {
-	margin: 0;
+    margin: 0;
 }
 
 body {
-	min-height: 100vh;
-	margin: 0;
-	/* display: flex; */
-	/* justify-content: center; */
-	background-color: #ffffff;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #ffffff;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    color: #333333;
+    
+    
+    
 }
 
 button {
-	box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-/* 상단 메인 배너 */
+input {
+    font-family: inherit;
+}
+
+/* 2. 상단 메인 배너 영역 */
 .main {
-	width: 840px;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	border-radius: 8px;
-	gap: 20px;
-	background: linear-gradient(to top, #417370, #c2a065);
-	 margin-top: 40px;
-	 margin-left: 80px; 
+    width: 840px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 12px;
+    gap: 20px;
+    background-color: #fdfbf7;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: 70px;
+    margin-right: auto;
+    padding: 40px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .banner {
-	width: 800px;
-	height: 200px;
-	border-radius: 8px;
-	display: flex;
-	align-items: center;
-	margin-top: 20px;
-	background-color: lightgreen;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
 }
 
-.profile {
-	width: 100px;
-	height: 100px;
-	border-radius: 20%;
-	background-color: lightblue;
-	margin-left: 60px;
+/* 프로필 이미지 감싸는 박스 (따뜻한 코랄/오렌지 포인트) */
+#profileDiv.profile {
+    position: relative;
+    padding: 4px;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    border-radius: 30%;
+    box-shadow: 0 6px 15px rgba(255, 154, 158, 0.3);
+    transition: transform 0.3s ease;
+}
+
+#profileDiv.profile:hover {
+    transform: translateY(-3px);
+}
+
+#profileDiv.profile img {
+    display: block;
+    border-radius: 27%;
+    object-fit: cover;
+    background-color: #ffffff;
+}
+
+/* 파일 업로드 및 버튼 폼 영역 */
+.banner form {
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.banner input[type="file"] {
+    font-size: 13px;
+    color: #666666;
+    padding: 8px;
+    border: 1px dashed #dcd6cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    width: 260px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.banner input[type="file"]:hover {
+    border-color: #ff9a9e;
+}
+
+/* 프로필 사진 적용 버튼 */
+.banner button[type="submit"] {
+    background: #e07a5f;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(224, 122, 95, 0.25);
+    transition: all 0.2s ease;
+    margin-left: 0 !important;
+}
+
+.banner button[type="submit"]:hover {
+    background: #cc6b50;
+    transform: translateY(-1px);
+}
+
+.banner button[type="submit"]:active {
+    transform: translateY(1px);
 }
 
 .nickname {
-	display: flex;
-	font-size: 20px;
-	font-weight: bold;
-	margin-left: 15px;
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 15px;
+    color: #2c2c2c;
 }
 
-/* 유저정보 */
+/* 3. 유저 정보 영역 (.middle) */
 .middle {
-	width: 800px;
-	min-height: 500px;
-	background-color: #ffffff;
-	border-radius: 8px;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	margin-bottom: 20px;
+    width: 780px;
+    min-height: 450px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    overflow: hidden; /* 카테고리 둥근 모서리 맞춤 */
+    border: 1px solid #f0ebe1;
 }
 
+/* 카테고리 탭 메뉴 */
 .category {
-	width: 100%;
-	height: 80px;
-	display: flex;
-	background-color: #F8F6F0;
-	box-sizing: border-box;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    background-color: #F8F6F0;
+    box-sizing: border-box;
+    flex-wrap: nowrap;
 }
 
 .box {
-	width: 25%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	box-sizing: border-box;
-	background-color: #FB7185;
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    background-color: #f4f0eb;
+    color: #777777;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap; 
+    overflow: hidden;
 }
 
-.box:last-child {
-	border-right: none;
+.box:hover {
+    background-color: #efeae1;
+    color: #333333;
 }
 
 .box.active {
-	background-color: #e9b4c3;
-	font-weight: bold;
+    background-color: #ffffff;
+    color: #e07a5f;
+    font-weight: bold;
+    border-bottom: 2px solid #e07a5f;
 }
 
+/* 정보 박스 및 입력창 스타일 */
 .info_box {
-	width: 700px;
-	height: auto;
-	border: 1px solid black;
-	border-radius: 6px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-	padding: 20px;
-	box-sizing: border-box;
+    width: 700px;
+    height: auto;
+    border: 1px solid #e6dfd5;
+    border-radius: 8px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 24px;
+    box-sizing: border-box;
+    background-color: #ffffff;
 }
 
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    max-width: 400px;
+    min-width: 200px;
+    height: 38px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    border: 1px solid #dcd6cd;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #e07a5f;
+}
+
+/* 버튼 및 기타 공통 클래스 */
 .quit_button {
-	width: 80px;
-	margin-left: auto;
+    width: 84px;
+    height: 32px;
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid #dcd6cd;
+    border-radius: 6px;
+    color: #666666;
+    transition: all 0.2s ease;
+}
+
+.quit_button:hover {
+    border-color: #e63946;
+    color: #e63946;
 }
 
 .quit_button:active {
-	color: red;
-	border-color: red;
-	border-radius: 4px;
-}
-
-input[type="text"] {
-	width: 100%;
-	max-width: 400px;
-	min-width: 200px;
-	height: 32px;
-	box-sizing: border-box;
-	font-size: 20px;
-}
-
-input[type="password"] {
-	width: 100%;
-	max-width: 400px;
-	min-width: 200px;
-	height: 32px;
-	box-sizing: border-box;
-	font-size: 20px;
-}
-
-/* 탭 전환 CSS - 기본은 전부 안보이게 설정 */
-.content-item {
-	display: none;
-	width: 100%;
-}
-
-/* active 상태 CSS */
-.content-item.active {
-	display: block !important;
-}
-
-/* 내 정보 탭만 세로 배치 적용 */
-#tab-info.active {
-	display: flex !important;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.is-hidden {
-	display: none;
+    background-color: #ffe5e7;
 }
 
 .updateBtn {
-	width: 150px;
+    width: 150px;
+    height: 38px;
+    background-color: #3d405b;
+    color: white;
+    border: none;
+    border-rem: 6px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.updateBtn:hover {
+    background-color: #2f3248;
+}
+
+/* 탭 전환 시스템 */
+.content-item {
+    display: none;
+    width: 100%;
+}
+
+.content-item.active {
+    display: block !important;
+}
+
+#tab-info.active {
+    display: flex !important;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed; /* [핵심] 셀 안의 내용에 따라 테이블이 지멋대로 늘어나거나 깨지는 현상 방지 */
+    border-collapse: collapse;
+    border-spacing: 10px 0px;
+}
+td {
+	white-space: nowrap;
+	overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
 
@@ -260,7 +388,7 @@ input[type="password"] {
 						<br>
 
 						<div>
-							<button type="submit">변경 완료</button>
+							<button type="submit" class="updateBtn">변경 완료</button>
 						</div>
 
 					</form>
@@ -284,7 +412,7 @@ input[type="password"] {
 						<br>
 
 						<div>
-							<button type="submit">변경 완료</button>
+							<button type="submit" class="updateBtn">변경 완료</button>
 						</div>
 
 					</form>
@@ -300,7 +428,7 @@ input[type="password"] {
 
 					<h3>📝 내 작성글 목록</h3>
 					
-					<table class="table1">
+					<table >
 						<thead>
 							<tr>
 								<th scope="col">번호</th>
@@ -365,7 +493,7 @@ input[type="password"] {
 									<c:forEach var="comment" items="${commentList}">
 										<tr>
 
-											<td class="game-alias"><span class="badge">${comment.gameAlias != null ? comment.gameAlias : '일반'}</span>
+											<td class="game-alias"><span>${comment.gameAlias}</span>
 											</td>
 
 
@@ -409,7 +537,7 @@ input[type="password"] {
 								<c:otherwise>
 									<c:forEach var="post" items="${postList}">
 										<tr>
-											<td><span class="badge">${post.gameAlias}</span></td>
+											<td><span>${post.gameAlias}</span></td>
 											<td><a href="/board/${post.gameAlias}/${post.pid}">${post.title}</a></td>
 											<td>${post.viewCount}</td>
 											<td>${post.createdAt}</td>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.common.CommonCode;
 import com.app.dto.board.Comments;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.Post;
@@ -90,18 +91,22 @@ public class MypageController {
 	        
 	        // 사이드바 프로필에 들어갈 정보들
 
-	        if (loginUserId != null) {
-	            Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
-	            model.addAttribute("profileImage", profileImage);
-	        }
-
-	        if (myInfo != null) {
-	            String nickname = myInfo.getNickname();
-	            model.addAttribute("nickname", nickname);
-	            System.out.println("닉네임: " + nickname);
-	        } else {
-	            model.addAttribute("nickname", "Guest");
-	        }
+	     // 로그인 사용자 닉네임, 프로필 이미지
+			UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+			
+			if (loginUser != null) {
+				String nickname = loginUser.getNickname();
+				Map<String, Object> profileImage = userService.getUserProfile(loginUser.getUid());
+				model.addAttribute("loginUser", loginUser);
+				model.addAttribute("nickname", nickname);
+				model.addAttribute("profileImage", profileImage);
+				System.out.println("닉네임: " + nickname);
+			} else {
+				// 로그인 안 된 상태
+				model.addAttribute("nickname", "Guest");
+				model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
+				return "redirect:/main";
+			}
 
 	        
 	        
