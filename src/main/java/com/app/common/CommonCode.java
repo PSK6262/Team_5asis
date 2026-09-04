@@ -11,7 +11,7 @@ public class CommonCode {
 	public static final String BOARD_TYPE_ALL_ENG = "all";
 	public static final String BOARD_TYPE_ALL_KOR = "전체";
 	public static final int BOARD_TYPE_ALL_MULTIPLIER = 2;
-	
+	public static final int USER_STATUS_DEACTIVATED = 2;
 	
 	// API
 	// Chzzk API에서 한번에 몇개의 방송DATA를 가져올 것인지 ( 넉넉하게 )

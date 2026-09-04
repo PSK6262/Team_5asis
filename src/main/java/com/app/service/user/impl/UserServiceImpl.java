@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.common.CommonCode;
 import com.app.dao.user.UserDAO;
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserService;
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
 		UserInfo dbUser = userDAO.findUserByEmail(userInfo.getEmail());
 		
 		//2) 조회된 회원정보가 존재하고, 비밀번호가 일치하는지 검증
-		if (dbUser != null) {
+		if (dbUser != null && dbUser.getStatus() != CommonCode.USER_STATUS_DEACTIVATED) {
 			try {
 				//로그인할 때 입력한 비번을 똑같이 암호화
 				String inputEncPw = SHA256Encryptor.encrypt(userInfo.getPassword());
