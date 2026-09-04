@@ -27,8 +27,8 @@ public interface PostDAO {
     void deleteLikeHistory(Map<String, Object> map);
     void decreaseLikeCount(Long pId);
     
-	int updatePost(Long pId, Long uId, String title, String content, String category);
-	int deletePost(Long pId, Long uId);
+	int updatePost(Long pId, Long uId, String title, String content, String category, boolean isAdmin);
+	int deletePost(Long pId, Long uId, boolean isAdmin);
 
 	String findGameAliasByPostId(Long pId);
 	int insertPost(Post post);

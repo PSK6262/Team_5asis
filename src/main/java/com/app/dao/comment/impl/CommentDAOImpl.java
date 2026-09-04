@@ -40,26 +40,24 @@ public class CommentDAOImpl implements CommentDAO {
 	}
 
 	@Override
-	public void deleteComment(Long cId, Long uId) {
-		Map<String, Object> paramMap = new HashMap<>();
+	public void deleteComment(Long cId, Long uId, boolean isAdmin) {
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("cId", cId);
+	    paramMap.put("uId", uId);
+	    paramMap.put("isAdmin", isAdmin);
 
-        paramMap.put("cId", cId);
-        paramMap.put("uId", uId);
-
-        sql.update(NAMESPACE + "deleteComment", paramMap);
-		
+	    sql.delete(NAMESPACE + "deleteComment", paramMap);
 	}
 
 	@Override
-	public void updateComment(Long cId, Long uId, String content) {
-		Map<String, Object> paramMap = new HashMap<>();
+	public void updateComment(Long cId, Long uId, String content, boolean isAdmin) {
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("cId", cId);
+	    paramMap.put("uId", uId);
+	    paramMap.put("content", content);
+	    paramMap.put("isAdmin", isAdmin);
 
-        paramMap.put("cId", cId);
-        paramMap.put("uId", uId);
-        paramMap.put("content", content);
-
-        sql.insert(NAMESPACE + "updateComment", paramMap);
-		
+	    sql.update(NAMESPACE + "updateComment", paramMap);
 	}
 
 	@Override
@@ -81,10 +79,12 @@ public class CommentDAOImpl implements CommentDAO {
 	}
 
 	@Override
-	public void markAsDeleted(Long cId, Long uId) {
+	public void markAsDeleted(Long cId, Long uId, boolean isAdmin) {
 	    Map<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("cId", cId);
 	    paramMap.put("uId", uId);
+	    paramMap.put("isAdmin", isAdmin); // 👈 핵심 추가
+
 	    sql.update(NAMESPACE + "markAsDeleted", paramMap);
 	}
 	

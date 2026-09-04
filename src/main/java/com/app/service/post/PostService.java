@@ -16,8 +16,10 @@ public interface PostService {
     boolean isLiked(Long pId, Long uId);
 	Map<String, Object> processLike(Long pId, Long uId);
 	
-	int updatePost(Long pId, Long uId, String title, String content, String category);
-	int deletePost(Long pId, Long uId);
+	int updatePost(Long pId, Long uId, String title, String content, String category, boolean isAdmin);
+	int deletePost(Long pId, Long uId, boolean isAdmin);
 	
 	String findGameAliasByPostId(Long pId);
 }
+
+

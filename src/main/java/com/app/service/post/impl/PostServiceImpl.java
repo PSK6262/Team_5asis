@@ -99,20 +99,21 @@ public class PostServiceImpl implements PostService {
     }
 
 	@Override
-	public int updatePost(Long pId, Long uId, String title, String content, String category) {
+	public int updatePost(Long pId, Long uId, String title, String content, String category, boolean isAdmin) {
 		return postDAO.updatePost(
 	            pId,
 	            uId,
 	            title,
 	            content,
-	            category
+	            category,
+	            isAdmin
 	    );
 	}
 
 	@Override
-	public int deletePost(Long pId, Long uId) {
+	public int deletePost(Long pId, Long uId, boolean isAdmin) {
 		
-		return postDAO.deletePost(pId, uId);
+		return postDAO.deletePost(pId, uId, isAdmin);
 		
 	}
 	
