@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,6 +13,7 @@
         .form-group label { display: block; margin-bottom: 5px; color: #666; font-size: 14px; }
         .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
         .form-group input:focus { border-color: #007bff; outline: none; }
+        .form-group input:read-only { background-color: #e9ecef; color: #495057; cursor: not-allowed; }
         .error-msg { color: #dc3545; font-size: 13px; margin-top: 5px; display: none; }
         .btn-submit { width: 100%; padding: 12px; background-color: #007bff; border: none; border-radius: 4px; color: white; font-size: 16px; cursor: pointer; font-weight: bold; }
         .btn-submit:hover { background-color: #0056b3; }
@@ -22,16 +24,21 @@
 <div class="reset-container">
     <h2>비밀번호 재설정</h2>
     
-    <!-- action 속성에는 패스워드 변경을 처리할 서버 URL을 넣으시면 됩니다 -->
-    <form action="/api/reset-password" method="POST" onsubmit="return validateForm()">
+    <!-- 컨트롤러 매핑 주소인 /reset 으로 설정 -->
+    <form action="${pageContext.request.contextPath}/user/reset" method="POST" onsubmit="return validateForm()">
         
-        <!-- 검증된 토큰을 서버로 함께 전송하기 위한 hidden 필드입니다. 
-             JavaScript나 템플릿 엔진을 통해 value에 토큰 값을 동적으로 넣어주세요. -->
-        <input type="hidden" id="token" name="token" value="">
+        <!-- 1. 이메일 추가: GET 방식으로 들어왔을 때 검증한 이메일을 여기에 바인딩해 주세요.
+             사용자에게 보여주되 수정은 못 하도록 readonly 처리를 했습니다. 
+             화면에서 아예 숨기고 싶다면 type="hidden"으로 변경하셔도 됩니다. -->
+        <div class="form-group">
+            <label for="email">이메일 계정</label>
+            <input type="email" id="email" name="email" value="${email}" readonly required>
+        </div>
 
+        <!-- 2. 비밀번호 추가: 컨트롤러의 request.getParameter("password")와 일치하도록 name="password" 설정 -->
         <div class="form-group">
             <label for="newPassword">새 비밀번호</label>
-            <input type="password" id="newPassword" name="newPassword" required placeholder="영문, 숫자, 특수문자 포함 8자 이상">
+            <input type="password" id="newPassword" name="password" required placeholder="영문, 숫자, 특수문자 포함 8자 이상">
             <div id="passwordError" class="error-msg">비밀번호 형식이 올바르지 않습니다.</div>
         </div>
 
@@ -56,7 +63,7 @@ function validateForm() {
     let isValid = true;
 
     // 비밀번호 정규식 (영문, 숫자, 특수문자 포함 8자 이상)
-    const passwordRegExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    const passwordRegExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
 
     // 1. 비밀번호 유효성 검사
     if (!passwordRegExp.test(password)) {
