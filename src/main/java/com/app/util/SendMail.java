@@ -25,13 +25,13 @@ public class SendMail {
             // 두 번째 인자 true는 멀티파트(HTML, 첨부파일 등) 메시지 포맷을 허용함을 의미합니다.
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail);          // 보내는 사람 (properties에서 가져온 값)
+            helper.setFrom(fromEmail,"5ASIS");          // 보내는 사람 (properties에서 가져온 값)
             helper.setTo(toEmail);              // 받는 사람
             helper.setSubject(title);           // 메일 제목
             helper.setText(content, true);      // 메일 본문 (true 지정 시 내부 HTML 코드가 작동함)
 
-            // 실제 SMTP 서버를 통해 전송
             mailSender.send(message);
+            // 실제 SMTP 서버를 통해 전송
             System.out.println("[SendMail] 메일 발송 성공 -> " + toEmail);
             return true;
             
