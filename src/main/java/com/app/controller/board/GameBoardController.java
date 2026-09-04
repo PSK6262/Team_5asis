@@ -66,7 +66,7 @@ public class GameBoardController {
 			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
 			
 			// 기존 설정 INFO이므로 지금은 보이지 않음
-			log.debug("비회원(Guest) 페이지 접속");
+			 log.debug("비회원(Guest) 페이지 접속");
 		}
 
 		String gameName = gameBoardService.findGameNameByGameAlias(gameAlias);
