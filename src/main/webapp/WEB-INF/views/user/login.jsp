@@ -9,7 +9,12 @@
 
 <body>
 
+	
 	<div class="login-container">
+		<a href="${pageContext.request.contextPath}/main">
+	    <img src="${pageContext.request.contextPath}/resources/image/teamLogo.png" alt="5ASIS 로고" class="site-logo">
+		</a>
+		
 	    <h1 class="page-title">로그인</h1>
 		<form id="loginForm" action="${pageContext.request.contextPath}/user/login" method="POST">
 	    
