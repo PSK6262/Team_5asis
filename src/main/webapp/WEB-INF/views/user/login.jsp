@@ -15,8 +15,9 @@
 	    
 	        <div class="form-group">
             	<label class="form-label" for="email">이메일</label>
-				<!-- 쿠키에 저장된 이메일이 있으면 자동으로 채워짐 -->
-	            <input class="form-input" type="text" id="email" name="email" value="${rememberEmail}" placeholder="이메일 입력" required>
+				<!-- (수정) 방금 친 이메일이(typedEmail)이 있으면 그거 우선, 없으면 쿠키(rememberEmail) 표시 -->
+	            <input class="form-input" type="text" id="email" name="email" value="${not empty typedEmail ? typedEmail : rememberEmail}" 
+	            			placeholder="이메일 입력" required>
 	        </div>
 	        
 	        <div class="form-group">

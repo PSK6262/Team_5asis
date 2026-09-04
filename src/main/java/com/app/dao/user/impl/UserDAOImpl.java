@@ -28,9 +28,9 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public void updatePassword(UserInfo userInfo) {
-		// TODO Auto-generated method stub
-		sqlSessionTemplate.update("user_mapper.updatePassword", userInfo);
+	public int updatePassword(UserInfo userInfo) {
+		int result = sqlSessionTemplate.update("user_mapper.updatePassword", userInfo);
+		return result;
 	}
 
 	//회원 정보
@@ -75,6 +75,12 @@ public class UserDAOImpl implements UserDAO {
 			return -1;
 		}
 		return uid;
+	}
+
+	@Override
+	public int deleteUsedTokenByTokenID(String token) {
+		int result = sqlSessionTemplate.delete("user_mapper.deleteUsedTokenByTokenID", token);
+		return result;
 	}
 	
 	
