@@ -1,6 +1,10 @@
 package com.app.controller.user;
 
 import com.app.service.user.impl.UserMailServiceImpl;
+import com.app.util.SHA256Encryptor;
+
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserMailService;
@@ -79,7 +84,7 @@ public class AuthController {
 
     // 폼 전송 시 처리
     @PostMapping("/login")
-    public String login(UserInfo userInfo, HttpSession session, Model model,
+    public String login(UserInfo userInfo, HttpSession session, RedirectAttributes redirectAttributes,
     					@RequestParam(value = "rememberId", required = false) String rememberId,
     					HttpServletResponse response) {
         
@@ -93,8 +98,11 @@ public class AuthController {
         
         //2) 일치하는 회원이 없을 시
         if (loginUser == null) {
-        	model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
-        	return "user/login";	//다시 로그인 화면으로
+        	//(추가) 방금 입력했던 이메일을 화면에 그대로 다시 돌려줌
+        	redirectAttributes.addFlashAttribute("typedEmail", userInfo.getEmail());
+        	redirectAttributes.addFlashAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
+        	
+        	return "redirect:/user/login";
         }
         
         //추가(보안) 세션 저장 전 비밀번호 제거
@@ -157,19 +165,24 @@ public class AuthController {
     @PostMapping("/findPassword")
     public String findPassword(@RequestParam("email") String email) {
     	String password = userService.findPwByEmail(email);
+    	UserInfo user = userService.findUserByEmail(email);
+    	if(user != null) {
+    		userMailService.sendPasswordReset(email);
+    	}
     	
-    	userMailService.sendPasswordReset(email);
-    
     	return (password != null) ? "메일을 확인하세요" : "NOT_FOUND";
     }
     
     @GetMapping("/reset")
     public String resetPassword(@RequestParam("email") String email , 
-    										 @RequestParam("token") String token , HttpSession session) {
+    										 @RequestParam("token") String token , HttpSession session ,
+    										 Model model , HttpServletRequest request) {
     
     	if(session.getAttribute("LOGIN_USER") != null) {
     		// 이 경우 이미 로그인한 사람이라는것임
     		session.invalidate();
+    		// 빈 세션 만들어줘야 함
+    		session = request.getSession(true);
     	}
     	
     	// email이 존재하고, 토큰이 존재하면? (expired 기간 안이면?)
@@ -178,10 +191,47 @@ public class AuthController {
         	loginUser.setPassword(null);
         	session.setAttribute("LOGIN_USER",loginUser);
         	session.setAttribute("PASSWORD_RESET_MODE", true);
-        	
-        	return "redirect:/board/mypage";
+        	model.addAttribute("email",email);
+    		userService.deleteUsedTokenByTokenID(token);
+        	return "/user/pwResetToken";
     	}
     	// 여기는 토큰이 없거나 , 만료
-    	return "redirect:/board/main";
+    	return "redirect:/main";
+    }
+    
+    @PostMapping("/reset")
+    public String resetPasswordAction(HttpServletRequest request , HttpSession session , Model model) {
+    	 
+    	Boolean isPwResetMode = (Boolean) session.getAttribute("PASSWORD_RESET_MODE");
+    	
+    	if(isPwResetMode == null || !isPwResetMode) {
+    		System.out.println("PwResetMode null or false");
+    		return "redirect:/board/main";
+    	}
+    	session.setAttribute("PASSWORD_RESET_MODE", false);
+    	
+    	String email = request.getParameter("email");
+    	
+        if (email == null || email.trim().isEmpty()) {
+            // 이메일이 없을 경우 예외 처리 (로그 확인용)
+            System.out.println("[Error] JSP에서 전송된 이메일 값이 비어있습니다.");
+            return "redirect:/board/main";
+        }
+    	
+    	String pass = request.getParameter("password");
+
+    	UserInfo user = userService.findUserByEmail(email);
+    	 
+    	try {
+			pass = SHA256Encryptor.encrypt(pass);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+    	
+    	user.setPassword(pass);
+    	 
+    	userService.updatePassword(user);
+    	
+    	return "redirect:/main";
     }
 }

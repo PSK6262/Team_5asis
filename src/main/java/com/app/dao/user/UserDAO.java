@@ -8,7 +8,7 @@ public interface UserDAO {
 	public String 	findNickNameByUid(Long uid);	
 	public UserInfo findMyPageByUserId(Long userId);
 	
-	public void updatePassword(UserInfo userInfo);
+	public int updatePassword(UserInfo userInfo);
 	
 	// 회원가입: 유저 정보 등록 추가
 	public void insertUser(UserInfo userInfo);
@@ -19,4 +19,6 @@ public interface UserDAO {
 	int insertProfileInfo(Map<String, Object> fileParam);
 	int updateUserProfileImageId(Map<String, Object> userParam);
 	public long findUidByUserEmail(String email);
+	
+	public int deleteUsedTokenByTokenID(String token);
 }
