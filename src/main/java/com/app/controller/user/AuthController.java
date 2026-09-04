@@ -208,7 +208,6 @@ public class AuthController {
     		System.out.println("PwResetMode null or false");
     		return "redirect:/board/main";
     	}
-    	session.setAttribute("PASSWORD_RESET_MODE", false);
     	
     	String email = request.getParameter("email");
     	
@@ -231,6 +230,7 @@ public class AuthController {
     	user.setPassword(pass);
     	 
     	userService.updatePassword(user);
+    	session.removeAttribute("PASSWORD_RESET_MODE"); 
     	
     	return "redirect:/main";
     }

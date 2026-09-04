@@ -1,6 +1,7 @@
 package com.app.controller.board;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -46,20 +47,20 @@ public class GameBoardController {
 		// 사이드바 전체 게임리스트
 		List<GameNameTransferForm> allGames = gameBoardService.findAllGames();
 		model.addAttribute("games", allGames);
-		// 로그인 사용자 닉네임, 프로필 이미지도 세션에서 꺼내서 전달
+		
+		// 로그인 사용자 닉네임, 프로필 이미지
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
 		if (loginUser != null) {
 			String nickname = loginUser.getNickname();
-			String profileImg = loginUser.getProfileImageUrl();
+			Map<String, Object> profileImage = userService.getUserProfile(loginUser.getUid());
 			model.addAttribute("loginUser", loginUser);
 			model.addAttribute("nickname", nickname);
-			model.addAttribute("profileImg", profileImg);
+			model.addAttribute("profileImage", profileImage);
 			System.out.println("닉네임: " + nickname);
 		} else {
-			// 로그인 안 된 상태 처리
+			// 로그인 안 된 상태
 			model.addAttribute("nickname", "Guest");
-			model.addAttribute("profileImg",
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
+			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
 		}
 
 		if (pSize == null || pSize <= 0) {
