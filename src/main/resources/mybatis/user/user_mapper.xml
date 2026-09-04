@@ -112,4 +112,9 @@
 	    DELETE FROM USER_PASSWORD_TOKEN 
 	    WHERE token = #{token}
 	</delete>
+	<select id="findStatusByUserEmail" parameterType="string" resultType="int">
+		select status
+		from user_info
+		where email = #{email}
+	</select>
 </mapper>

@@ -28,7 +28,10 @@ function searchPassword() {
         if (result === "NOT_FOUND") {
             resultDiv.innerText = "등록되지 않은 이메일입니다.";
             resultDiv.style.color = "red";
-        } else {
+        } else if(result === "DEACTIVATED"){
+			resultDiv.innerText = "탈퇴된 계정입니다.";
+			resultDiv.style.color = "red";
+		} else {
             resultDiv.innerHTML = "가입하신 이메일로 비밀번호 재설정 링크가 발송되었습니다.<br><small style='color: #888;'>메일함을 확인해 주세요!</small>";
             resultDiv.style.color = "#2F7778";
         }

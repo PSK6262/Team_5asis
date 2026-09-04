@@ -69,6 +69,7 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSessionTemplate.update("user_mapper.updateUserProfileImageId", userParam);
 	}
 	
+	@Override
 	public long findUidByUserEmail(String email) {
 		Integer uid = sqlSessionTemplate.selectOne("user_mapper.findUidByUserEmail",email);
 		if (uid == null) {
@@ -83,5 +84,10 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 	
+	@Override
+	public int findStatusByUserEmail(String email) {
+		int result = sqlSessionTemplate.selectOne("user_mapper.findStatusByUserEmail",email);
+		return result;
+	}
 	
 }

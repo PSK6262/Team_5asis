@@ -19,6 +19,6 @@ public interface UserDAO {
 	int insertProfileInfo(Map<String, Object> fileParam);
 	int updateUserProfileImageId(Map<String, Object> userParam);
 	public long findUidByUserEmail(String email);
-	
 	public int deleteUsedTokenByTokenID(String token);
+	public int findStatusByUserEmail(String email);
 }

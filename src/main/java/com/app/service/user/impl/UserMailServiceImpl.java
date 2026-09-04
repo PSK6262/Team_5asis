@@ -4,9 +4,11 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.app.common.CommonCode;
 import com.app.dao.user.UserDAO;
 import com.app.dao.user.UserMailDAO;
 import com.app.service.user.UserMailService;
+import com.app.service.user.UserService;
 import com.app.util.SendMail;
 
 import lombok.extern.slf4j.Slf4j;
@@ -172,16 +174,24 @@ public class UserMailServiceImpl implements UserMailService {
                 + "</html>";
 
         // 4. 발송
-        boolean isSuccess = sendMail.send(userEmail, title, content);
         
-        if (isSuccess) {
-        	log.info("비밀번호 변경 메일 발송 성공 , token = {}  ",token);
-            long uid = userDAO.findUidByUserEmail(userEmail);
-            userMailDAO.insertPasswordToken(uid, token);
-           
-        } else {
-        	log.warn("비밀번호 변경 메일 발송 실패");
+        // 하기전 status = 2라면 탈퇴된 계정이므로 제외해야 한다.
+        
+        int status = userDAO.findStatusByUserEmail(userEmail);
+        
+        if(status != CommonCode.USER_STATUS_DEACTIVATED) {
+            boolean isSuccess = sendMail.send(userEmail, title, content);
+            
+            if (isSuccess) {
+            	log.info("비밀번호 변경 메일 발송 성공 , token = {}  ",token);
+                long uid = userDAO.findUidByUserEmail(userEmail);
+                userMailDAO.insertPasswordToken(uid, token);
+               
+            } else {
+            	log.warn("비밀번호 변경 메일 발송 실패");
+            }
         }
+        log.info("메일 발송 실패, 탈퇴한 계정");
 	}
     @Override
     public boolean verifyResetToken(String email, String token) {

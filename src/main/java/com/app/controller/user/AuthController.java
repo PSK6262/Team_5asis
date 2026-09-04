@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.app.common.CommonCode;
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserMailService;
 import com.app.service.user.UserService;
@@ -166,9 +167,15 @@ public class AuthController {
     public String findPassword(@RequestParam("email") String email) {
     	String password = userService.findPwByEmail(email);
     	UserInfo user = userService.findUserByEmail(email);
+    	
     	if(user != null) {
     		userMailService.sendPasswordReset(email);
+    		
+        	if(user.getStatus() == CommonCode.USER_STATUS_DEACTIVATED) {
+        		return "DEACTIVATED";
+        	}
     	}
+
     	
     	return (password != null) ? "메일을 확인하세요" : "NOT_FOUND";
     }
