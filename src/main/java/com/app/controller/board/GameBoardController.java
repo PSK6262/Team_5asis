@@ -129,12 +129,32 @@ public class GameBoardController {
 	@GetMapping("/search")
 	public String search(@RequestParam(value = "keyword", required = false) String keyword ,
 								 @RequestParam(value = "type", defaultValue = CommonCode.BOARD_TYPE_ALL_ENG, required = false) String type ,
-								 Model model) {
+								 Model model , HttpSession session) {
 
 		// 인기 게임 게시판 TOP 6를 출력하는 서비스
-		List<GameNameTransferForm> popularSixGames = gameBoardService.findPopularSixGames();
-		model.addAttribute("popularSixGames", popularSixGames);
+		List<GameNameTransferForm> findAllGames = gameBoardService.findAllGames();
+		model.addAttribute("games", findAllGames);
 		model.addAttribute("keyword", keyword);
+		
+		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+		if (loginUser != null) {
+			String nickname = loginUser.getNickname();
+			Map<String, Object> profileImage = userService.getUserProfile(loginUser.getUid());
+			model.addAttribute("loginUser", loginUser);
+			model.addAttribute("nickname", nickname);
+			model.addAttribute("profileImage", profileImage);
+			System.out.println("닉네임: " + nickname);
+		    log.info("회원 접속 (검색) - Email: {}, Nickname: {}", loginUser.getEmail(), nickname);
+		} else {
+			// 로그인 안 된 상태
+			model.addAttribute("nickname", "Guest");
+			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
+			
+			// 기존 설정 INFO이므로 지금은 보이지 않음
+			log.debug("비회원(Guest) 페이지 접속 (검색)");
+		}
+		
+		
 		
 		// /board/search?type=all&keyword=롤
 		// type은 각각 전체, 사용자 , 내용 , 제목 , 게시판이 존재
