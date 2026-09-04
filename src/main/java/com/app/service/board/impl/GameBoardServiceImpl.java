@@ -15,6 +15,9 @@ import com.app.dto.board.SearchResult;
 import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class GameBoardServiceImpl implements GameBoardService {
 
@@ -55,6 +58,8 @@ public class GameBoardServiceImpl implements GameBoardService {
 	@Override
 	public PagingPosts findPostListByPagingPosts(String gameAlias, int pageNum , String category , Integer pSize) {
 		
+		log.info("[게시판 페이징 요청] 게임: {}, 페이지: {}, 카테고리: {}, 요청된 사이즈: {}", gameAlias, pageNum, category, pSize);
+		
 		// pSize = 한 페이지에 몇개 보여줄 것인지 (글 개수)
 		// 만약 값이 제대로 들어오지 않았다면? -> 기본값 5
 		if (pSize == null || pSize <= 0) {
@@ -64,6 +69,7 @@ public class GameBoardServiceImpl implements GameBoardService {
 			if (CommonCode.BOARD_TYPE_ALL_ENG.equals(gameAlias)) {
 				pSize = pSize * CommonCode.BOARD_TYPE_ALL_MULTIPLIER;
 			}
+			log.info("[페이징 사이즈 보정] pSize가 기본값으로 세팅되었습니다. 최종 pSize: {}", pSize);
 		}
 		
 		// 게임 약어 , 현재 페이지 , 현재 카테고리 , 한 페이지에서 보여줄 게시글의 숫자
@@ -80,11 +86,15 @@ public class GameBoardServiceImpl implements GameBoardService {
 		int postSize = gameBoardDAO.findPostSizeByGameAliasAndCategory(gameAlias,category);
 		pagingPosts.setPostSize(postSize);
 		
+		log.info("[게시판 페이징 완료] 조회된 한 페이지 글 수: {}, 해당 카테고리 전체 글 수: {}", selectedPagingPost.size(), postSize);
+		
 		return pagingPosts;
 	}
 
 	@Override
 	public SearchResult findSearchResultByKeyword(String keyword) {
+		
+		log.info("[통합 검색 수행] 검색 키워드: '{}'", keyword);
 		
 		// 검색 결과 받아오기
 		
@@ -101,6 +111,11 @@ public class GameBoardServiceImpl implements GameBoardService {
 		searchResult.setSearchedByContent(searchedByContent);
 		searchResult.setSearchedByNickname(searchedByNickname);
 		searchResult.setSearchedByBoardName(searchedByBoardName);
+		
+		// [로그 추가] 각 영역별로 검색 결과가 몇 건씩 나왔는지 요약 기록합니다.
+		log.info("[통합 검색 완료] 키워드: '{}' -> 제목: {}건, 내용: {}건, 닉네임: {}건, 게시판명: {}건", 
+					keyword, searchedByTitle.size(), searchedByContent.size(), searchedByNickname.size(), searchedByBoardName.size());
+				
 		
 		return searchResult;
 	}

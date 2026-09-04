@@ -12,9 +12,11 @@ import com.app.dao.board.GameBoardDAO;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.PagingPosts;
 import com.app.dto.board.Post;
-import com.app.dto.board.SearchResult;
 import com.app.dto.user.UserInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class GameBoardDAOImpl implements GameBoardDAO {
 
@@ -54,7 +56,7 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	@Override
 	public List<Post> findPostListByPagingPosts(PagingPosts pagingPosts) {
 		List<Post> selectedPagingPost = sqlSessionTemplate.selectList("board_mapper.findPostListByPagingPosts",pagingPosts);
-		System.out.println(selectedPagingPost+": dao pp ");
+		log.debug("DAO 페이징 조회 결과 객체: {}, 요청 조건: {}", selectedPagingPost, pagingPosts);
 		return selectedPagingPost;
 	}
 
@@ -98,17 +100,10 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 		return searchedByBoardName;
 	}
 
-	// 전체 게임 리스트 가져오기
-	
+	// 다른사람 코드
 	@Override
-	
 	public List<GameNameTransferForm> findAllGames() {
-		
 		List<GameNameTransferForm> findAllGames = sqlSessionTemplate.selectList("board_mapper.findAllGames");
-		
-		
 		return findAllGames;
-		
 	}
-	
 }
