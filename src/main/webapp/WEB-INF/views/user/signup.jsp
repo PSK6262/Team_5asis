@@ -11,6 +11,9 @@
 <body>
 
 	<div class="signup-container">
+		<a href="${pageContext.request.contextPath}/main">
+	    <img src="${pageContext.request.contextPath}/resources/image/teamLogo.png" alt="5ASIS 로고" class="site-logo">
+		</a>
 		<h1 class="page-title">회원가입</h1>
 		<form id="signupForm" action="${pageContext.request.contextPath}/user/signup" method="POST">
 
