@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.app.common.CommonCode;
 import com.app.dto.board.Comments;
@@ -142,12 +143,18 @@ public class MypageController {
 	    }
 	    
 	    userInfo.setUid(userId);
-		
-	
-		
-		System.out.println("변경된 닉네임: " + userInfo.getNickname());
-		
+	    
+	    System.out.println("변경된 닉네임: " + userInfo.getNickname());
+		System.out.println("찾을 유저 ID: " + userInfo.getUid());
 		userService.updateNickname(userInfo);
+		
+		System.out.println("=== [DEBUG] 닉네임: " + userInfo.getNickname() + ", UID: " + userInfo.getUid());
+		
+		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+	    if (loginUser != null) {
+	        loginUser.setNickname(userInfo.getNickname()); // 세션 객체의 닉네임 변경
+	        session.setAttribute("LOGIN_USER", loginUser); // 세션에 다시 저장
+	    }
 		
 		return "redirect:/board/mypage";
 	}
@@ -162,9 +169,33 @@ public class MypageController {
 	        return "redirect:/main";
 	    }
 
-	    // Service 계층의 프로필 업데이트 메서드 호출 (Long 타입 ID와 파일 전달)
+	   
 	    userService.updateProfileImage(loginUserId, uploadFile, request);
 	    
 	    return "redirect:/board/mypage";
 	}
+	
+	@PostMapping("/mypage/deleteUser")
+	public String deleteUser(HttpSession session, RedirectAttributes rttr) {
+	    
+	    Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
+	    
+	    if (loginUserId == null) {
+	        return "redirect:/user/login";
+	    }
+	    
+	   
+	    UserInfo userInfo = new UserInfo();
+	    userInfo.setUid(loginUserId);
+	    
+	    
+	    boolean deleteUser = userService.deleteUser(userInfo, session);
+	    
+	    if (deleteUser) {
+	        rttr.addFlashAttribute("msg", "회원탈퇴가 정상적으로 처리되었습니다.");
+	        return "redirect:/main";
+	    }
+		return "redirect:/board/mypage";
+	}
+	
 }

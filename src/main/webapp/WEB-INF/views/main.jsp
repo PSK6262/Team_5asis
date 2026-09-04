@@ -12,7 +12,13 @@
 		<meta charset="UTF-8">
 	
 		<title>5ASIS</title>
-	
+			
+		<!-- 회원 탈퇴후 메인 페이지 복귀 시 안내 메시지 -->	
+		<c:if test="${not empty msg}">
+		    <script>
+		        alert("${msg}");
+		    </script>
+		</c:if>
 	
 		<!-- 부트스트랩 css CDN 연결 부분 -->
 		
@@ -21,7 +27,7 @@
 		<!-- 메인 css -->
 		
 		<link href="${pageContext.request.contextPath}/resources/css/main.css" rel=stylesheet type="text/css">
-		
+	
 		<!-- 네비게이션바 css -->
 		
 		<link href="${pageContext.request.contextPath}/resources/css/navbar.css" rel=stylesheet type="text/css">

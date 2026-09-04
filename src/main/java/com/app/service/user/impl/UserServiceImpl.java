@@ -6,17 +6,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.common.CommonCode;
 import com.app.dao.user.UserDAO;
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserService;
 import com.app.util.SHA256Encryptor;
 
+@Transactional
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -75,8 +78,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void updateNickname(UserInfo userInfo) {
-	    // 팀원이 컨트롤러에서 호출해서 임시로 껍데기만 만들어둠
-	    // 나중에 DAO 쿼리 연결 예정
+		userDAO.updateNickname(userInfo);
 	}
 
 	//로그인 검증 처리
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
 		UserInfo dbUser = userDAO.findUserByEmail(userInfo.getEmail());
 		
 		//2) 조회된 회원정보가 존재하고, 비밀번호가 일치하는지 검증
-		if (dbUser != null) {
+		if (dbUser != null && dbUser.getStatus() != CommonCode.USER_STATUS_DEACTIVATED) {
 			try {
 				//로그인할 때 입력한 비번을 똑같이 암호화
 				String inputEncPw = SHA256Encryptor.encrypt(userInfo.getPassword());
@@ -211,4 +213,20 @@ public class UserServiceImpl implements UserService {
 		if(result < 1) System.out.println("토큰 삭제이상");
 		return result;
 	}
+	
+	@Transactional
+	public boolean deleteUser(UserInfo userInfo, HttpSession session) {
+	    int result = userDAO.deleteUser(userInfo);
+	    
+	    if (result > 0) {
+	        // DB 상태 변경 성공 시 세션 무효화 (로그아웃 처리)
+	        session.invalidate();
+	        return true;
+	    }
+	    return false;
+	}
+
+	
+
+	
 }

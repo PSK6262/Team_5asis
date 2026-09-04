@@ -19,6 +19,18 @@
 	    SET password = #{password} 
 	    WHERE u_id = #{uid}
 	</update>
+	<update id="updateNickname">
+    UPDATE user_info
+    SET nickname = #{nickname} 
+    WHERE u_id = #{uid}
+</update>
+	<update id="deleteUser">
+	UPDATE user_info
+	SET status = '2'
+	WHERE u_id=#{uid}
+	
+	</update>
+	
 	
 	<!-- 회원가입: DB에 유저 정보 넣기 -->
 	<insert id="insertUser" parameterType="com.app.dto.user.UserInfo">
@@ -112,4 +124,9 @@
 	    DELETE FROM USER_PASSWORD_TOKEN 
 	    WHERE token = #{token}
 	</delete>
+	<select id="findStatusByUserEmail" parameterType="string" resultType="int">
+		select status
+		from user_info
+		where email = #{email}
+	</select>
 </mapper>

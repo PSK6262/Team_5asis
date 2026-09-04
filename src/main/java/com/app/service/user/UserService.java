@@ -3,6 +3,7 @@ package com.app.service.user;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,8 @@ public interface UserService {
 	public int updatePassword(UserInfo userInfo);
 	
 	public void updateNickname(UserInfo userInfo);
+	
+	boolean deleteUser(UserInfo userInfo, HttpSession session);
 	
 	//회원가입: 이메일 중복 확인 (중복:1, 사용가능:0)
 	int checkEmailDuplicate(String email);

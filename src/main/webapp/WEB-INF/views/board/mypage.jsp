@@ -309,12 +309,12 @@ td {
 		<%@ include file="../common/sidebar.jsp" %>
 		<div class="pagebody-rightside flex-grow-1">
 			<div class="content-header-nav mb-3">
-			    <nav aria-label="breadcrumb">
+			    <%-- <nav aria-label="breadcrumb">
 			        <ol class="breadcrumb mb-0">
 			            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main">홈</a></li>
 			            <li class="breadcrumb-item active" aria-current="page">${gameName}</li>
 			        </ol>
-			    </nav>
+			    </nav> --%>
 			</div>
 	<!-- 상단 프로필 배너 -->
 	<div class="main">
@@ -401,7 +401,7 @@ td {
 						변경하기</button>
 
 
-					<form action="/board/mypage/update-nickname" method="post"
+					<form action="${pageContext.request.contextPath}/board/mypage/update-nickname" method="post"
 						id="nicknameUpdateForm" class="is-hidden">
 
 						<div>
@@ -418,9 +418,9 @@ td {
 					</form>
 
 
-
-					<button class="quit_button">회원탈퇴</button>
-
+				<form action="${pageContext.request.contextPath}/board/mypage/deleteUser"method="post" id="deleteForm" style="display: inline;">
+  					 <button type="button" id="deleteBtn" class="quit_button">회원탈퇴</button>
+				</form>
 
 				</div>
 				<div id="tab-posts" class="content-item">
@@ -613,6 +613,18 @@ td {
 		        return;
 		    }
 		    location.href = '/board/' + gameAlias + '/' + pId;
+		}
+		
+		const deleteBtn = document.getElementById('deleteBtn');
+		if (deleteBtn){
+			deleteBtn.addEventListener('click', function(){
+				if (confirm("정말 탈퇴하시겠습니까?\n탈퇴 시 기존 정보 및 계정 사용이 제한됩니다.")) {
+	                const deleteForm = document.getElementById('deleteForm');
+	                if (deleteForm) {
+	                	deleteForm.submit();
+	                }
+	            }
+	        });
 		}
 	</script>
 </body>
