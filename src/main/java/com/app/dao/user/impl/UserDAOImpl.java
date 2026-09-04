@@ -82,6 +82,19 @@ public class UserDAOImpl implements UserDAO {
 		int result = sqlSessionTemplate.delete("user_mapper.deleteUsedTokenByTokenID", token);
 		return result;
 	}
+
+	@Override
+	public void updateNickname(UserInfo userInfo) {
+		
+		sqlSessionTemplate.update("user_mapper.updateNickname", userInfo);
+		
+	}
+
+	@Override
+	public int deleteUser(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.update("user_mapper.deleteUser", userInfo);
+	}
 	
 	
 }
