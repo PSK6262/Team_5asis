@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.app.dto.user.UserInfo;
 import com.app.service.user.UserMailService;
@@ -83,7 +84,7 @@ public class AuthController {
 
     // 폼 전송 시 처리
     @PostMapping("/login")
-    public String login(UserInfo userInfo, HttpSession session, Model model,
+    public String login(UserInfo userInfo, HttpSession session, RedirectAttributes redirectAttributes,
     					@RequestParam(value = "rememberId", required = false) String rememberId,
     					HttpServletResponse response) {
         
@@ -97,8 +98,11 @@ public class AuthController {
         
         //2) 일치하는 회원이 없을 시
         if (loginUser == null) {
-        	model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
-        	return "user/login";	//다시 로그인 화면으로
+        	//(추가) 방금 입력했던 이메일을 화면에 그대로 다시 돌려줌
+        	redirectAttributes.addFlashAttribute("typedEmail", userInfo.getEmail());
+        	redirectAttributes.addFlashAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
+        	
+        	return "redirect:/user/login";
         }
         
         //추가(보안) 세션 저장 전 비밀번호 제거
