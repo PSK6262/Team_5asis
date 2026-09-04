@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.app.common.CommonCode;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.user.UserInfo;
 import com.app.service.board.GameBoardService;
@@ -68,8 +69,7 @@ public class MainController {
 
 			model.addAttribute("nickname", "Guest");
 
-			model.addAttribute("profileImage",
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
+			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE);
 
 		}
 		

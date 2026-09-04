@@ -19,7 +19,7 @@ public class CommonCode {
 	// 한번에 보여줄 개수
 	public static final int CHZZK_API_DATA_SIZE = 2;
 	
-
+	public static final String SIDEBAR_PROFILE_DEFAULT_IMAGE = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10";
 	
 	
 }
