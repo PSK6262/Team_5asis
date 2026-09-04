@@ -26,6 +26,19 @@
 
 			<div class="page-container">
 				<div class="detail-container">
+				
+				<!-- 안전하게 수정된 디버깅용 상자 -->
+<div style="background-color: #fff3cd; color: #856404; padding: 15px; border: 2px solid #ffeeba; border-radius: 8px; margin-bottom: 20px;">
+    <h3>🔍 [로그인 유저 권한 검사 디버그]</h3>
+    <ul>
+        <li><b>1. 세션 LOGIN_USER 존재 여부:</b> [${not empty sessionScope.LOGIN_USER}]</li>
+        <li><b>2. 로그인 유저 UID:</b> [${sessionScope.LOGIN_USER.uid}]</li>
+        <li><b>3. 게시글 작성자 UID:</b> [${post.uid}]</li>
+        <li><b>4. 작성자 일치 여부:</b> [${post.uid eq sessionScope.LOGIN_USER.uid}]</li>
+        <li><b>5. status 변수 값:</b> [${sessionScope.LOGIN_USER.status}]</li>
+        <li><b>6. 판정 (status eq 4):</b> [${sessionScope.LOGIN_USER.status eq 4}]</li>
+    </ul>
+</div>
 
 					<a href="${pageContext.request.contextPath}/board/${gameAlias}"
 						class="btn-list-link"> ← 목록으로 </a>
@@ -101,21 +114,18 @@
 							</button>
 						</div>
 
-						<!-- 2. 수정/삭제 버튼 (오른쪽 끝 정렬) -->
-						<c:if
-							test="${not empty sessionScope.LOGIN_USER and post.uid == sessionScope.LOGIN_USER.uid}">
-							<div class="author-buttons">
-								<a
-									href="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/edit"
-									class="btn-sm btn-edit"> 수정 </a>
-
-								<form
-									action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/delete"
-									method="post" style="display: inline;"
-									onsubmit="return confirm('정말 삭제하시겠습니까?');">
-									<button type="submit" class="btn-sm btn-delete">삭제</button>
-								</form>
-							</div>
+						<!-- 2. 수정/삭제 버튼 (작성자이거나 관리자(status == 4)인 경우) -->
+						<c:if test="${not empty sessionScope.LOGIN_USER and (post.uid eq sessionScope.LOGIN_USER.uid or sessionScope.LOGIN_USER.status eq 4)}">
+						    <div class="author-buttons">
+						        <a href="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/edit"
+						            class="btn-sm btn-edit"> 수정 </a>
+						
+						        <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/delete"
+						            method="post" style="display: inline;"
+						            onsubmit="return confirm('정말 삭제하시겠습니까?');">
+						            <button type="submit" class="btn-sm btn-delete">삭제</button>
+						        </form>
+						    </div>
 						</c:if>
 					</div>
 
@@ -184,36 +194,34 @@
 															👍 <span id="comment-like-count-${comment.cid}">${comment.likeCount}</span>
 														</button>
 
-														<c:if
-															test="${not empty sessionScope.LOGIN_USER and comment.uid == sessionScope.LOGIN_USER.uid}">
-															<button type="button" class="btn-reply-sm"
-																onclick="showEditForm(${comment.cid})">수정</button>
-
-															<form
-																action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete"
-																method="post" style="display: inline;"
-																onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-																<button type="submit"
-																	class="btn-reply-sm btn-reply-delete">삭제</button>
-															</form>
+														<!-- 댓글 수정/삭제 권한 검사 (.status.statusId -> .status로 수정 완료) -->
+														<c:if test="${not empty sessionScope.LOGIN_USER and (comment.uid eq sessionScope.LOGIN_USER.uid or sessionScope.LOGIN_USER.status eq 4)}">
+														    <button type="button" class="btn-reply-sm"
+														        onclick="showEditForm(${comment.cid})">수정</button>
+														
+														    <form action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/delete"
+														        method="post" style="display: inline;"
+														        onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+														        <button type="submit" class="btn-reply-sm btn-reply-delete">삭제</button>
+														    </form>
 														</c:if>
 													</div>
 												</c:if>
-											</div> <!-- 2. 수정 입력 폼 --> <c:if
-												test="${not empty sessionScope.LOGIN_USER and comment.uid == sessionScope.LOGIN_USER.uid}">
-												<form id="reply-edit-form-${comment.cid}"
-													action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/edit"
-													method="post" class="reply-edit-form">
-													<input type="text" name="commentContent"
-														class="reply-edit-input" value="${comment.content}"
-														required>
-													<div class="reply-edit-buttons">
-														<button type="submit" class="btn-reply-edit-save">완료</button>
-														<button type="button" class="btn-reply-edit-cancel"
-															onclick="hideEditForm(${comment.cid})">취소</button>
-													</div>
-												</form>
-											</c:if> <!-- 최상위 댓글이면서 + '삭제된 댓글'이 아닌 경우에만 답글 버튼 노출 --> <c:if
+											</div> <!-- 2. 수정 입력 폼 (.status.statusId -> .status로 수정 완료) -->
+												<c:if test="${not empty sessionScope.LOGIN_USER and (comment.uid eq sessionScope.LOGIN_USER.uid or sessionScope.LOGIN_USER.status eq 4)}">
+												    <form id="reply-edit-form-${comment.cid}"
+												        action="${pageContext.request.contextPath}/board/${gameAlias}/${post.pid}/comment/${comment.cid}/edit"
+												        method="post" class="reply-edit-form">
+												        <input type="text" name="commentContent"
+												            class="reply-edit-input" value="${comment.content}"
+												            required>
+												        <div class="reply-edit-buttons">
+												            <button type="submit" class="btn-reply-edit-save">완료</button>
+												            <button type="button" class="btn-reply-edit-cancel"
+												                onclick="hideEditForm(${comment.cid})">취소</button>
+												        </div>
+												    </form>
+												</c:if> <!-- 최상위 댓글이면서 + '삭제된 댓글'이 아닌 경우에만 답글 버튼 노출 --> <c:if
 												test="${empty comment.parentCId and comment.content != '삭제된 댓글입니다.'}">
 												<button type="button" class="btn-nested-reply"
 													onclick="showReplyForm(${comment.cid})">답글</button>

@@ -39,7 +39,8 @@
 			u_id AS "uId",
 			email,
 			password,
-			nickname
+			nickname,
+			status
 		FROM user_info
 		WHERE email = #{email}
 	</select>

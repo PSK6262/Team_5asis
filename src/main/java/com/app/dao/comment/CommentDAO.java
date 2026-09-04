@@ -9,15 +9,14 @@ public interface CommentDAO {
 	void insertComment(Long pId, Long uId, String content, Long parentCId);
 
 	List<Comments> selectCommentByUid(Long loginUserId);
-	
-	void deleteComment(Long cId, Long uId);
-
-	void updateComment(Long cId, Long uId, String content);
 
 	void insertReply(Long pId, Long uId, Long parentCId, String content);
+	
+	void deleteComment(Long cId, Long uId, boolean isAdmin);
+	void markAsDeleted(Long cId, Long uId, boolean isAdmin);
+	void updateComment(Long cId, Long uId, String content, boolean isAdmin);
 
 	int countReplies(Long cId);
-	void markAsDeleted(Long cId, Long uId);
 	
 	Comments selectCommentById(Long cId);
 	void deleteCommentById(Long cId);

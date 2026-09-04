@@ -31,9 +31,8 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public void updateComment(Long cId, Long uId, String content) {
-		commentDAO.updateComment(cId, uId, content);
-		
+	public void updateComment(Long cId, Long uId, String content, boolean isAdmin) {
+	    commentDAO.updateComment(cId, uId, content, isAdmin);
 	}
 
 	@Override
@@ -41,28 +40,24 @@ public class CommentServiceImpl implements CommentService {
 		commentDAO.insertReply(pId, uId, parentCId, content);
 		
 	}
-	
-	@Transactional // 여러 DB 조작이 일어나므로 트랜잭션 처리 권장
+
+	@Transactional
 	@Override
-	public void deleteComment(Long cId, Long uId) {
-	    // 0. 삭제 대상 댓글의 정보를 먼저 조회
+	public void deleteComment(Long cId, Long uId, boolean isAdmin) {
 	    Comments targetComment = commentDAO.selectCommentById(cId);
 	    if (targetComment == null) return;
 
 	    Long parentCId = targetComment.getParentCId();
 
-	    // 1. 해당 댓글 아래에 달린 대댓글(자식 댓글) 개수 확인
 	    int replyCount = commentDAO.countReplies(cId);
 
 	    if (replyCount > 0) {
-	        // 2-1. 대댓글이 존재하면 내용만 "삭제된 댓글입니다."로 변경
-	        commentDAO.markAsDeleted(cId, uId);
+	        // 대댓글이 존재하면 내용만 변경
+	        commentDAO.markAsDeleted(cId, uId, isAdmin);
 	    } else {
-	        // 2-2. 대댓글이 없으면 DB에서 완전히 삭제
-	        commentDAO.deleteComment(cId, uId);
+	        // 대댓글이 없으면 DB에서 완전 삭제
+	        commentDAO.deleteComment(cId, uId, isAdmin);
 
-	        // 3. 만약 삭제한 댓글이 '대댓글'이었을 경우 (parentCId != null), 
-	        //    부모 댓글이 '삭제된 댓글입니다.' 상태이고 남은 대댓글이 0개라면 부모 댓글도 삭제
 	        if (parentCId != null) {
 	            cleanUpParentComment(parentCId);
 	        }
