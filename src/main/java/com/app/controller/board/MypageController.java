@@ -90,24 +90,17 @@ public class MypageController {
 	        
 	        // 사이드바 프로필에 들어갈 정보들
 
-	        UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
-
-	        
-
 	        if (loginUserId != null) {
-
 	            Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
-
-	            String nickname = loginUser.getNickname();
-
-	            
-
-	            model.addAttribute("nickname", nickname);
-
 	            model.addAttribute("profileImage", profileImage);
+	        }
 
+	        if (myInfo != null) {
+	            String nickname = myInfo.getNickname();
+	            model.addAttribute("nickname", nickname);
 	            System.out.println("닉네임: " + nickname);
-
+	        } else {
+	            model.addAttribute("nickname", "Guest");
 	        }
 
 	        
