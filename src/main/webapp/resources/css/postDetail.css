@@ -229,6 +229,7 @@ body {
 /* 댓글 목록 */
 .reply-list {
 	list-style: none;
+	padding: 5px;
 }
 
 .no-reply {
