@@ -14,7 +14,7 @@ public interface UserService {
 	
 	//회원가입: DB에 신규 회원가입 등록
 	void signup(UserInfo userInfo);
-	public void updatePassword(UserInfo userInfo);
+	public int updatePassword(UserInfo userInfo);
 	
 	public void updateNickname(UserInfo userInfo);
 	
@@ -30,4 +30,5 @@ public interface UserService {
 	void updateProfileImage(Long loginUserId, MultipartFile uploadFile, HttpServletRequest request);
 	
 	public UserInfo findUserByEmail(String email);
+	public int deleteUsedTokenByTokenID(String token);
 }
