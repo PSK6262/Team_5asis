@@ -61,9 +61,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updatePassword(UserInfo userInfo) {
-		// TODO Auto-generated method stub
-		
+	public int updatePassword(UserInfo userInfo) {
+		int result = userDAO.updatePassword(userInfo);
+		if(result < 1) System.out.println("update 안됨");
+		return result;
 	}
 
 	@Override
@@ -202,5 +203,12 @@ public class UserServiceImpl implements UserService {
 	public UserInfo findUserByEmail(String email) {
 		UserInfo user = userDAO.findUserByEmail(email);
 		return user;
+	}
+
+	@Override
+	public int deleteUsedTokenByTokenID(String token) {
+		int result = userDAO.deleteUsedTokenByTokenID(token);
+		if(result < 1) System.out.println("토큰 삭제이상");
+		return result;
 	}
 }

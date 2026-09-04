@@ -1,6 +1,10 @@
 package com.app.controller.user;
 
 import com.app.service.user.impl.UserMailServiceImpl;
+import com.app.util.SHA256Encryptor;
+
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -157,19 +161,24 @@ public class AuthController {
     @PostMapping("/findPassword")
     public String findPassword(@RequestParam("email") String email) {
     	String password = userService.findPwByEmail(email);
+    	UserInfo user = userService.findUserByEmail(email);
+    	if(user != null) {
+    		userMailService.sendPasswordReset(email);
+    	}
     	
-    	userMailService.sendPasswordReset(email);
-    
     	return (password != null) ? "메일을 확인하세요" : "NOT_FOUND";
     }
     
     @GetMapping("/reset")
     public String resetPassword(@RequestParam("email") String email , 
-    										 @RequestParam("token") String token , HttpSession session) {
+    										 @RequestParam("token") String token , HttpSession session ,
+    										 Model model , HttpServletRequest request) {
     
     	if(session.getAttribute("LOGIN_USER") != null) {
     		// 이 경우 이미 로그인한 사람이라는것임
     		session.invalidate();
+    		// 빈 세션 만들어줘야 함
+    		session = request.getSession(true);
     	}
     	
     	// email이 존재하고, 토큰이 존재하면? (expired 기간 안이면?)
@@ -178,10 +187,47 @@ public class AuthController {
         	loginUser.setPassword(null);
         	session.setAttribute("LOGIN_USER",loginUser);
         	session.setAttribute("PASSWORD_RESET_MODE", true);
-        	
-        	return "redirect:/board/mypage";
+        	model.addAttribute("email",email);
+    		userService.deleteUsedTokenByTokenID(token);
+        	return "/user/pwResetToken";
     	}
     	// 여기는 토큰이 없거나 , 만료
-    	return "redirect:/board/main";
+    	return "redirect:/main";
+    }
+    
+    @PostMapping("/reset")
+    public String resetPasswordAction(HttpServletRequest request , HttpSession session , Model model) {
+    	 
+    	Boolean isPwResetMode = (Boolean) session.getAttribute("PASSWORD_RESET_MODE");
+    	
+    	if(isPwResetMode == null || !isPwResetMode) {
+    		System.out.println("PwResetMode null or false");
+    		return "redirect:/board/main";
+    	}
+    	session.setAttribute("PASSWORD_RESET_MODE", false);
+    	
+    	String email = request.getParameter("email");
+    	
+        if (email == null || email.trim().isEmpty()) {
+            // 이메일이 없을 경우 예외 처리 (로그 확인용)
+            System.out.println("[Error] JSP에서 전송된 이메일 값이 비어있습니다.");
+            return "redirect:/board/main";
+        }
+    	
+    	String pass = request.getParameter("password");
+
+    	UserInfo user = userService.findUserByEmail(email);
+    	 
+    	try {
+			pass = SHA256Encryptor.encrypt(pass);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+    	
+    	user.setPassword(pass);
+    	 
+    	userService.updatePassword(user);
+    	
+    	return "redirect:/main";
     }
 }

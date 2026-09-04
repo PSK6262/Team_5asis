@@ -17,7 +17,7 @@
 	<update id="updatePassword">
 	    UPDATE user_info
 	    SET password = #{password} 
-	    WHERE u_id = #{uId}
+	    WHERE u_id = #{uid}
 	</update>
 	
 	<!-- 회원가입: DB에 유저 정보 넣기 -->
@@ -107,8 +107,8 @@
 	      AND t.TOKEN = #{token}
 	      AND SYSDATE &lt;= t.EXPIRED_AT
 	</select>
-    <delete id="deleteUsedToken" parameterType="int">
+    <delete id="deleteUsedTokenByTokenID" parameterType="string">
 	    DELETE FROM USER_PASSWORD_TOKEN 
-	    WHERE uid = #{uid}
+	    WHERE token = #{token}
 	</delete>
 </mapper>
