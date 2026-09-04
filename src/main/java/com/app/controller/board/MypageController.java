@@ -100,7 +100,7 @@ public class MypageController {
 
 	            String nickname = loginUser.getNickname();
 
-	            model.addAttribute("loginUser", loginUser);
+	            
 
 	            model.addAttribute("nickname", nickname);
 
