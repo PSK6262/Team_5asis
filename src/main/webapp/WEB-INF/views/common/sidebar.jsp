@@ -22,16 +22,7 @@
 			<label id="label_profile">프로필</label>
 			<div class="sideBar_line"></div>
 			<div class="sideBar_profile">
-				<c:choose>
-					<c:when test="${not empty loginUser}">
-						<!-- 로그인 상태 -->
-						<img class="sideBar_profileImg" src="${profileImage.URL_FILE_PATH}" alt="프로필 이미지">
-					</c:when>
-					<c:otherwise>
-						<!-- 비로그인 상태 -->
-						<img class="sideBar_profileImg" src="${profileImage}" alt="프로필 이미지">
-					</c:otherwise>
-				</c:choose>
+				<img class="sideBar_profileImg" src="${profileImage}" alt="프로필 이미지">
 
 				<div class="sideBar_profileInfo">
 					<c:choose>

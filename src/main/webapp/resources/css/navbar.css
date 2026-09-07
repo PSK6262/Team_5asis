@@ -7,6 +7,7 @@
 	padding: 0 20px;
 	color: #2E2E2E;
 	min-height: 80px; /* 헤더 최소 높이 지정 */
+	font-family: Arial, sans-serif;
 }
 
 /* 로고 + 팀명 */
