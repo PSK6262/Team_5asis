@@ -144,14 +144,28 @@ public class PostController {
 		// 2. 해당 게시글의 첨부파일 목록 DB 조회
 		List<FileInfo> fileList = fileService.getFilesByPid(pId);
 
-		// 3. 조회수 1 증가
-		postService.increaseViewCount(pId);
-
-		// 4. 현재 로그인 사용자 추천 여부 확인
+		// 3. 현재 로그인 사용자 확인
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
-		boolean isLiked = false;
+
+		// 4. 조회수 1 증가
+		// 같은 세션에서 같은 게시글을 다시 조회하면 조회수 증가하지 않음
 		if (loginUser != null) {
-			isLiked = postService.isLiked(pId, loginUser.getUid());
+
+		    String viewKey = "VIEWED_POST_" + pId;
+
+		    Boolean alreadyViewed = (Boolean) session.getAttribute(viewKey);
+
+		    if (alreadyViewed == null || !alreadyViewed) {
+		        postService.increaseViewCount(pId);
+		        session.setAttribute(viewKey, true);
+		    }
+		}
+
+		// 5. 현재 로그인 사용자 추천 여부 확인
+		boolean isLiked = false;
+
+		if (loginUser != null) {
+		    isLiked = postService.isLiked(pId, loginUser.getUid());
 		}
 
 		model.addAttribute("post", postDetail);
