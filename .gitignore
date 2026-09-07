@@ -141,3 +141,15 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/java,windows,maven,eclipse
 
 *.properties
+
+# Eclipse Web Project Settings
+.settings/org.eclipse.wst.common.component
+.settings/org.eclipse.wst.common.project.facet.core.xml
+
+# Manifest file
+**/MANIFEST.MF
+manifest.mf
+
+# img
+/src/main/webapp/resources/upload/*.jpg
+/src/main/webapp/resources/upload/*.png
