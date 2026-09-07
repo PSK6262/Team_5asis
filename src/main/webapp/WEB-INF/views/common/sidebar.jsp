@@ -24,12 +24,12 @@
 			<div class="sideBar_profile">
 				<c:choose>
 				    <%-- 1. 로그인 상태이면서 프로필 이미지가 있는 경우 --%>
-				    <c:when test="${not empty loginUser and not empty profileImage.URL_FILE_PATH}">
-				        <img class="sideBar_profileImg" src="${profileImage.URL_FILE_PATH}" alt="프로필 이미지">
+				    <c:when test="${not empty loginUser and not empty profileImage}">
+				        <img class="sideBar_profileImg" src="${profileImage}" alt="프로필 이미지">
 				    </c:when>
 				    
 				    <%-- 2. 로그인 상태이지만 프로필 이미지가 없는 경우 (기본 프로필 출력) --%>
-				    <c:when test="${not empty loginUser and empty profileImage.URL_FILE_PATH}">
+				    <c:when test="${not empty loginUser and empty profileImage}">
 				        <img class="sideBar_profileImg" src="${pageContext.request.contextPath}/resources/upload/guest_image.jpg" alt="기본 프로필 이미지">
 				    </c:when>
 				    
