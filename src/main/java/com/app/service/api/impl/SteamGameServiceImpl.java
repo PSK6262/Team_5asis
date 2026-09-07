@@ -1,4 +1,4 @@
-package com.app.service.steam.impl;
+package com.app.service.api.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.app.dto.steam.SteamGame;
-import com.app.service.steam.SteamGameService;
+import com.app.dto.api.SteamGame;
+import com.app.service.api.SteamGameService;
 
 /**
  * SteamGameService의 실제 구현 클래스

@@ -1,4 +1,4 @@
-package com.app.dto.profile;
+package com.app.dto.file;
 
 import lombok.Data;
 

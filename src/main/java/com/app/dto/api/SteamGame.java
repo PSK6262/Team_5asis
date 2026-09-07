@@ -1,4 +1,4 @@
-package com.app.dto.steam;
+package com.app.dto.api;
 
 /**
  * ================================================================

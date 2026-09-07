@@ -1,9 +1,9 @@
-package com.app.service.steam;
+package com.app.service.api;
 
 
 import java.util.List;
 
-import com.app.dto.steam.SteamGame;
+import com.app.dto.api.SteamGame;
 
 /**
  * ================================================================

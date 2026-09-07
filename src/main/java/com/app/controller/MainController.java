@@ -11,11 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.app.common.CommonCode;
+import com.app.dto.api.SteamGame;
 import com.app.dto.board.GameNameTransferForm;
-import com.app.dto.steam.SteamGame;
 import com.app.dto.user.UserInfo;
+import com.app.service.api.SteamGameService;
 import com.app.service.board.GameBoardService;
-import com.app.service.steam.SteamGameService;
 import com.app.service.user.UserService;
 
 
