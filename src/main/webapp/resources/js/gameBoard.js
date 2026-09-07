@@ -8,22 +8,21 @@ function pageMovement(currentPage, num , category){
 	let targetPage = currentPage + num;
 	
     const urlParams = new URLSearchParams(window.location.search);
-    let currentSize = urlParams.get('pSize'); 
+	let currentSize = urlParams.get('pSize'); 
 	
-    if (!currentSize) {
+	if (!currentSize) {
         const activeSizeBtn = document.querySelector('.btn-group .btn.active');
         if (activeSizeBtn) {
             currentSize = parseInt(activeSizeBtn.textContent.trim());
         } else {
             currentSize = 5;
         }
+		const isAllPage = window.location.pathname.includes('/all');
+		if (isAllPage) {
+			currentSize *= 2;
+		}
     }
-	if(category && category.trim() === '전체') {
-		location.href = window.location.pathname + "?page=" + targetPage + "&pSize=" + currentSize;
-	}
-	else { 
-		location.href = window.location.pathname + "?page=" + targetPage + "&category=" + category + "&pSize=" + currentSize;
-	}
+	location.href = window.location.pathname + "?page=" + targetPage + "&category=" + category + "&pSize=" + currentSize;
 }
 function categoryBtnClick(gameAlias, categoryName) {
     const currentUrlObj = new URL(window.location.href); 
