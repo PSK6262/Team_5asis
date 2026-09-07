@@ -218,8 +218,7 @@ public class MainController {
 
         String nickname = "Guest";
 
-        String profileImage =
-                CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE;
+        Map<String, Object> profileImage = null;
 
 
         // =========================================================
@@ -230,68 +229,9 @@ public class MainController {
         // =========================================================
 
         if (loginUser != null && loginUserId != null) {
-
-
-            /**
-             * DB에서 사용자 프로필 정보를 가져온다.
-             */
-            Map<String, Object> profileInfo =
-                    userService.getUserProfile(
-                            loginUserId
-                    );
-
-
-            /**
-             * 로그인한 사용자의 닉네임을 사용한다.
-             */
-            nickname =
-                    loginUser.getNickname();
-
-
-            /**
-             * ====================================================
-             * 프로필 이미지 확인
-             * ====================================================
-             *
-             * DB에 프로필 이미지가 존재하면
-             *
-             * URL_FILE_PATH
-             *
-             * 값을 사용한다.
-             *
-             * 이미지가 없으면 위에서 설정한
-             * 기본 이미지를 그대로 사용한다.
-             */
-            if (profileInfo != null
-                    && profileInfo.get("URL_FILE_PATH") != null) {
-
-                profileImage =
-                        profileInfo.get(
-                                "URL_FILE_PATH"
-                        ).toString();
-            }
-
-
-            /**
-             * JSP에서 로그인 사용자 객체가
-             * 필요할 수 있으므로 Model에 전달한다.
-             */
-            model.addAttribute(
-                    "loginUser",
-                    loginUser
-            );
-
-
-            /**
-             * 개발 단계에서 실제 값을 확인하기 위한 로그.
-             */
-            System.out.println(
-                    "닉네임: " + nickname
-            );
-
-            System.out.println(
-                    "프로필 이미지: " + profileImage
-            );
+            profileImage = userService.getUserProfile(loginUserId);
+            nickname = loginUser.getNickname();
+            model.addAttribute("loginUser", loginUser);
         }
 
 
@@ -299,10 +239,7 @@ public class MainController {
         // 8. JSP에서 사용할 닉네임 전달
         // =========================================================
 
-        model.addAttribute(
-                "nickname",
-                nickname
-        );
+        model.addAttribute("nickname", nickname);
 
 
         // =========================================================
@@ -318,11 +255,11 @@ public class MainController {
         // 로 바로 사용한다.
         // =========================================================
 
-        model.addAttribute(
-                "profileImage",
-                profileImage
-        );
-
+        if (profileImage != null && profileImage.get("URL_FILE_PATH") != null) {
+            model.addAttribute("profileImage", profileImage);
+        } else {
+            model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE);
+        }
 
         // =========================================================
         // 10. main.jsp 출력
