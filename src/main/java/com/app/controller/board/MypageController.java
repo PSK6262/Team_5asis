@@ -99,16 +99,21 @@ public class MypageController {
 			
 			if (loginUser != null) {
 				String nickname = loginUser.getNickname();
-				Map<String, Object> profileImage = userService.getUserProfile(loginUser.getUid());
+				
+				Map<String, Object> profileMap = userService.getUserProfile(loginUser.getUid());
+				
+				String profileImage = CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE;
+				if(profileMap != null && profileMap.get("URL_FILE_PATH") != null ) {
+					profileImage = profileMap.get("URL_FILE_PATH").toString();
+				}
+				
 				model.addAttribute("loginUser", loginUser);
 				model.addAttribute("nickname", nickname);
 				model.addAttribute("profileImage", profileImage);
-				System.out.println("닉네임: " + nickname);
 			} else {
 				// 로그인 안 된 상태
 				model.addAttribute("nickname", "Guest");
 				model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
-				return "redirect:/main";
 			}
 
 	        

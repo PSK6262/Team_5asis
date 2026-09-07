@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.common.CommonCode;
 import com.app.dto.board.GameNameTransferForm;
 import com.app.dto.board.Post;
 import com.app.dto.file.FileInfo;
@@ -57,19 +58,25 @@ public class PostController {
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
 		Long loginUserId = (Long) session.getAttribute("LOGIN_USER_ID");
 
-	    if (loginUser != null && loginUserId != null) {
-			Map<String, Object> profileImage = userService.getUserProfile(loginUserId);
+		if (loginUser != null) {
 			String nickname = loginUser.getNickname();
+			
+			Map<String, Object> profileMap = userService.getUserProfile(loginUser.getUid());
+			
+			String profileImage = CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE;
+			if(profileMap != null && profileMap.get("URL_FILE_PATH") != null ) {
+				profileImage = profileMap.get("URL_FILE_PATH").toString();
+			}
+			
 			model.addAttribute("loginUser", loginUser);
 			model.addAttribute("nickname", nickname);
 			model.addAttribute("profileImage", profileImage);
-			System.out.println("닉네임: " + nickname);
 		} else {
-			// 로그인 안 된 상태 처리
+			// 로그인 안 된 상태
 			model.addAttribute("nickname", "Guest");
-			model.addAttribute("profileImage",
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhyGGwgPL45lqvy3D15y74Heh7azl2cOLI7CPnHb6jw&s=10");
+			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
 		}
+		
 	}
 
 	// 게시글 작성 페이지 (/board/lol/write)

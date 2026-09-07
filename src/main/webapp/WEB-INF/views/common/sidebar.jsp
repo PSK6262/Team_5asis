@@ -25,9 +25,6 @@
 				<c:choose>
 				    <c:when test="${not empty loginUser}">
 				        <c:choose>
-				            <c:when test="${not empty profileImage.URL_FILE_PATH}">
-				                <img class="sideBar_profileImg" src="${profileImage.URL_FILE_PATH}" alt="프로필 이미지">
-				            </c:when>
 				            <c:when test="${not empty profileImage and profileImage ne CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE}">
 				                <img class="sideBar_profileImg" src="${profileImage}" alt="프로필 이미지">
 				            </c:when>
@@ -40,7 +37,6 @@
 				        <img class="sideBar_profileImg" src="${profileImage}" alt="게스트 이미지">
 				    </c:otherwise>
 				</c:choose>
-
 				<div class="sideBar_profileInfo">
 					<c:choose>
 						<c:when test="${not empty loginUser}">

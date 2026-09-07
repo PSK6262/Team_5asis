@@ -256,7 +256,7 @@ public class MainController {
         // =========================================================
 
         if (profileImage != null && profileImage.get("URL_FILE_PATH") != null) {
-            model.addAttribute("profileImage", profileImage);
+            model.addAttribute("profileImage", profileImage.get("URL_FILE_PATH").toString());
         } else {
             model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE);
         }

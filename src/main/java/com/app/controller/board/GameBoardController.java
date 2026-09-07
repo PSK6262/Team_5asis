@@ -55,7 +55,14 @@ public class GameBoardController {
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
 		if (loginUser != null) {
 			String nickname = loginUser.getNickname();
-			Map<String, Object> profileImage = userService.getUserProfile(loginUser.getUid());
+			
+			Map<String, Object> profileMap = userService.getUserProfile(loginUser.getUid());
+			
+			String profileImage = CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE;
+			if(profileMap != null && profileMap.get("URL_FILE_PATH") != null ) {
+				profileImage = profileMap.get("URL_FILE_PATH").toString();
+			}
+			
 			model.addAttribute("loginUser", loginUser);
 			model.addAttribute("nickname", nickname);
 			model.addAttribute("profileImage", profileImage);
@@ -136,9 +143,17 @@ public class GameBoardController {
 		model.addAttribute("keyword", keyword);
 		
 		UserInfo loginUser = (UserInfo) session.getAttribute("LOGIN_USER");
+		
 		if (loginUser != null) {
 			String nickname = loginUser.getNickname();
-			Map<String, Object> profileImage = userService.getUserProfile(loginUser.getUid());
+			
+			Map<String, Object> profileMap = userService.getUserProfile(loginUser.getUid());
+			
+			String profileImage = CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE;
+			if(profileMap != null && profileMap.get("URL_FILE_PATH") != null ) {
+				profileImage = profileMap.get("URL_FILE_PATH").toString();
+			}
+			
 			model.addAttribute("loginUser", loginUser);
 			model.addAttribute("nickname", nickname);
 			model.addAttribute("profileImage", profileImage);
@@ -147,12 +162,8 @@ public class GameBoardController {
 			// 로그인 안 된 상태
 			model.addAttribute("nickname", "Guest");
 			model.addAttribute("profileImage", CommonCode.SIDEBAR_PROFILE_DEFAULT_IMAGE );
-			
-			// 기존 설정 INFO이므로 지금은 보이지 않음
 			log.debug("비회원(Guest) 페이지 접속 (검색)");
 		}
-		
-		
 		
 		// /board/search?type=all&keyword=롤
 		// type은 각각 전체, 사용자 , 내용 , 제목 , 게시판이 존재
