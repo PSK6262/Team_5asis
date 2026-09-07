@@ -69,7 +69,7 @@
 					게시판</a> <a
 					href="${pageContext.request.contextPath}/board/all?category=자유">자유
 					게시판</a> <a
-					href="${pageContext.request.contextPath}/board/all?category=구인">모집
+					href="${pageContext.request.contextPath}/board/all?category=파티모집">모집
 					게시판</a> <a
 					href="${pageContext.request.contextPath}/board/all?category=정보">정보
 					게시판</a> <a
