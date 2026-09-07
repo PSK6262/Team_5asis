@@ -322,8 +322,8 @@ td {
 			<div id="profileDiv" class="profile">
         <c:choose>
             <%-- 1. 등록된 프로필 사진이 없을 때 기본 이미지 출력 --%>
-            <c:when test="${empty profileImage}">
-                <img src="${pageContext.request.contextPath}/resources/img/default_profile.png" width="100" height="100" style="border-radius: 20%; object-fit: cover;">
+            <c:when test="${empty profileImage.URL_FILE_PATH}">
+                <img src="${pageContext.request.contextPath}/resources/upload/guest_image.jpg" width="100" height="100" style="border-radius: 20%; object-fit: cover;">
             </c:when>
             <%-- 2. 등록된 프로필 사진이 있을 때 해당 경로 이미지 출력 --%>
             <c:otherwise>
@@ -433,8 +433,8 @@ td {
 							<tr>
 								<th scope="col">번호</th>
 								<th scope="col">카테고리</th>
-								<th scope="col">제목</th>
-								<th scope="col">등록일</th>
+								<th style="width:150px;"scope="col">제목</th>
+								<th style="width:150px;"scope="col">등록일</th>
 								<th scope="col">조회수</th>
 								<th scope="col">추천</th>
 							</tr>
@@ -473,9 +473,9 @@ td {
 					<table class="comment-table">
 						<thead>
 							<tr>
-								<th>게임</th>
+								<th style="width:100px;">게임</th>
 								<th>댓글 내용</th>
-								<th>조회수</th>
+								<th style="width:100px;">조회수</th>
 								<th>작성일</th>
 							</tr>
 						</thead>

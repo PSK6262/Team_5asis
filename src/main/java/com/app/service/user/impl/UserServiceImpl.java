@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             // 1. 서버 폴더 경로 설정
-            String uploadPath = request.getSession().getServletContext().getRealPath("/resources/img/");
+            String uploadPath = request.getSession().getServletContext().getRealPath("/resources/upload/");
             File folder = new File(uploadPath);
             if (!folder.exists()) folder.mkdirs();
 
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
             fileParam.put("fileName", savedFileName);
             fileParam.put("originalFileName", originalFileName);
             fileParam.put("filePath", uploadPath);
-            fileParam.put("urlFilePath", request.getContextPath() + "/resources/img/" + savedFileName);
+            fileParam.put("urlFilePath", request.getContextPath() + "/resources/upload/" + savedFileName);
 
             // 5. 파일 상세 정보 INSERT (useGeneratedKeys로 ID를 받아옴)
             userDAO.insertProfileInfo(fileParam);

@@ -1,5 +1,6 @@
 package com.app.controller.board;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import com.app.service.board.GameBoardService;
 import com.app.service.comment.CommentService;
 import com.app.service.post.PostService;
 import com.app.service.user.UserService;
+import com.app.util.SHA256Encryptor;
 
 
 
@@ -129,9 +131,19 @@ public class MypageController {
 		
 		System.out.println("변경된 비밀번호: " + userInfo.getPassword());
 		
-		userService.updatePassword(userInfo);
-		
+		String encPw = null;
+		try {
+			encPw = SHA256Encryptor.encrypt(userInfo.getPassword());
+			userInfo.setPassword(encPw);
+			userService.updatePassword(userInfo);
+		}catch(NoSuchAlgorithmException e) {
+			System.out.println("변경 실패");
+			e.printStackTrace();
+		}
 		return "redirect:/board/mypage";
+	
+		
+		
 	}
 	
 	@PostMapping("/mypage/update-nickname")
